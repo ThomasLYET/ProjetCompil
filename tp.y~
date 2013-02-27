@@ -3,10 +3,6 @@
  *
  * Bison ecrase le contenu de tp_y.h a partir de la description de la ligne
  * suivante. Ce sont donc ces lignes qu'il faut adapter si besoin, pas tp_y.h !
-
-
-
-
  */
  
 %token CLASS IS EXTENDS STATIC OVERRIDE RETURNS DEF THIS SUPER RESULT AS NEW
