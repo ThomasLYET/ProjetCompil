@@ -23,7 +23,7 @@
 %nonassoc RELOP
 %left ELSE
 %left AND
-%left ADD SUB 
+%left ADD SUB
 %left MUL DIV
 %left '.'
 %left UNARY
@@ -54,10 +54,17 @@ declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '
 ;
 
 paramsList :
+<<<<<<< HEAD
 | paramName paraSuiv
 ;
 
 paraSuiv : ',' paramName paramsList
+| paramsMultiples
+;
+
+paramsMultiples : paramName
+| paramName ',' paramsMultiples
+; 
 
 paramName : var ':' type
 ;
@@ -78,6 +85,8 @@ argumentsList :
 ;
 
 arg : expression
+| expression ',' argumentsList
+| expression
 ;
 
 blocs :
@@ -135,15 +144,23 @@ expression : selection
 | exprWithOperator
 ;
 
+
+/* -3.toString() */
+
 selection : expression '.' var
 ;
 
 instenciation : NEW type '(' argumentsList ')'
 ;
 
+<<<<<<< HEAD
 envoiMsg : expression '.' ID '(' listAttributs ')'
 ;
 
+=======
+envoiMsg : expression '.' '(' listAttributs ')'
+;	
+>>>>>>> 52e09c5b569472dd682be504a450ee2b73d8768e
 
 listAttributs :
 | expression
