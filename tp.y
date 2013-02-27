@@ -13,11 +13,6 @@
 %token UNARY
  
  
-/*%token BEG END IF THEN ELSE GET PUT
-%token AFF
-%token ID STR
-%token CST
-*/
 
 
 
@@ -30,6 +25,7 @@
 %left AND
 %left ADD SUB 
 %left MUL DIV
+%left '.'
 %left UNARY
 
 
@@ -58,9 +54,10 @@ declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '
 ;
 
 paramsList :
-| paramName',' paramsList
-| paramName
+| paramName paraSuiv
 ;
+
+paraSuiv : ',' paramName paramsList
 
 paramName : var ':' type
 ;
@@ -80,8 +77,7 @@ argumentsList :
 | arg
 ;
 
-arg : var
-| expression
+arg : expression
 ;
 
 blocs :
@@ -130,8 +126,7 @@ isReturn :
 /* IV/ */
 /* Sans ";", qui est défini ailleurs */
 /* expression ne rajoute JAMAIS de { }  */
-expression : ID
-| selection
+expression : selection
 | CST
 | '(' expression ')'
 | '(' AS type ':' expression ')'
@@ -146,20 +141,16 @@ selection : expression '.' var
 instenciation : NEW type '(' argumentsList ')'
 ;
 
-envoiMsg : var message
+envoiMsg : expression '.' ID '(' listAttributs ')'
 ;
 
-message : '.' ID '(' listAttributs ')'
-| '.' ID '(' listAttributs ')' message
-;
 
 listAttributs :
 | expression
 | expression',' listAttributs
 ;
 
-exprWithOperator : 
-| var
+exprWithOperator : var
 | expression ADD expression
 | expression SUB expression
 | expression MUL expression
@@ -177,7 +168,7 @@ instructions : expression ';'
 ;
 
 listInstructions : instructions
-| instructions listInstructions;
+| instructions listInstructions
 ;
 
 listDeclarationVariables : VAR var ':' type exprInitVar ';'
