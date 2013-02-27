@@ -54,13 +54,9 @@ declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '
 ;
 
 paramsList :
-<<<<<<< HEAD
-| paramName paraSuiv
+| paramsMultiples 
 ;
 
-paraSuiv : ',' paramName paramsList
-| paramsMultiples
-;
 
 paramsMultiples : paramName
 | paramName ',' paramsMultiples
@@ -145,7 +141,7 @@ expression : selection
 ;
 
 
-/* -3.toString() */
+
 
 selection : expression '.' var
 ;
