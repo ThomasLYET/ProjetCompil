@@ -3,10 +3,6 @@
  *
  * Bison ecrase le contenu de tp_y.h a partir de la description de la ligne
  * suivante. Ce sont donc ces lignes qu'il faut adapter si besoin, pas tp_y.h !
-
-
-
-
  */
  
 %token CLASS IS EXTENDS STATIC OVERRIDE RETURNS DEF THIS SUPER RESULT AS NEW
@@ -24,7 +20,7 @@
 */
 
 
-*/
+
 /* indications de precedence (en ordre croissant) et d'associativite. Les
  * operateurs sur une meme ligne (separes par un espace) ont la meme priorite.
  * On peut mettre soit un token, soit directement un caractere comme '*'
@@ -36,7 +32,7 @@
 %left MUL DIV
 %left UNARY
 
-*/
+
  /* On declare que la valeur associe a NOM_VAR utilise la variante 'S' du
   * type YYSTYPE. Il s'agira donc d'une chaine de caracteres...
   * Ajouter les indications similaires pour les autres nom-terminaux qui ont
@@ -54,12 +50,11 @@ extern int yylex();	/* fournie par Flex */
 extern void yyerror();  /* definie dans tp.c */
 %}
 
+%%
 
 /*  class Nom (param, ...) [extends nom (args, ...)] [bloc]  is  { decl,  ... } */
-
-%%
 /* I/ */
-declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declsList '}'
+declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '}'
 ;
 
 paramsList :
@@ -90,18 +85,18 @@ arg : var
 ;
 
 blocs :
-| '{' blocContent '}'
+| '{' blocInstructions '}'
 ;
 
-
-/*   CHANGER   */ 
-blocContent : 
-| var AFF expression';' blocContent
+blocInstructions :
+| listInstructions
+| listDeclarationVariables IS listInstructions
 ;
 
 declList :
 | declChamp declList
 | declMethod declList
+;
 
 
 /* [static] var nom : type [:= expression]; */
@@ -117,9 +112,10 @@ exprInitVar :
 | AFF expression
 ;
 
+
 /* [override | static] def nom (params, ...) [returns type] is bloc */
 /* III/ */
-declMethod : isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' blocContent '}'
+declMethod : isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' blocInstructions '}'
 ;
 
 isStaticOrOverride :
@@ -129,7 +125,7 @@ isStaticOrOverride :
 
 isReturn : 
 | RETURNS type
-
+;
 
 /* IV/ */
 /* Sans ";", qui est défini ailleurs */
@@ -155,10 +151,11 @@ envoiMsg : var message
 
 message : '.' ID '(' listAttributs ')'
 | '.' ID '(' listAttributs ')' message
+;
 
-ListAttributs :
+listAttributs :
 | expression
-| expression',' ListAttributs
+| expression',' listAttributs
 ;
 
 exprWithOperator : 
@@ -172,9 +169,28 @@ exprWithOperator :
 | ADD expression %prec UNARY
 ;
 
+instructions : expression ';'
+| '{' blocInstructions '}'
+| RETURNS ';'
+| affectation
+| ifThenElse
+;
 
-/* TODO :
-  Instructions */ 
+listInstructions : instructions
+| instructions listInstructions;
+;
+
+listDeclarationVariables : VAR var ':' type exprInitVar ';'
+;
+
+affectation : selection AFF expression ';'
+| ID AFF expression ';'
+;
+
+ifThenElse : IF expression THEN instructions ELSE instructions
+;
+
+
 
 
 /*
@@ -193,17 +209,6 @@ expr :
 ;
 */
 
-
-/* une declaration de variable ou de fonction, terminee par un ';'.
- * L'action associee devrait correspondre a
- * - evaluer l'arbre correspondant a 'expr', en utilisant la liste courante
- * des couple variable/valeur. Une fois la valeur obtenue ajouter le nouveau
- * couple forme du nom de la variable et de sa valeur, en verifiant au
- * prealable que la variable n'existait pas deja (une seule declaration de
- * chaque variable d'apres l'enonce.
- *
- * Pour l'evaluation, voir l'ebauche de la fonction 'eval' dans tp.c
- */
 /*decl : ID AFF expr ';'
 ;
 */
