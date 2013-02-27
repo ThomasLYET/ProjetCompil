@@ -59,7 +59,6 @@ paramsList :
 ;
 
 paraSuiv : ',' paramName paramsList
-=======
 | paramsMultiples
 ;
 

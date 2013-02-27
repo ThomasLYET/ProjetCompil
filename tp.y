@@ -153,14 +153,8 @@ selection : expression '.' var
 instenciation : NEW type '(' argumentsList ')'
 ;
 
-<<<<<<< HEAD
 envoiMsg : expression '.' ID '(' listAttributs ')'
 ;
-
-=======
-envoiMsg : expression '.' '(' listAttributs ')'
-;	
->>>>>>> 52e09c5b569472dd682be504a450ee2b73d8768e
 
 listAttributs :
 | expression
