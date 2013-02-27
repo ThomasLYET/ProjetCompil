@@ -58,12 +58,13 @@ extern void yyerror();  /* definie dans tp.c */
 declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '}'
 ;
 
-
-/* FAUX */
 paramsList :
-| paramName',' paramsList
-| paramName
+| paramsMultiples
 ;
+
+paramsMultiples : paramName
+| paramName ',' paramsMultiples
+; 
 
 paramName : var ':' type
 ;
