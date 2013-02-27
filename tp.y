@@ -28,8 +28,9 @@
 %nonassoc RELOP
 %left ELSE
 %left AND
-%left ADD SUB 
+%left ADD SUB
 %left MUL DIV
+%left '.'
 %left UNARY
 
 
@@ -57,6 +58,8 @@ extern void yyerror();  /* definie dans tp.c */
 declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '}'
 ;
 
+
+/* FAUX */
 paramsList :
 | paramName',' paramsList
 | paramName
@@ -76,11 +79,7 @@ inherits :
 ;
 
 argumentsList :
-| arg',' argumentsList
-| arg
-;
-
-arg : var
+| expression ',' argumentsList
 | expression
 ;
 
@@ -130,8 +129,7 @@ isReturn :
 /* IV/ */
 /* Sans ";", qui est défini ailleurs */
 /* expression ne rajoute JAMAIS de { }  */
-expression : ID
-| selection
+expression : selection
 | CST
 | '(' expression ')'
 | '(' AS type ':' expression ')'
@@ -140,26 +138,24 @@ expression : ID
 | exprWithOperator
 ;
 
+
+/* -3.toString() */
+
 selection : expression '.' var
 ;
 
 instenciation : NEW type '(' argumentsList ')'
 ;
 
-envoiMsg : var message
-;
-
-message : '.' ID '(' listAttributs ')'
-| '.' ID '(' listAttributs ')' message
-;
+envoiMsg : expression '.' '(' listAttributs ')'
+;	
 
 listAttributs :
 | expression
 | expression',' listAttributs
 ;
 
-exprWithOperator : 
-| var
+exprWithOperator : var
 | expression ADD expression
 | expression SUB expression
 | expression MUL expression
@@ -177,7 +173,7 @@ instructions : expression ';'
 ;
 
 listInstructions : instructions
-| instructions listInstructions;
+| instructions listInstructions
 ;
 
 listDeclarationVariables : VAR var ':' type exprInitVar ';'
