@@ -1,0 +1,1964 @@
+Terminals unused in grammar
+
+   THIS
+   SUPER
+   RESULT
+   AND
+
+
+State 47 conflicts: 1 shift/reduce
+State 48 conflicts: 1 shift/reduce
+State 89 conflicts: 6 shift/reduce
+
+
+Grammar
+
+    0 $accept: declarationClasse $end
+
+    1 declarationClasse: CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '}'
+
+    2 paramsList: /* empty */
+    3           | paramsMultiples
+
+    4 paramsMultiples: paramName
+    5                | paramName ',' paramsMultiples
+
+    6 paramName: var ':' type
+
+    7 var: ID
+
+    8 type: ID
+
+    9 inherits: /* empty */
+   10         | EXTENDS TYPE '(' argumentsList ')'
+
+   11 argumentsList: /* empty */
+   12              | arg ',' argumentsList
+   13              | arg
+
+   14 arg: expression
+   15    | expression ',' argumentsList
+
+   16 blocs: /* empty */
+   17      | '{' blocInstructions '}'
+
+   18 blocInstructions: /* empty */
+   19                 | listInstructions
+   20                 | listDeclarationVariables IS listInstructions
+
+   21 declList: /* empty */
+   22         | declChamp declList
+   23         | declMethod declList
+
+   24 declChamp: isStatic VAR var ':' type exprInitVar ';'
+
+   25 isStatic: /* empty */
+   26         | STATIC
+
+   27 exprInitVar: /* empty */
+   28            | AFF expression
+
+   29 declMethod: isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' blocInstructions '}'
+
+   30 isStaticOrOverride: /* empty */
+   31                   | STATIC
+   32                   | OVERRIDE
+
+   33 isReturn: /* empty */
+   34         | RETURNS type
+
+   35 expression: selection
+   36           | CST
+   37           | '(' expression ')'
+   38           | '(' AS type ':' expression ')'
+   39           | instenciation
+   40           | envoiMsg
+   41           | exprWithOperator
+
+   42 selection: expression '.' var
+
+   43 instenciation: NEW type '(' argumentsList ')'
+
+   44 envoiMsg: expression '.' ID '(' listAttributs ')'
+
+   45 listAttributs: /* empty */
+   46              | expression
+   47              | expression ',' listAttributs
+
+   48 exprWithOperator: var
+   49                 | expression ADD expression
+   50                 | expression SUB expression
+   51                 | expression MUL expression
+   52                 | expression DIV expression
+   53                 | expression relop expression
+   54                 | SUB expression
+   55                 | ADD expression
+
+   56 relop: RELOP
+
+   57 instructions: expression ';'
+   58             | '{' blocInstructions '}'
+   59             | RETURNS ';'
+   60             | affectation
+   61             | ifThenElse
+
+   62 listInstructions: instructions
+   63                 | instructions listInstructions
+
+   64 listDeclarationVariables: VAR var ':' type exprInitVar ';'
+
+   65 affectation: selection AFF expression ';'
+   66            | ID AFF expression ';'
+
+   67 ifThenElse: IF expression THEN instructions ELSE instructions
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 1 10 29 37 38 43 44
+')' (41) 1 10 29 37 38 43 44
+',' (44) 5 12 15 47
+'.' (46) 42 44
+':' (58) 6 24 38 64
+';' (59) 24 57 59 64 65 66
+'{' (123) 1 17 29 58
+'}' (125) 1 17 29 58
+error (256)
+CLASS (258) 1
+IS (259) 1 20 29
+EXTENDS (260) 10
+STATIC (261) 26 31
+OVERRIDE (262) 32
+RETURNS (263) 34 59
+DEF (264) 29
+THIS (265)
+SUPER (266)
+RESULT (267)
+AS (268) 38
+NEW (269) 43
+AFF (270) 28 65 66
+IF (271) 67
+THEN (272) 67
+ELSE (273) 67
+ID (274) 1 7 8 29 44 66
+TYPE (275) 10
+VAR (276) 24 64
+CST (277) 36
+RELOP (278) 56
+UNARY (279)
+AND (280)
+SUB (281) 50 54
+ADD (282) 49 55
+DIV (283) 52
+MUL (284) 51
+
+
+Nonterminals, with rules where they appear
+
+$accept (38)
+    on left: 0
+declarationClasse (39)
+    on left: 1, on right: 0
+paramsList (40)
+    on left: 2 3, on right: 1 29
+paramsMultiples (41)
+    on left: 4 5, on right: 3 5
+paramName (42)
+    on left: 6, on right: 4 5
+var (43)
+    on left: 7, on right: 6 24 42 48 64
+type (44)
+    on left: 8, on right: 6 24 34 38 43 64
+inherits (45)
+    on left: 9 10, on right: 1
+argumentsList (46)
+    on left: 11 12 13, on right: 10 12 15 43
+arg (47)
+    on left: 14 15, on right: 12 13
+blocs (48)
+    on left: 16 17, on right: 1
+blocInstructions (49)
+    on left: 18 19 20, on right: 17 29 58
+declList (50)
+    on left: 21 22 23, on right: 1 22 23
+declChamp (51)
+    on left: 24, on right: 22
+isStatic (52)
+    on left: 25 26, on right: 24
+exprInitVar (53)
+    on left: 27 28, on right: 24 64
+declMethod (54)
+    on left: 29, on right: 23
+isStaticOrOverride (55)
+    on left: 30 31 32, on right: 29
+isReturn (56)
+    on left: 33 34, on right: 29
+expression (57)
+    on left: 35 36 37 38 39 40 41, on right: 14 15 28 37 38 42 44 46
+    47 49 50 51 52 53 54 55 57 65 66 67
+selection (58)
+    on left: 42, on right: 35 65
+instenciation (59)
+    on left: 43, on right: 39
+envoiMsg (60)
+    on left: 44, on right: 40
+listAttributs (61)
+    on left: 45 46 47, on right: 44 47
+exprWithOperator (62)
+    on left: 48 49 50 51 52 53 54 55, on right: 41
+relop (63)
+    on left: 56, on right: 53
+instructions (64)
+    on left: 57 58 59 60 61, on right: 62 63 67
+listInstructions (65)
+    on left: 62 63, on right: 19 20 63
+listDeclarationVariables (66)
+    on left: 64, on right: 20
+affectation (67)
+    on left: 65 66, on right: 60
+ifThenElse (68)
+    on left: 67, on right: 61
+
+
+state 0
+
+    0 $accept: . declarationClasse $end
+
+    CLASS  shift, and go to state 1
+
+    declarationClasse  go to state 2
+
+
+state 1
+
+    1 declarationClasse: CLASS . ID '(' paramsList ')' inherits blocs IS '{' declList '}'
+
+    ID  shift, and go to state 3
+
+
+state 2
+
+    0 $accept: declarationClasse . $end
+
+    $end  shift, and go to state 4
+
+
+state 3
+
+    1 declarationClasse: CLASS ID . '(' paramsList ')' inherits blocs IS '{' declList '}'
+
+    '('  shift, and go to state 5
+
+
+state 4
+
+    0 $accept: declarationClasse $end .
+
+    $default  accept
+
+
+state 5
+
+    1 declarationClasse: CLASS ID '(' . paramsList ')' inherits blocs IS '{' declList '}'
+
+    ID  shift, and go to state 6
+
+    $default  reduce using rule 2 (paramsList)
+
+    paramsList       go to state 7
+    paramsMultiples  go to state 8
+    paramName        go to state 9
+    var              go to state 10
+
+
+state 6
+
+    7 var: ID .
+
+    $default  reduce using rule 7 (var)
+
+
+state 7
+
+    1 declarationClasse: CLASS ID '(' paramsList . ')' inherits blocs IS '{' declList '}'
+
+    ')'  shift, and go to state 11
+
+
+state 8
+
+    3 paramsList: paramsMultiples .
+
+    $default  reduce using rule 3 (paramsList)
+
+
+state 9
+
+    4 paramsMultiples: paramName .
+    5                | paramName . ',' paramsMultiples
+
+    ','  shift, and go to state 12
+
+    $default  reduce using rule 4 (paramsMultiples)
+
+
+state 10
+
+    6 paramName: var . ':' type
+
+    ':'  shift, and go to state 13
+
+
+state 11
+
+    1 declarationClasse: CLASS ID '(' paramsList ')' . inherits blocs IS '{' declList '}'
+
+    EXTENDS  shift, and go to state 14
+
+    $default  reduce using rule 9 (inherits)
+
+    inherits  go to state 15
+
+
+state 12
+
+    5 paramsMultiples: paramName ',' . paramsMultiples
+
+    ID  shift, and go to state 6
+
+    paramsMultiples  go to state 16
+    paramName        go to state 9
+    var              go to state 10
+
+
+state 13
+
+    6 paramName: var ':' . type
+
+    ID  shift, and go to state 17
+
+    type  go to state 18
+
+
+state 14
+
+   10 inherits: EXTENDS . TYPE '(' argumentsList ')'
+
+    TYPE  shift, and go to state 19
+
+
+state 15
+
+    1 declarationClasse: CLASS ID '(' paramsList ')' inherits . blocs IS '{' declList '}'
+
+    '{'  shift, and go to state 20
+
+    $default  reduce using rule 16 (blocs)
+
+    blocs  go to state 21
+
+
+state 16
+
+    5 paramsMultiples: paramName ',' paramsMultiples .
+
+    $default  reduce using rule 5 (paramsMultiples)
+
+
+state 17
+
+    8 type: ID .
+
+    $default  reduce using rule 8 (type)
+
+
+state 18
+
+    6 paramName: var ':' type .
+
+    $default  reduce using rule 6 (paramName)
+
+
+state 19
+
+   10 inherits: EXTENDS TYPE . '(' argumentsList ')'
+
+    '('  shift, and go to state 22
+
+
+state 20
+
+   17 blocs: '{' . blocInstructions '}'
+
+    RETURNS  shift, and go to state 23
+    NEW      shift, and go to state 24
+    IF       shift, and go to state 25
+    ID       shift, and go to state 26
+    VAR      shift, and go to state 27
+    CST      shift, and go to state 28
+    SUB      shift, and go to state 29
+    ADD      shift, and go to state 30
+    '('      shift, and go to state 31
+    '{'      shift, and go to state 32
+
+    $default  reduce using rule 18 (blocInstructions)
+
+    var                       go to state 33
+    blocInstructions          go to state 34
+    expression                go to state 35
+    selection                 go to state 36
+    instenciation             go to state 37
+    envoiMsg                  go to state 38
+    exprWithOperator          go to state 39
+    instructions              go to state 40
+    listInstructions          go to state 41
+    listDeclarationVariables  go to state 42
+    affectation               go to state 43
+    ifThenElse                go to state 44
+
+
+state 21
+
+    1 declarationClasse: CLASS ID '(' paramsList ')' inherits blocs . IS '{' declList '}'
+
+    IS  shift, and go to state 45
+
+
+state 22
+
+   10 inherits: EXTENDS TYPE '(' . argumentsList ')'
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    $default  reduce using rule 11 (argumentsList)
+
+    var               go to state 33
+    argumentsList     go to state 46
+    arg               go to state 47
+    expression        go to state 48
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 23
+
+   59 instructions: RETURNS . ';'
+
+    ';'  shift, and go to state 50
+
+
+state 24
+
+   43 instenciation: NEW . type '(' argumentsList ')'
+
+    ID  shift, and go to state 17
+
+    type  go to state 51
+
+
+state 25
+
+   67 ifThenElse: IF . expression THEN instructions ELSE instructions
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    var               go to state 33
+    expression        go to state 52
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 26
+
+    7 var: ID .
+   66 affectation: ID . AFF expression ';'
+
+    AFF  shift, and go to state 53
+
+    $default  reduce using rule 7 (var)
+
+
+state 27
+
+   64 listDeclarationVariables: VAR . var ':' type exprInitVar ';'
+
+    ID  shift, and go to state 6
+
+    var  go to state 54
+
+
+state 28
+
+   36 expression: CST .
+
+    $default  reduce using rule 36 (expression)
+
+
+state 29
+
+   54 exprWithOperator: SUB . expression
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    var               go to state 33
+    expression        go to state 55
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 30
+
+   55 exprWithOperator: ADD . expression
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    var               go to state 33
+    expression        go to state 56
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 31
+
+   37 expression: '(' . expression ')'
+   38           | '(' . AS type ':' expression ')'
+
+    AS   shift, and go to state 57
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    var               go to state 33
+    expression        go to state 58
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 32
+
+   58 instructions: '{' . blocInstructions '}'
+
+    RETURNS  shift, and go to state 23
+    NEW      shift, and go to state 24
+    IF       shift, and go to state 25
+    ID       shift, and go to state 26
+    VAR      shift, and go to state 27
+    CST      shift, and go to state 28
+    SUB      shift, and go to state 29
+    ADD      shift, and go to state 30
+    '('      shift, and go to state 31
+    '{'      shift, and go to state 32
+
+    $default  reduce using rule 18 (blocInstructions)
+
+    var                       go to state 33
+    blocInstructions          go to state 59
+    expression                go to state 35
+    selection                 go to state 36
+    instenciation             go to state 37
+    envoiMsg                  go to state 38
+    exprWithOperator          go to state 39
+    instructions              go to state 40
+    listInstructions          go to state 41
+    listDeclarationVariables  go to state 42
+    affectation               go to state 43
+    ifThenElse                go to state 44
+
+
+state 33
+
+   48 exprWithOperator: var .
+
+    $default  reduce using rule 48 (exprWithOperator)
+
+
+state 34
+
+   17 blocs: '{' blocInstructions . '}'
+
+    '}'  shift, and go to state 60
+
+
+state 35
+
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+   57 instructions: expression . ';'
+
+    RELOP  shift, and go to state 61
+    SUB    shift, and go to state 62
+    ADD    shift, and go to state 63
+    DIV    shift, and go to state 64
+    MUL    shift, and go to state 65
+    '.'    shift, and go to state 66
+    ';'    shift, and go to state 67
+
+    relop  go to state 68
+
+
+state 36
+
+   35 expression: selection .
+   65 affectation: selection . AFF expression ';'
+
+    AFF  shift, and go to state 69
+
+    $default  reduce using rule 35 (expression)
+
+
+state 37
+
+   39 expression: instenciation .
+
+    $default  reduce using rule 39 (expression)
+
+
+state 38
+
+   40 expression: envoiMsg .
+
+    $default  reduce using rule 40 (expression)
+
+
+state 39
+
+   41 expression: exprWithOperator .
+
+    $default  reduce using rule 41 (expression)
+
+
+state 40
+
+   62 listInstructions: instructions .
+   63                 | instructions . listInstructions
+
+    RETURNS  shift, and go to state 23
+    NEW      shift, and go to state 24
+    IF       shift, and go to state 25
+    ID       shift, and go to state 26
+    CST      shift, and go to state 28
+    SUB      shift, and go to state 29
+    ADD      shift, and go to state 30
+    '('      shift, and go to state 31
+    '{'      shift, and go to state 32
+
+    $default  reduce using rule 62 (listInstructions)
+
+    var               go to state 33
+    expression        go to state 35
+    selection         go to state 36
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+    instructions      go to state 40
+    listInstructions  go to state 70
+    affectation       go to state 43
+    ifThenElse        go to state 44
+
+
+state 41
+
+   19 blocInstructions: listInstructions .
+
+    $default  reduce using rule 19 (blocInstructions)
+
+
+state 42
+
+   20 blocInstructions: listDeclarationVariables . IS listInstructions
+
+    IS  shift, and go to state 71
+
+
+state 43
+
+   60 instructions: affectation .
+
+    $default  reduce using rule 60 (instructions)
+
+
+state 44
+
+   61 instructions: ifThenElse .
+
+    $default  reduce using rule 61 (instructions)
+
+
+state 45
+
+    1 declarationClasse: CLASS ID '(' paramsList ')' inherits blocs IS . '{' declList '}'
+
+    '{'  shift, and go to state 72
+
+
+state 46
+
+   10 inherits: EXTENDS TYPE '(' argumentsList . ')'
+
+    ')'  shift, and go to state 73
+
+
+state 47
+
+   12 argumentsList: arg . ',' argumentsList
+   13              | arg .
+
+    ','  shift, and go to state 74
+
+    ','       [reduce using rule 13 (argumentsList)]
+    $default  reduce using rule 13 (argumentsList)
+
+
+state 48
+
+   14 arg: expression .
+   15    | expression . ',' argumentsList
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+
+    RELOP  shift, and go to state 61
+    SUB    shift, and go to state 62
+    ADD    shift, and go to state 63
+    DIV    shift, and go to state 64
+    MUL    shift, and go to state 65
+    '.'    shift, and go to state 66
+    ','    shift, and go to state 75
+
+    ','       [reduce using rule 14 (arg)]
+    $default  reduce using rule 14 (arg)
+
+    relop  go to state 68
+
+
+state 49
+
+   35 expression: selection .
+
+    $default  reduce using rule 35 (expression)
+
+
+state 50
+
+   59 instructions: RETURNS ';' .
+
+    $default  reduce using rule 59 (instructions)
+
+
+state 51
+
+   43 instenciation: NEW type . '(' argumentsList ')'
+
+    '('  shift, and go to state 76
+
+
+state 52
+
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+   67 ifThenElse: IF expression . THEN instructions ELSE instructions
+
+    THEN   shift, and go to state 77
+    RELOP  shift, and go to state 61
+    SUB    shift, and go to state 62
+    ADD    shift, and go to state 63
+    DIV    shift, and go to state 64
+    MUL    shift, and go to state 65
+    '.'    shift, and go to state 66
+
+    relop  go to state 68
+
+
+state 53
+
+   66 affectation: ID AFF . expression ';'
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    var               go to state 33
+    expression        go to state 78
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 54
+
+   64 listDeclarationVariables: VAR var . ':' type exprInitVar ';'
+
+    ':'  shift, and go to state 79
+
+
+state 55
+
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+   54                 | SUB expression .
+
+    $default  reduce using rule 54 (exprWithOperator)
+
+    relop  go to state 68
+
+
+state 56
+
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+   55                 | ADD expression .
+
+    $default  reduce using rule 55 (exprWithOperator)
+
+    relop  go to state 68
+
+
+state 57
+
+   38 expression: '(' AS . type ':' expression ')'
+
+    ID  shift, and go to state 17
+
+    type  go to state 80
+
+
+state 58
+
+   37 expression: '(' expression . ')'
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+
+    RELOP  shift, and go to state 61
+    SUB    shift, and go to state 62
+    ADD    shift, and go to state 63
+    DIV    shift, and go to state 64
+    MUL    shift, and go to state 65
+    '.'    shift, and go to state 66
+    ')'    shift, and go to state 81
+
+    relop  go to state 68
+
+
+state 59
+
+   58 instructions: '{' blocInstructions . '}'
+
+    '}'  shift, and go to state 82
+
+
+state 60
+
+   17 blocs: '{' blocInstructions '}' .
+
+    $default  reduce using rule 17 (blocs)
+
+
+state 61
+
+   56 relop: RELOP .
+
+    $default  reduce using rule 56 (relop)
+
+
+state 62
+
+   50 exprWithOperator: expression SUB . expression
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    var               go to state 33
+    expression        go to state 83
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 63
+
+   49 exprWithOperator: expression ADD . expression
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    var               go to state 33
+    expression        go to state 84
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 64
+
+   52 exprWithOperator: expression DIV . expression
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    var               go to state 33
+    expression        go to state 85
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 65
+
+   51 exprWithOperator: expression MUL . expression
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    var               go to state 33
+    expression        go to state 86
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 66
+
+   42 selection: expression '.' . var
+   44 envoiMsg: expression '.' . ID '(' listAttributs ')'
+
+    ID  shift, and go to state 87
+
+    var  go to state 88
+
+
+state 67
+
+   57 instructions: expression ';' .
+
+    $default  reduce using rule 57 (instructions)
+
+
+state 68
+
+   53 exprWithOperator: expression relop . expression
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    var               go to state 33
+    expression        go to state 89
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 69
+
+   65 affectation: selection AFF . expression ';'
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    var               go to state 33
+    expression        go to state 90
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 70
+
+   63 listInstructions: instructions listInstructions .
+
+    $default  reduce using rule 63 (listInstructions)
+
+
+state 71
+
+   20 blocInstructions: listDeclarationVariables IS . listInstructions
+
+    RETURNS  shift, and go to state 23
+    NEW      shift, and go to state 24
+    IF       shift, and go to state 25
+    ID       shift, and go to state 26
+    CST      shift, and go to state 28
+    SUB      shift, and go to state 29
+    ADD      shift, and go to state 30
+    '('      shift, and go to state 31
+    '{'      shift, and go to state 32
+
+    var               go to state 33
+    expression        go to state 35
+    selection         go to state 36
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+    instructions      go to state 40
+    listInstructions  go to state 91
+    affectation       go to state 43
+    ifThenElse        go to state 44
+
+
+state 72
+
+    1 declarationClasse: CLASS ID '(' paramsList ')' inherits blocs IS '{' . declList '}'
+
+    STATIC    shift, and go to state 92
+    OVERRIDE  shift, and go to state 93
+
+    DEF       reduce using rule 30 (isStaticOrOverride)
+    VAR       reduce using rule 25 (isStatic)
+    $default  reduce using rule 21 (declList)
+
+    declList            go to state 94
+    declChamp           go to state 95
+    isStatic            go to state 96
+    declMethod          go to state 97
+    isStaticOrOverride  go to state 98
+
+
+state 73
+
+   10 inherits: EXTENDS TYPE '(' argumentsList ')' .
+
+    $default  reduce using rule 10 (inherits)
+
+
+state 74
+
+   12 argumentsList: arg ',' . argumentsList
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    $default  reduce using rule 11 (argumentsList)
+
+    var               go to state 33
+    argumentsList     go to state 99
+    arg               go to state 47
+    expression        go to state 48
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 75
+
+   15 arg: expression ',' . argumentsList
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    $default  reduce using rule 11 (argumentsList)
+
+    var               go to state 33
+    argumentsList     go to state 100
+    arg               go to state 47
+    expression        go to state 48
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 76
+
+   43 instenciation: NEW type '(' . argumentsList ')'
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    $default  reduce using rule 11 (argumentsList)
+
+    var               go to state 33
+    argumentsList     go to state 101
+    arg               go to state 47
+    expression        go to state 48
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 77
+
+   67 ifThenElse: IF expression THEN . instructions ELSE instructions
+
+    RETURNS  shift, and go to state 23
+    NEW      shift, and go to state 24
+    IF       shift, and go to state 25
+    ID       shift, and go to state 26
+    CST      shift, and go to state 28
+    SUB      shift, and go to state 29
+    ADD      shift, and go to state 30
+    '('      shift, and go to state 31
+    '{'      shift, and go to state 32
+
+    var               go to state 33
+    expression        go to state 35
+    selection         go to state 36
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+    instructions      go to state 102
+    affectation       go to state 43
+    ifThenElse        go to state 44
+
+
+state 78
+
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+   66 affectation: ID AFF expression . ';'
+
+    RELOP  shift, and go to state 61
+    SUB    shift, and go to state 62
+    ADD    shift, and go to state 63
+    DIV    shift, and go to state 64
+    MUL    shift, and go to state 65
+    '.'    shift, and go to state 66
+    ';'    shift, and go to state 103
+
+    relop  go to state 68
+
+
+state 79
+
+   64 listDeclarationVariables: VAR var ':' . type exprInitVar ';'
+
+    ID  shift, and go to state 17
+
+    type  go to state 104
+
+
+state 80
+
+   38 expression: '(' AS type . ':' expression ')'
+
+    ':'  shift, and go to state 105
+
+
+state 81
+
+   37 expression: '(' expression ')' .
+
+    $default  reduce using rule 37 (expression)
+
+
+state 82
+
+   58 instructions: '{' blocInstructions '}' .
+
+    $default  reduce using rule 58 (instructions)
+
+
+state 83
+
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   50                 | expression SUB expression .
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+
+    DIV  shift, and go to state 64
+    MUL  shift, and go to state 65
+    '.'  shift, and go to state 66
+
+    $default  reduce using rule 50 (exprWithOperator)
+
+    relop  go to state 68
+
+
+state 84
+
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   49                 | expression ADD expression .
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+
+    DIV  shift, and go to state 64
+    MUL  shift, and go to state 65
+    '.'  shift, and go to state 66
+
+    $default  reduce using rule 49 (exprWithOperator)
+
+    relop  go to state 68
+
+
+state 85
+
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   52                 | expression DIV expression .
+   53                 | expression . relop expression
+
+    '.'  shift, and go to state 66
+
+    $default  reduce using rule 52 (exprWithOperator)
+
+    relop  go to state 68
+
+
+state 86
+
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   51                 | expression MUL expression .
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+
+    '.'  shift, and go to state 66
+
+    $default  reduce using rule 51 (exprWithOperator)
+
+    relop  go to state 68
+
+
+state 87
+
+    7 var: ID .
+   44 envoiMsg: expression '.' ID . '(' listAttributs ')'
+
+    '('  shift, and go to state 106
+
+    $default  reduce using rule 7 (var)
+
+
+state 88
+
+   42 selection: expression '.' var .
+
+    $default  reduce using rule 42 (selection)
+
+
+state 89
+
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+   53                 | expression relop expression .
+
+    RELOP  shift, and go to state 61
+    SUB    shift, and go to state 62
+    ADD    shift, and go to state 63
+    DIV    shift, and go to state 64
+    MUL    shift, and go to state 65
+    '.'    shift, and go to state 66
+
+    RELOP     [reduce using rule 53 (exprWithOperator)]
+    SUB       [reduce using rule 53 (exprWithOperator)]
+    ADD       [reduce using rule 53 (exprWithOperator)]
+    DIV       [reduce using rule 53 (exprWithOperator)]
+    MUL       [reduce using rule 53 (exprWithOperator)]
+    '.'       [reduce using rule 53 (exprWithOperator)]
+    $default  reduce using rule 53 (exprWithOperator)
+
+    relop  go to state 68
+
+
+state 90
+
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+   65 affectation: selection AFF expression . ';'
+
+    RELOP  shift, and go to state 61
+    SUB    shift, and go to state 62
+    ADD    shift, and go to state 63
+    DIV    shift, and go to state 64
+    MUL    shift, and go to state 65
+    '.'    shift, and go to state 66
+    ';'    shift, and go to state 107
+
+    relop  go to state 68
+
+
+state 91
+
+   20 blocInstructions: listDeclarationVariables IS listInstructions .
+
+    $default  reduce using rule 20 (blocInstructions)
+
+
+state 92
+
+   26 isStatic: STATIC .
+   31 isStaticOrOverride: STATIC .
+
+    DEF       reduce using rule 31 (isStaticOrOverride)
+    $default  reduce using rule 26 (isStatic)
+
+
+state 93
+
+   32 isStaticOrOverride: OVERRIDE .
+
+    $default  reduce using rule 32 (isStaticOrOverride)
+
+
+state 94
+
+    1 declarationClasse: CLASS ID '(' paramsList ')' inherits blocs IS '{' declList . '}'
+
+    '}'  shift, and go to state 108
+
+
+state 95
+
+   22 declList: declChamp . declList
+
+    STATIC    shift, and go to state 92
+    OVERRIDE  shift, and go to state 93
+
+    DEF       reduce using rule 30 (isStaticOrOverride)
+    VAR       reduce using rule 25 (isStatic)
+    $default  reduce using rule 21 (declList)
+
+    declList            go to state 109
+    declChamp           go to state 95
+    isStatic            go to state 96
+    declMethod          go to state 97
+    isStaticOrOverride  go to state 98
+
+
+state 96
+
+   24 declChamp: isStatic . VAR var ':' type exprInitVar ';'
+
+    VAR  shift, and go to state 110
+
+
+state 97
+
+   23 declList: declMethod . declList
+
+    STATIC    shift, and go to state 92
+    OVERRIDE  shift, and go to state 93
+
+    DEF       reduce using rule 30 (isStaticOrOverride)
+    VAR       reduce using rule 25 (isStatic)
+    $default  reduce using rule 21 (declList)
+
+    declList            go to state 111
+    declChamp           go to state 95
+    isStatic            go to state 96
+    declMethod          go to state 97
+    isStaticOrOverride  go to state 98
+
+
+state 98
+
+   29 declMethod: isStaticOrOverride . DEF ID '(' paramsList ')' isReturn IS '{' blocInstructions '}'
+
+    DEF  shift, and go to state 112
+
+
+state 99
+
+   12 argumentsList: arg ',' argumentsList .
+
+    $default  reduce using rule 12 (argumentsList)
+
+
+state 100
+
+   15 arg: expression ',' argumentsList .
+
+    $default  reduce using rule 15 (arg)
+
+
+state 101
+
+   43 instenciation: NEW type '(' argumentsList . ')'
+
+    ')'  shift, and go to state 113
+
+
+state 102
+
+   67 ifThenElse: IF expression THEN instructions . ELSE instructions
+
+    ELSE  shift, and go to state 114
+
+
+state 103
+
+   66 affectation: ID AFF expression ';' .
+
+    $default  reduce using rule 66 (affectation)
+
+
+state 104
+
+   64 listDeclarationVariables: VAR var ':' type . exprInitVar ';'
+
+    AFF  shift, and go to state 115
+
+    $default  reduce using rule 27 (exprInitVar)
+
+    exprInitVar  go to state 116
+
+
+state 105
+
+   38 expression: '(' AS type ':' . expression ')'
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    var               go to state 33
+    expression        go to state 117
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 106
+
+   44 envoiMsg: expression '.' ID '(' . listAttributs ')'
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    $default  reduce using rule 45 (listAttributs)
+
+    var               go to state 33
+    expression        go to state 118
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    listAttributs     go to state 119
+    exprWithOperator  go to state 39
+
+
+state 107
+
+   65 affectation: selection AFF expression ';' .
+
+    $default  reduce using rule 65 (affectation)
+
+
+state 108
+
+    1 declarationClasse: CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '}' .
+
+    $default  reduce using rule 1 (declarationClasse)
+
+
+state 109
+
+   22 declList: declChamp declList .
+
+    $default  reduce using rule 22 (declList)
+
+
+state 110
+
+   24 declChamp: isStatic VAR . var ':' type exprInitVar ';'
+
+    ID  shift, and go to state 6
+
+    var  go to state 120
+
+
+state 111
+
+   23 declList: declMethod declList .
+
+    $default  reduce using rule 23 (declList)
+
+
+state 112
+
+   29 declMethod: isStaticOrOverride DEF . ID '(' paramsList ')' isReturn IS '{' blocInstructions '}'
+
+    ID  shift, and go to state 121
+
+
+state 113
+
+   43 instenciation: NEW type '(' argumentsList ')' .
+
+    $default  reduce using rule 43 (instenciation)
+
+
+state 114
+
+   67 ifThenElse: IF expression THEN instructions ELSE . instructions
+
+    RETURNS  shift, and go to state 23
+    NEW      shift, and go to state 24
+    IF       shift, and go to state 25
+    ID       shift, and go to state 26
+    CST      shift, and go to state 28
+    SUB      shift, and go to state 29
+    ADD      shift, and go to state 30
+    '('      shift, and go to state 31
+    '{'      shift, and go to state 32
+
+    var               go to state 33
+    expression        go to state 35
+    selection         go to state 36
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+    instructions      go to state 122
+    affectation       go to state 43
+    ifThenElse        go to state 44
+
+
+state 115
+
+   28 exprInitVar: AFF . expression
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    var               go to state 33
+    expression        go to state 123
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    exprWithOperator  go to state 39
+
+
+state 116
+
+   64 listDeclarationVariables: VAR var ':' type exprInitVar . ';'
+
+    ';'  shift, and go to state 124
+
+
+state 117
+
+   38 expression: '(' AS type ':' expression . ')'
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+
+    RELOP  shift, and go to state 61
+    SUB    shift, and go to state 62
+    ADD    shift, and go to state 63
+    DIV    shift, and go to state 64
+    MUL    shift, and go to state 65
+    '.'    shift, and go to state 66
+    ')'    shift, and go to state 125
+
+    relop  go to state 68
+
+
+state 118
+
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   46 listAttributs: expression .
+   47              | expression . ',' listAttributs
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+
+    RELOP  shift, and go to state 61
+    SUB    shift, and go to state 62
+    ADD    shift, and go to state 63
+    DIV    shift, and go to state 64
+    MUL    shift, and go to state 65
+    '.'    shift, and go to state 66
+    ','    shift, and go to state 126
+
+    $default  reduce using rule 46 (listAttributs)
+
+    relop  go to state 68
+
+
+state 119
+
+   44 envoiMsg: expression '.' ID '(' listAttributs . ')'
+
+    ')'  shift, and go to state 127
+
+
+state 120
+
+   24 declChamp: isStatic VAR var . ':' type exprInitVar ';'
+
+    ':'  shift, and go to state 128
+
+
+state 121
+
+   29 declMethod: isStaticOrOverride DEF ID . '(' paramsList ')' isReturn IS '{' blocInstructions '}'
+
+    '('  shift, and go to state 129
+
+
+state 122
+
+   67 ifThenElse: IF expression THEN instructions ELSE instructions .
+
+    $default  reduce using rule 67 (ifThenElse)
+
+
+state 123
+
+   28 exprInitVar: AFF expression .
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   49 exprWithOperator: expression . ADD expression
+   50                 | expression . SUB expression
+   51                 | expression . MUL expression
+   52                 | expression . DIV expression
+   53                 | expression . relop expression
+
+    RELOP  shift, and go to state 61
+    SUB    shift, and go to state 62
+    ADD    shift, and go to state 63
+    DIV    shift, and go to state 64
+    MUL    shift, and go to state 65
+    '.'    shift, and go to state 66
+
+    $default  reduce using rule 28 (exprInitVar)
+
+    relop  go to state 68
+
+
+state 124
+
+   64 listDeclarationVariables: VAR var ':' type exprInitVar ';' .
+
+    $default  reduce using rule 64 (listDeclarationVariables)
+
+
+state 125
+
+   38 expression: '(' AS type ':' expression ')' .
+
+    $default  reduce using rule 38 (expression)
+
+
+state 126
+
+   47 listAttributs: expression ',' . listAttributs
+
+    NEW  shift, and go to state 24
+    ID   shift, and go to state 6
+    CST  shift, and go to state 28
+    SUB  shift, and go to state 29
+    ADD  shift, and go to state 30
+    '('  shift, and go to state 31
+
+    $default  reduce using rule 45 (listAttributs)
+
+    var               go to state 33
+    expression        go to state 118
+    selection         go to state 49
+    instenciation     go to state 37
+    envoiMsg          go to state 38
+    listAttributs     go to state 130
+    exprWithOperator  go to state 39
+
+
+state 127
+
+   44 envoiMsg: expression '.' ID '(' listAttributs ')' .
+
+    $default  reduce using rule 44 (envoiMsg)
+
+
+state 128
+
+   24 declChamp: isStatic VAR var ':' . type exprInitVar ';'
+
+    ID  shift, and go to state 17
+
+    type  go to state 131
+
+
+state 129
+
+   29 declMethod: isStaticOrOverride DEF ID '(' . paramsList ')' isReturn IS '{' blocInstructions '}'
+
+    ID  shift, and go to state 6
+
+    $default  reduce using rule 2 (paramsList)
+
+    paramsList       go to state 132
+    paramsMultiples  go to state 8
+    paramName        go to state 9
+    var              go to state 10
+
+
+state 130
+
+   47 listAttributs: expression ',' listAttributs .
+
+    $default  reduce using rule 47 (listAttributs)
+
+
+state 131
+
+   24 declChamp: isStatic VAR var ':' type . exprInitVar ';'
+
+    AFF  shift, and go to state 115
+
+    $default  reduce using rule 27 (exprInitVar)
+
+    exprInitVar  go to state 133
+
+
+state 132
+
+   29 declMethod: isStaticOrOverride DEF ID '(' paramsList . ')' isReturn IS '{' blocInstructions '}'
+
+    ')'  shift, and go to state 134
+
+
+state 133
+
+   24 declChamp: isStatic VAR var ':' type exprInitVar . ';'
+
+    ';'  shift, and go to state 135
+
+
+state 134
+
+   29 declMethod: isStaticOrOverride DEF ID '(' paramsList ')' . isReturn IS '{' blocInstructions '}'
+
+    RETURNS  shift, and go to state 136
+
+    $default  reduce using rule 33 (isReturn)
+
+    isReturn  go to state 137
+
+
+state 135
+
+   24 declChamp: isStatic VAR var ':' type exprInitVar ';' .
+
+    $default  reduce using rule 24 (declChamp)
+
+
+state 136
+
+   34 isReturn: RETURNS . type
+
+    ID  shift, and go to state 17
+
+    type  go to state 138
+
+
+state 137
+
+   29 declMethod: isStaticOrOverride DEF ID '(' paramsList ')' isReturn . IS '{' blocInstructions '}'
+
+    IS  shift, and go to state 139
+
+
+state 138
+
+   34 isReturn: RETURNS type .
+
+    $default  reduce using rule 34 (isReturn)
+
+
+state 139
+
+   29 declMethod: isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS . '{' blocInstructions '}'
+
+    '{'  shift, and go to state 140
+
+
+state 140
+
+   29 declMethod: isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' . blocInstructions '}'
+
+    RETURNS  shift, and go to state 23
+    NEW      shift, and go to state 24
+    IF       shift, and go to state 25
+    ID       shift, and go to state 26
+    VAR      shift, and go to state 27
+    CST      shift, and go to state 28
+    SUB      shift, and go to state 29
+    ADD      shift, and go to state 30
+    '('      shift, and go to state 31
+    '{'      shift, and go to state 32
+
+    $default  reduce using rule 18 (blocInstructions)
+
+    var                       go to state 33
+    blocInstructions          go to state 141
+    expression                go to state 35
+    selection                 go to state 36
+    instenciation             go to state 37
+    envoiMsg                  go to state 38
+    exprWithOperator          go to state 39
+    instructions              go to state 40
+    listInstructions          go to state 41
+    listDeclarationVariables  go to state 42
+    affectation               go to state 43
+    ifThenElse                go to state 44
+
+
+state 141
+
+   29 declMethod: isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' blocInstructions . '}'
+
+    '}'  shift, and go to state 142
+
+
+state 142
+
+   29 declMethod: isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' blocInstructions '}' .
+
+    $default  reduce using rule 29 (declMethod)

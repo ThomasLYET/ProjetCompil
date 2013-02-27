@@ -13,11 +13,6 @@
 %token UNARY
  
  
-/*%token BEG END IF THEN ELSE GET PUT
-%token AFF
-%token ID STR
-%token CST
-*/
 
 
 
@@ -40,10 +35,11 @@
   * aussi une notion de valeur associee.
   */
 /*%type <S> NOM_VAR
-%type <S> paramStrPut
-%type <T> expr
+%type <S> paramStrPut*/
+%type <T> expression
+%type <T> exprWithOperator
 %type <C> relop
-*/
+
 %{
 #include "tp.h"     /* les definition des types et les etiquettes des noeuds */
 
@@ -59,8 +55,9 @@ declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '
 ;
 
 paramsList :
-| paramsMultiples
+| paramsMultiples 
 ;
+
 
 paramsMultiples : paramName
 | paramName ',' paramsMultiples
@@ -80,8 +77,12 @@ inherits :
 ;
 
 argumentsList :
+| arg',' argumentsList
+| arg
+;
+
+arg : expression
 | expression ',' argumentsList
-| expression
 ;
 
 blocs :
@@ -140,7 +141,7 @@ expression : selection
 ;
 
 
-/* -3.toString() */
+
 
 selection : expression '.' var
 ;
@@ -148,8 +149,8 @@ selection : expression '.' var
 instenciation : NEW type '(' argumentsList ')'
 ;
 
-envoiMsg : expression '.' '(' listAttributs ')'
-;	
+envoiMsg : expression '.' ID '(' listAttributs ')'
+;
 
 listAttributs :
 | expression
@@ -157,14 +158,16 @@ listAttributs :
 ;
 
 exprWithOperator : var
-| expression ADD expression
-| expression SUB expression
-| expression MUL expression
-| expression DIV expression
-| expression RELOP expression
-| SUB expression %prec UNARY
-| ADD expression %prec UNARY
+| expression ADD expression  				{ $$=makeTree(ADD,2,$1,$3); }
+| expression SUB expression				{ $$=makeTree(SUB,2,$1,$3); }
+| expression MUL expression  				{ $$=makeTree(MUL,2,$1,$3); }
+| expression DIV expression  				{ $$=makeTree(DIV,2,$1,$3); }
+| expression relop expression  				{ $$=makeTree($2,2,$1,$3); }
+| SUB expression %prec UNARY  				{ $$=makeTree(UMIN,1,$2); }
+| ADD expression %prec UNARY				{ $$=makeTree(UPLUS,1,$2); }
 ;
+
+relop : RELOP						{ $$=yyval.C; }
 
 instructions : expression ';'
 | '{' blocInstructions '}'
