@@ -11,10 +11,6 @@
 %token ID TYPE VAR CST
 %token RELOP
 %token UNARY
- 
- 
-
-
 
 /* indications de precedence (en ordre croissant) et d'associativite. Les
  * operateurs sur une meme ligne (separes par un espace) ont la meme priorite.
@@ -76,13 +72,23 @@ inherits :
 | EXTENDS TYPE '(' argumentsList ')'
 ;
 
+/* TODO : Pour Salma et Vincent : A modifier si besoin et à supprimer
 argumentsList :
-| arg',' argumentsList
+| arg ',' argumentsList
 | arg
 ;
 
 arg : expression
 | expression ',' argumentsList
+;
+*/
+
+argumentsListAux : expression ',' argumentsListAux
+| expression
+;
+
+argumentsList : 
+| argumentsListAux
 ;
 
 blocs :

@@ -32,11 +32,11 @@ typedef struct _Methode {
  */
 typedef struct _Class
 {   char *name;
-	VarDeclP varConstruction; // Les variables nécessaires à la construction de la classe
+	VarDeclP varConstruction; /* Les variables nécessaires à la construction de la classe */
 	VarDeclP attribut;
 	VarDeclP attributStatic;
 	MethodeP methode;
-	MethodeP methodeStatic;
+	MethodeP methodeStatic; /* ATTENTION : ne peut pas utiliser des attributs NON-static ! */
 	TreeP constructeur;
     struct _Class *next;
 } Class, *ClassP;
