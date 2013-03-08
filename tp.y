@@ -37,7 +37,6 @@
 */
 /* %type<T> expression // TODO : A REMETTRE après avoir bien défini expression !!! \\ */
 /* %type<T> exprWithOperator // IDEM \\ */
-%type<C> relop
 
 %{
 #include "arbre.h"     /* les definition des types et les etiquettes des noeuds */
@@ -170,12 +169,10 @@ exprWithOperator : var				/* { $$=makeLeaf(ADD, 3); /* Attention valeur BIDON */
 | expression SUB expression			/* { $$=makeTree(SUB,2,$1,$3); } */
 | expression MUL expression  		/* { $$=makeTree(MUL,2,$1,$3); } */
 | expression DIV expression  		/* { $$=makeTree(DIV,2,$1,$3); } */
-| expression relop expression  		/* { $$=makeTree($2,2,$1,$3); } */
+| expression RELOP expression  		/* { $$=makeTree($2,2,$1,$3); } */
 | SUB expression %prec UNARY  		/* { $$=makeTree(UMIN,1,$2); } */
 | ADD expression %prec UNARY		/* { $$=makeTree(UPLUS,1,$2); } */
 ;
-
-relop : RELOP						{ $$=yyval.C; }
 
 instructions : expression ';'
 | '{' blocInstructions '}'
@@ -213,7 +210,7 @@ expr :
 | NOM_VAR				{$$=makeLeafStr(CST, yylval.S);}
 | '-' expr %prec UNARY		{$$=makeTree(UMIN,1,$2);}
 | IF expr THEN expr ELSE expr	{$$=makeTree(IF,3,$2,$4,$6);}
-| expr relop expr			{$$=makeTree($2 ,2,$1,$3);}
+| expr RELOP expr			{$$=makeTree($2 ,2,$1,$3);}
 ;
 */
 
