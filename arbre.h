@@ -10,37 +10,56 @@
 typedef int bool;
 
 /* la structure d'un arbre (noeud ou feuille) */
-/* Pour Thomas : Sert pour le code de "base"*/
 typedef struct _Tree {
-  short op;         /* etiquette de l'operateur courant */
-  short nbChildren; /* nombre de sous-arbres */
-  union {
-    char *str;      /* valeur de la feuille si op = ID ou STR */
-    int val;        /* valeur de la feuille si op = CST */
-    struct _Tree **children; /* tableau des sous-arbres */
-  } u;
+	short op;         /* etiquette de l'operateur courant */
+	short nbChildren; /* nombre de sous-arbres */
+	union {
+		char *str;      /* valeur de la feuille si op = ID ou STR */
+		int val;        /* valeur de la feuille si op = CST */
+		struct _Tree **children; /* tableau des sous-arbres */
+	} u;
 } Tree, *TreeP;
+
+
+typedef struct _Methode {
+	VarDeclP varEntree; 
+	VarDeclP varSorti; /* ATTENTION : il n'y a qu'une seul variable de sorti !!! */
+	TreeP code;
+} Methode, *MethodeP;
 
 /* Structure qui permet de mémoriser la liste de toutes les classes défini
  * dans le fichier
  */
 typedef struct _Class
-{ char *name;
-  struct _Class *next;
+{   char *name;
+	VarDeclP varConstruction; // Les variables nécessaires à la construction de la classe
+	VarDeclP attribut;
+	VarDeclP attributStatic;
+	MethodeP methode;
+	MethodeP methodeStatic;
+	TreeP constructeur;
+    struct _Class *next;
 } Class, *ClassP;
-
-
-
 
 /* la structure ci-dessous permet de memoriser des listes variable/valeur
  * (entiere). On va construire des listes de la forme { (x 5), (y, 27) } au fur
  * et a mesure qu'on interprete les declarations dans le programme.
  */
+ /* TODO : Trouver commer stocker la valeur de la variable ! */
 typedef struct _Decl
-{ char *name;
-  int val;
-  struct _Decl *next;
+{	char *name;
+	union { /* Normalement c'est une "Class" SAUF dans le cas des classes prédéfini "Integer" et "String" */
+		Class c;
+		int i;
+		char *str;
+	} val;
+	struct _Decl *next;
 } VarDecl, *VarDeclP;
+
+typedef struct _Fichier {
+	ClassP classe;
+	TreeP main;
+}
 
 /* Etiquettes additionnelles pour les arbres de syntaxe abstraite. Les tokens
  * tels que ADD, SUB, etc. servent directement d'etiquette.
