@@ -77,7 +77,7 @@ extern void yyerror();  /* definie dans arbre.c */
 
 
 /* Line 189 of yacc.c  */
-#line 81 "tp_y.tab.c"
+#line 81 "tp_y.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -148,7 +148,7 @@ typedef int YYSTYPE;
 
 
 /* Line 264 of yacc.c  */
-#line 152 "tp_y.tab.c"
+#line 152 "tp_y.c"
 
 #ifdef short
 # undef short
@@ -1473,7 +1473,7 @@ yyreduce:
       
 
 /* Line 1455 of yacc.c  */
-#line 1477 "tp_y.tab.c"
+#line 1477 "tp_y.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
