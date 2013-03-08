@@ -135,20 +135,20 @@ RESULT (267)
 AS (268) 37
 NEW (269) 42
 AFF (270) 27 64 65
-IF (271) 66
-THEN (272) 66
-ELSE (273) 66
-ID (274) 1 7 8 28 43 65
-TYPE (275) 10
-VAR (276) 23 63
-CST (277) 35
-RELOP (278) 55
-UNARY (279)
-AND (280)
-SUB (281) 49 53
-ADD (282) 48 54
-DIV (283) 51
-MUL (284) 50
+ADD (271) 48 54
+SUB (272) 49 53
+MUL (273) 50
+DIV (274) 51
+IF (275) 66
+THEN (276) 66
+ELSE (277) 66
+ID (278) 1 7 8 28 43 65
+TYPE (279) 10
+VAR (280) 23 63
+CST (281) 35
+RELOP (282) 55
+UNARY (283)
+AND (284)
 
 
 Non-terminaux, suivis des règles où ils apparaissent
@@ -390,12 +390,12 @@ ifThenElse (68)
 
     RETURNS  décalage et aller à l'état 23
     NEW      décalage et aller à l'état 24
-    IF       décalage et aller à l'état 25
-    ID       décalage et aller à l'état 26
-    VAR      décalage et aller à l'état 27
-    CST      décalage et aller à l'état 28
-    SUB      décalage et aller à l'état 29
-    ADD      décalage et aller à l'état 30
+    ADD      décalage et aller à l'état 25
+    SUB      décalage et aller à l'état 26
+    IF       décalage et aller à l'état 27
+    ID       décalage et aller à l'état 28
+    VAR      décalage et aller à l'état 29
+    CST      décalage et aller à l'état 30
     '('      décalage et aller à l'état 31
     '{'      décalage et aller à l'état 32
 
@@ -427,10 +427,10 @@ ifThenElse (68)
    10 inherits: EXTENDS TYPE '(' . argumentsList ')'
 
     NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
     ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
+    CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     $défaut  réduction par utilisation de la règle 13 (argumentsList)
@@ -463,13 +463,13 @@ ifThenElse (68)
 
 état 25
 
-   66 ifThenElse: IF . expression THEN instructions ELSE instructions
+   54 exprWithOperator: ADD . expression
 
     NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
     ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
+    CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     var               aller à l'état 33
@@ -482,66 +482,66 @@ ifThenElse (68)
 
 état 26
 
+   53 exprWithOperator: SUB . expression
+
+    NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
+    ID   décalage et aller à l'état 6
+    CST  décalage et aller à l'état 30
+    '('  décalage et aller à l'état 31
+
+    var               aller à l'état 33
+    expression        aller à l'état 53
+    selection         aller à l'état 49
+    instenciation     aller à l'état 37
+    envoiMsg          aller à l'état 38
+    exprWithOperator  aller à l'état 39
+
+
+état 27
+
+   66 ifThenElse: IF . expression THEN instructions ELSE instructions
+
+    NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
+    ID   décalage et aller à l'état 6
+    CST  décalage et aller à l'état 30
+    '('  décalage et aller à l'état 31
+
+    var               aller à l'état 33
+    expression        aller à l'état 54
+    selection         aller à l'état 49
+    instenciation     aller à l'état 37
+    envoiMsg          aller à l'état 38
+    exprWithOperator  aller à l'état 39
+
+
+état 28
+
     7 var: ID .
    65 affectation: ID . AFF expression ';'
 
-    AFF  décalage et aller à l'état 53
+    AFF  décalage et aller à l'état 55
 
     $défaut  réduction par utilisation de la règle 7 (var)
 
 
-état 27
+état 29
 
    63 listDeclarationVariables: VAR . var ':' type exprInitVar ';'
 
     ID  décalage et aller à l'état 6
 
-    var  aller à l'état 54
-
-
-état 28
-
-   35 expression: CST .
-
-    $défaut  réduction par utilisation de la règle 35 (expression)
-
-
-état 29
-
-   53 exprWithOperator: SUB . expression
-
-    NEW  décalage et aller à l'état 24
-    ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
-    '('  décalage et aller à l'état 31
-
-    var               aller à l'état 33
-    expression        aller à l'état 55
-    selection         aller à l'état 49
-    instenciation     aller à l'état 37
-    envoiMsg          aller à l'état 38
-    exprWithOperator  aller à l'état 39
+    var  aller à l'état 56
 
 
 état 30
 
-   54 exprWithOperator: ADD . expression
+   35 expression: CST .
 
-    NEW  décalage et aller à l'état 24
-    ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
-    '('  décalage et aller à l'état 31
-
-    var               aller à l'état 33
-    expression        aller à l'état 56
-    selection         aller à l'état 49
-    instenciation     aller à l'état 37
-    envoiMsg          aller à l'état 38
-    exprWithOperator  aller à l'état 39
+    $défaut  réduction par utilisation de la règle 35 (expression)
 
 
 état 31
@@ -551,10 +551,10 @@ ifThenElse (68)
 
     AS   décalage et aller à l'état 57
     NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
     ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
+    CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     var               aller à l'état 33
@@ -571,12 +571,12 @@ ifThenElse (68)
 
     RETURNS  décalage et aller à l'état 23
     NEW      décalage et aller à l'état 24
-    IF       décalage et aller à l'état 25
-    ID       décalage et aller à l'état 26
-    VAR      décalage et aller à l'état 27
-    CST      décalage et aller à l'état 28
-    SUB      décalage et aller à l'état 29
-    ADD      décalage et aller à l'état 30
+    ADD      décalage et aller à l'état 25
+    SUB      décalage et aller à l'état 26
+    IF       décalage et aller à l'état 27
+    ID       décalage et aller à l'état 28
+    VAR      décalage et aller à l'état 29
+    CST      décalage et aller à l'état 30
     '('      décalage et aller à l'état 31
     '{'      décalage et aller à l'état 32
 
@@ -621,11 +621,11 @@ ifThenElse (68)
    52                 | expression . relop expression
    56 instructions: expression . ';'
 
-    RELOP  décalage et aller à l'état 61
+    ADD    décalage et aller à l'état 61
     SUB    décalage et aller à l'état 62
-    ADD    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 63
     DIV    décalage et aller à l'état 64
-    MUL    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 65
     '.'    décalage et aller à l'état 66
     ';'    décalage et aller à l'état 67
 
@@ -670,11 +670,11 @@ ifThenElse (68)
 
     RETURNS  décalage et aller à l'état 23
     NEW      décalage et aller à l'état 24
-    IF       décalage et aller à l'état 25
-    ID       décalage et aller à l'état 26
-    CST      décalage et aller à l'état 28
-    SUB      décalage et aller à l'état 29
-    ADD      décalage et aller à l'état 30
+    ADD      décalage et aller à l'état 25
+    SUB      décalage et aller à l'état 26
+    IF       décalage et aller à l'état 27
+    ID       décalage et aller à l'état 28
+    CST      décalage et aller à l'état 30
     '('      décalage et aller à l'état 31
     '{'      décalage et aller à l'état 32
 
@@ -753,11 +753,11 @@ ifThenElse (68)
    51                 | expression . DIV expression
    52                 | expression . relop expression
 
-    RELOP  décalage et aller à l'état 61
+    ADD    décalage et aller à l'état 61
     SUB    décalage et aller à l'état 62
-    ADD    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 63
     DIV    décalage et aller à l'état 64
-    MUL    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 65
     '.'    décalage et aller à l'état 66
     ','    décalage et aller à l'état 74
 
@@ -796,46 +796,14 @@ ifThenElse (68)
    50                 | expression . MUL expression
    51                 | expression . DIV expression
    52                 | expression . relop expression
-   66 ifThenElse: IF expression . THEN instructions ELSE instructions
+   54                 | ADD expression .
 
-    THEN   décalage et aller à l'état 76
-    RELOP  décalage et aller à l'état 61
-    SUB    décalage et aller à l'état 62
-    ADD    décalage et aller à l'état 63
-    DIV    décalage et aller à l'état 64
-    MUL    décalage et aller à l'état 65
-    '.'    décalage et aller à l'état 66
+    $défaut  réduction par utilisation de la règle 54 (exprWithOperator)
 
     relop  aller à l'état 68
 
 
 état 53
-
-   65 affectation: ID AFF . expression ';'
-
-    NEW  décalage et aller à l'état 24
-    ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
-    '('  décalage et aller à l'état 31
-
-    var               aller à l'état 33
-    expression        aller à l'état 77
-    selection         aller à l'état 49
-    instenciation     aller à l'état 37
-    envoiMsg          aller à l'état 38
-    exprWithOperator  aller à l'état 39
-
-
-état 54
-
-   63 listDeclarationVariables: VAR var . ':' type exprInitVar ';'
-
-    ':'  décalage et aller à l'état 78
-
-
-état 55
 
    41 selection: expression . '.' var
    43 envoiMsg: expression . '.' ID '(' listAttributs ')'
@@ -851,7 +819,7 @@ ifThenElse (68)
     relop  aller à l'état 68
 
 
-état 56
+état 54
 
    41 selection: expression . '.' var
    43 envoiMsg: expression . '.' ID '(' listAttributs ')'
@@ -860,11 +828,43 @@ ifThenElse (68)
    50                 | expression . MUL expression
    51                 | expression . DIV expression
    52                 | expression . relop expression
-   54                 | ADD expression .
+   66 ifThenElse: IF expression . THEN instructions ELSE instructions
 
-    $défaut  réduction par utilisation de la règle 54 (exprWithOperator)
+    ADD    décalage et aller à l'état 61
+    SUB    décalage et aller à l'état 62
+    MUL    décalage et aller à l'état 63
+    DIV    décalage et aller à l'état 64
+    THEN   décalage et aller à l'état 76
+    RELOP  décalage et aller à l'état 65
+    '.'    décalage et aller à l'état 66
 
     relop  aller à l'état 68
+
+
+état 55
+
+   65 affectation: ID AFF . expression ';'
+
+    NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
+    ID   décalage et aller à l'état 6
+    CST  décalage et aller à l'état 30
+    '('  décalage et aller à l'état 31
+
+    var               aller à l'état 33
+    expression        aller à l'état 77
+    selection         aller à l'état 49
+    instenciation     aller à l'état 37
+    envoiMsg          aller à l'état 38
+    exprWithOperator  aller à l'état 39
+
+
+état 56
+
+   63 listDeclarationVariables: VAR var . ':' type exprInitVar ';'
+
+    ':'  décalage et aller à l'état 78
 
 
 état 57
@@ -887,11 +887,11 @@ ifThenElse (68)
    51                 | expression . DIV expression
    52                 | expression . relop expression
 
-    RELOP  décalage et aller à l'état 61
+    ADD    décalage et aller à l'état 61
     SUB    décalage et aller à l'état 62
-    ADD    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 63
     DIV    décalage et aller à l'état 64
-    MUL    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 65
     '.'    décalage et aller à l'état 66
     ')'    décalage et aller à l'état 80
 
@@ -914,20 +914,13 @@ ifThenElse (68)
 
 état 61
 
-   55 relop: RELOP .
-
-    $défaut  réduction par utilisation de la règle 55 (relop)
-
-
-état 62
-
-   49 exprWithOperator: expression SUB . expression
+   48 exprWithOperator: expression ADD . expression
 
     NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
     ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
+    CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     var               aller à l'état 33
@@ -938,19 +931,38 @@ ifThenElse (68)
     exprWithOperator  aller à l'état 39
 
 
-état 63
+état 62
 
-   48 exprWithOperator: expression ADD . expression
+   49 exprWithOperator: expression SUB . expression
 
     NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
     ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
+    CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     var               aller à l'état 33
     expression        aller à l'état 83
+    selection         aller à l'état 49
+    instenciation     aller à l'état 37
+    envoiMsg          aller à l'état 38
+    exprWithOperator  aller à l'état 39
+
+
+état 63
+
+   50 exprWithOperator: expression MUL . expression
+
+    NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
+    ID   décalage et aller à l'état 6
+    CST  décalage et aller à l'état 30
+    '('  décalage et aller à l'état 31
+
+    var               aller à l'état 33
+    expression        aller à l'état 84
     selection         aller à l'état 49
     instenciation     aller à l'état 37
     envoiMsg          aller à l'état 38
@@ -962,29 +974,10 @@ ifThenElse (68)
    51 exprWithOperator: expression DIV . expression
 
     NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
     ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
-    '('  décalage et aller à l'état 31
-
-    var               aller à l'état 33
-    expression        aller à l'état 84
-    selection         aller à l'état 49
-    instenciation     aller à l'état 37
-    envoiMsg          aller à l'état 38
-    exprWithOperator  aller à l'état 39
-
-
-état 65
-
-   50 exprWithOperator: expression MUL . expression
-
-    NEW  décalage et aller à l'état 24
-    ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
+    CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     var               aller à l'état 33
@@ -993,6 +986,13 @@ ifThenElse (68)
     instenciation     aller à l'état 37
     envoiMsg          aller à l'état 38
     exprWithOperator  aller à l'état 39
+
+
+état 65
+
+   55 relop: RELOP .
+
+    $défaut  réduction par utilisation de la règle 55 (relop)
 
 
 état 66
@@ -1017,10 +1017,10 @@ ifThenElse (68)
    52 exprWithOperator: expression relop . expression
 
     NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
     ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
+    CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     var               aller à l'état 33
@@ -1036,10 +1036,10 @@ ifThenElse (68)
    64 affectation: selection AFF . expression ';'
 
     NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
     ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
+    CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     var               aller à l'état 33
@@ -1063,11 +1063,11 @@ ifThenElse (68)
 
     RETURNS  décalage et aller à l'état 23
     NEW      décalage et aller à l'état 24
-    IF       décalage et aller à l'état 25
-    ID       décalage et aller à l'état 26
-    CST      décalage et aller à l'état 28
-    SUB      décalage et aller à l'état 29
-    ADD      décalage et aller à l'état 30
+    ADD      décalage et aller à l'état 25
+    SUB      décalage et aller à l'état 26
+    IF       décalage et aller à l'état 27
+    ID       décalage et aller à l'état 28
+    CST      décalage et aller à l'état 30
     '('      décalage et aller à l'état 31
     '{'      décalage et aller à l'état 32
 
@@ -1113,10 +1113,10 @@ ifThenElse (68)
    11 argumentsListAux: expression ',' . argumentsListAux
 
     NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
     ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
+    CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     var               aller à l'état 33
@@ -1133,10 +1133,10 @@ ifThenElse (68)
    42 instenciation: NEW type '(' . argumentsList ')'
 
     NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
     ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
+    CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     $défaut  réduction par utilisation de la règle 13 (argumentsList)
@@ -1157,11 +1157,11 @@ ifThenElse (68)
 
     RETURNS  décalage et aller à l'état 23
     NEW      décalage et aller à l'état 24
-    IF       décalage et aller à l'état 25
-    ID       décalage et aller à l'état 26
-    CST      décalage et aller à l'état 28
-    SUB      décalage et aller à l'état 29
-    ADD      décalage et aller à l'état 30
+    ADD      décalage et aller à l'état 25
+    SUB      décalage et aller à l'état 26
+    IF       décalage et aller à l'état 27
+    ID       décalage et aller à l'état 28
+    CST      décalage et aller à l'état 30
     '('      décalage et aller à l'état 31
     '{'      décalage et aller à l'état 32
 
@@ -1187,11 +1187,11 @@ ifThenElse (68)
    52                 | expression . relop expression
    65 affectation: ID AFF expression . ';'
 
-    RELOP  décalage et aller à l'état 61
+    ADD    décalage et aller à l'état 61
     SUB    décalage et aller à l'état 62
-    ADD    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 63
     DIV    décalage et aller à l'état 64
-    MUL    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 65
     '.'    décalage et aller à l'état 66
     ';'    décalage et aller à l'état 101
 
@@ -1233,17 +1233,17 @@ ifThenElse (68)
    41 selection: expression . '.' var
    43 envoiMsg: expression . '.' ID '(' listAttributs ')'
    48 exprWithOperator: expression . ADD expression
+   48                 | expression ADD expression .
    49                 | expression . SUB expression
-   49                 | expression SUB expression .
    50                 | expression . MUL expression
    51                 | expression . DIV expression
    52                 | expression . relop expression
 
+    MUL  décalage et aller à l'état 63
     DIV  décalage et aller à l'état 64
-    MUL  décalage et aller à l'état 65
     '.'  décalage et aller à l'état 66
 
-    $défaut  réduction par utilisation de la règle 49 (exprWithOperator)
+    $défaut  réduction par utilisation de la règle 48 (exprWithOperator)
 
     relop  aller à l'état 68
 
@@ -1253,40 +1253,22 @@ ifThenElse (68)
    41 selection: expression . '.' var
    43 envoiMsg: expression . '.' ID '(' listAttributs ')'
    48 exprWithOperator: expression . ADD expression
-   48                 | expression ADD expression .
    49                 | expression . SUB expression
+   49                 | expression SUB expression .
    50                 | expression . MUL expression
    51                 | expression . DIV expression
    52                 | expression . relop expression
 
+    MUL  décalage et aller à l'état 63
     DIV  décalage et aller à l'état 64
-    MUL  décalage et aller à l'état 65
     '.'  décalage et aller à l'état 66
 
-    $défaut  réduction par utilisation de la règle 48 (exprWithOperator)
+    $défaut  réduction par utilisation de la règle 49 (exprWithOperator)
 
     relop  aller à l'état 68
 
 
 état 84
-
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   51                 | expression DIV expression .
-   52                 | expression . relop expression
-
-    '.'  décalage et aller à l'état 66
-
-    $défaut  réduction par utilisation de la règle 51 (exprWithOperator)
-
-    relop  aller à l'état 68
-
-
-état 85
 
    41 selection: expression . '.' var
    43 envoiMsg: expression . '.' ID '(' listAttributs ')'
@@ -1300,6 +1282,24 @@ ifThenElse (68)
     '.'  décalage et aller à l'état 66
 
     $défaut  réduction par utilisation de la règle 50 (exprWithOperator)
+
+    relop  aller à l'état 68
+
+
+état 85
+
+   41 selection: expression . '.' var
+   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   48 exprWithOperator: expression . ADD expression
+   49                 | expression . SUB expression
+   50                 | expression . MUL expression
+   51                 | expression . DIV expression
+   51                 | expression DIV expression .
+   52                 | expression . relop expression
+
+    '.'  décalage et aller à l'état 66
+
+    $défaut  réduction par utilisation de la règle 51 (exprWithOperator)
 
     relop  aller à l'état 68
 
@@ -1332,18 +1332,18 @@ ifThenElse (68)
    52                 | expression . relop expression
    52                 | expression relop expression .
 
-    RELOP  décalage et aller à l'état 61
+    ADD    décalage et aller à l'état 61
     SUB    décalage et aller à l'état 62
-    ADD    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 63
     DIV    décalage et aller à l'état 64
-    MUL    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 65
     '.'    décalage et aller à l'état 66
 
-    RELOP     [réduction par utilisation de la règle 52 (exprWithOperator)]
-    SUB       [réduction par utilisation de la règle 52 (exprWithOperator)]
     ADD       [réduction par utilisation de la règle 52 (exprWithOperator)]
-    DIV       [réduction par utilisation de la règle 52 (exprWithOperator)]
+    SUB       [réduction par utilisation de la règle 52 (exprWithOperator)]
     MUL       [réduction par utilisation de la règle 52 (exprWithOperator)]
+    DIV       [réduction par utilisation de la règle 52 (exprWithOperator)]
+    RELOP     [réduction par utilisation de la règle 52 (exprWithOperator)]
     '.'       [réduction par utilisation de la règle 52 (exprWithOperator)]
     $défaut  réduction par utilisation de la règle 52 (exprWithOperator)
 
@@ -1361,11 +1361,11 @@ ifThenElse (68)
    52                 | expression . relop expression
    64 affectation: selection AFF expression . ';'
 
-    RELOP  décalage et aller à l'état 61
+    ADD    décalage et aller à l'état 61
     SUB    décalage et aller à l'état 62
-    ADD    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 63
     DIV    décalage et aller à l'état 64
-    MUL    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 65
     '.'    décalage et aller à l'état 66
     ';'    décalage et aller à l'état 105
 
@@ -1496,10 +1496,10 @@ ifThenElse (68)
    37 expression: '(' AS type ':' . expression ')'
 
     NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
     ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
+    CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     var               aller à l'état 33
@@ -1515,10 +1515,10 @@ ifThenElse (68)
    43 envoiMsg: expression '.' ID '(' . listAttributs ')'
 
     NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
     ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
+    CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     $défaut  réduction par utilisation de la règle 44 (listAttributs)
@@ -1589,11 +1589,11 @@ ifThenElse (68)
 
     RETURNS  décalage et aller à l'état 23
     NEW      décalage et aller à l'état 24
-    IF       décalage et aller à l'état 25
-    ID       décalage et aller à l'état 26
-    CST      décalage et aller à l'état 28
-    SUB      décalage et aller à l'état 29
-    ADD      décalage et aller à l'état 30
+    ADD      décalage et aller à l'état 25
+    SUB      décalage et aller à l'état 26
+    IF       décalage et aller à l'état 27
+    ID       décalage et aller à l'état 28
+    CST      décalage et aller à l'état 30
     '('      décalage et aller à l'état 31
     '{'      décalage et aller à l'état 32
 
@@ -1613,10 +1613,10 @@ ifThenElse (68)
    27 exprInitVar: AFF . expression
 
     NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
     ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
+    CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     var               aller à l'état 33
@@ -1645,11 +1645,11 @@ ifThenElse (68)
    51                 | expression . DIV expression
    52                 | expression . relop expression
 
-    RELOP  décalage et aller à l'état 61
+    ADD    décalage et aller à l'état 61
     SUB    décalage et aller à l'état 62
-    ADD    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 63
     DIV    décalage et aller à l'état 64
-    MUL    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 65
     '.'    décalage et aller à l'état 66
     ')'    décalage et aller à l'état 123
 
@@ -1668,11 +1668,11 @@ ifThenElse (68)
    51                 | expression . DIV expression
    52                 | expression . relop expression
 
-    RELOP  décalage et aller à l'état 61
+    ADD    décalage et aller à l'état 61
     SUB    décalage et aller à l'état 62
-    ADD    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 63
     DIV    décalage et aller à l'état 64
-    MUL    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 65
     '.'    décalage et aller à l'état 66
     ','    décalage et aller à l'état 124
 
@@ -1720,11 +1720,11 @@ ifThenElse (68)
    51                 | expression . DIV expression
    52                 | expression . relop expression
 
-    RELOP  décalage et aller à l'état 61
+    ADD    décalage et aller à l'état 61
     SUB    décalage et aller à l'état 62
-    ADD    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 63
     DIV    décalage et aller à l'état 64
-    MUL    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 65
     '.'    décalage et aller à l'état 66
 
     $défaut  réduction par utilisation de la règle 27 (exprInitVar)
@@ -1751,10 +1751,10 @@ ifThenElse (68)
    46 listAttributs: expression ',' . listAttributs
 
     NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
     ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 28
-    SUB  décalage et aller à l'état 29
-    ADD  décalage et aller à l'état 30
+    CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     $défaut  réduction par utilisation de la règle 44 (listAttributs)
@@ -1884,12 +1884,12 @@ ifThenElse (68)
 
     RETURNS  décalage et aller à l'état 23
     NEW      décalage et aller à l'état 24
-    IF       décalage et aller à l'état 25
-    ID       décalage et aller à l'état 26
-    VAR      décalage et aller à l'état 27
-    CST      décalage et aller à l'état 28
-    SUB      décalage et aller à l'état 29
-    ADD      décalage et aller à l'état 30
+    ADD      décalage et aller à l'état 25
+    SUB      décalage et aller à l'état 26
+    IF       décalage et aller à l'état 27
+    ID       décalage et aller à l'état 28
+    VAR      décalage et aller à l'état 29
+    CST      décalage et aller à l'état 30
     '('      décalage et aller à l'état 31
     '{'      décalage et aller à l'état 32
 

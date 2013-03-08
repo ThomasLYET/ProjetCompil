@@ -7,6 +7,7 @@
  
 %token CLASS IS EXTENDS STATIC OVERRIDE RETURNS DEF THIS SUPER RESULT AS NEW
 %token AFF
+%token ADD SUB MUL DIV
 %token IF THEN ELSE
 %token ID TYPE VAR CST
 %token RELOP
@@ -34,9 +35,9 @@
 %type <S> NOM_VAR
 %type <S> paramStrPu
 */
-%type <T> expression
-%type <T> exprWithOperator
-%type <C> relop
+/* %type<T> expression // TODO : A REMETTRE après avoir bien défini expression !!! \\ */
+/* %type<T> exprWithOperator // IDEM \\ */
+%type<C> relop
 
 %{
 #include "arbre.h"     /* les definition des types et les etiquettes des noeuds */
@@ -149,9 +150,6 @@ expression : selection
 | exprWithOperator
 ;
 
-
-
-
 selection : expression '.' var
 ;
 
@@ -166,14 +164,15 @@ listAttributs :
 | expression',' listAttributs
 ;
 
-exprWithOperator : var
-| expression ADD expression  				{ $$=makeTree(ADD,2,$1,$3); }
-| expression SUB expression				{ $$=makeTree(SUB,2,$1,$3); }
-| expression MUL expression  				{ $$=makeTree(MUL,2,$1,$3); }
-| expression DIV expression  				{ $$=makeTree(DIV,2,$1,$3); }
-| expression relop expression  				{ $$=makeTree($2,2,$1,$3); }
-| SUB expression %prec UNARY  				{ $$=makeTree(UMIN,1,$2); }
-| ADD expression %prec UNARY				{ $$=makeTree(UPLUS,1,$2); }
+/* Ce qui en commentaire à remettre après */
+exprWithOperator : var				/* { $$=makeLeaf(ADD, 3); /* Attention valeur BIDON */ /* } */
+| expression ADD expression  		/* { $$=makeTree(ADD,2,$1,$3); } */
+| expression SUB expression			/* { $$=makeTree(SUB,2,$1,$3); } */
+| expression MUL expression  		/* { $$=makeTree(MUL,2,$1,$3); } */
+| expression DIV expression  		/* { $$=makeTree(DIV,2,$1,$3); } */
+| expression relop expression  		/* { $$=makeTree($2,2,$1,$3); } */
+| SUB expression %prec UNARY  		/* { $$=makeTree(UMIN,1,$2); } */
+| ADD expression %prec UNARY		/* { $$=makeTree(UPLUS,1,$2); } */
 ;
 
 relop : RELOP						{ $$=yyval.C; }
@@ -233,8 +232,10 @@ expr :
 paramStrPut : STR { $$=yyval.S; }
 ;
 */
+
 /* Passage de valeur entre analyseur lexical et analyseur syntaxique via la
  * variable yylval (de type YYSTYPE)
  */
+ 
 /*NOM_VAR : ID { $$ = yylval.S; }
 ;*/
