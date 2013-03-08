@@ -68,12 +68,12 @@
 /* Copy the first part of user declarations.  */
 
 /* Line 189 of yacc.c  */
-#line 39 "tp.y"
+#line 41 "tp.y"
 
-#include "tp.h"     /* les definition des types et les etiquettes des noeuds */
+#include "arbre.h"     /* les definition des types et les etiquettes des noeuds */
 
 extern int yylex();	/* fournie par Flex */
-extern void yyerror();  /* definie dans tp.c */
+extern void yyerror();  /* definie dans arbre.c */
 
 
 /* Line 189 of yacc.c  */
@@ -459,13 +459,13 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    50,    50,    53,    54,    58,    59,    62,    65,    68,
-      71,    72,    86,    87,    90,    91,    94,    95,    98,    99,
-     100,   103,   104,   105,   111,   114,   115,   118,   119,   125,
-     128,   129,   130,   133,   134,   140,   141,   142,   143,   144,
-     145,   146,   152,   155,   158,   161,   162,   163,   166,   167,
-     168,   169,   170,   171,   172,   173,   176,   178,   179,   180,
-     181,   182,   185,   186,   189,   192,   193,   196
+       0,    52,    52,    55,    56,    60,    61,    64,    67,    70,
+      73,    74,    89,    90,    93,    94,    97,    98,   101,   102,
+     103,   106,   107,   108,   114,   117,   118,   121,   122,   128,
+     131,   132,   133,   136,   137,   143,   144,   145,   146,   147,
+     148,   149,   155,   158,   161,   164,   165,   166,   169,   170,
+     171,   172,   173,   174,   175,   176,   179,   181,   182,   183,
+     184,   185,   188,   189,   192,   195,   196,   199
 };
 #endif
 
@@ -1476,56 +1476,56 @@ yyreduce:
         case 49:
 
 /* Line 1455 of yacc.c  */
-#line 167 "tp.y"
+#line 170 "tp.y"
     { (yyval.T)=makeTree(ADD,2,(yyvsp[(1) - (3)].T),(yyvsp[(3) - (3)].T)); ;}
     break;
 
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 168 "tp.y"
+#line 171 "tp.y"
     { (yyval.T)=makeTree(SUB,2,(yyvsp[(1) - (3)].T),(yyvsp[(3) - (3)].T)); ;}
     break;
 
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 169 "tp.y"
+#line 172 "tp.y"
     { (yyval.T)=makeTree(MUL,2,(yyvsp[(1) - (3)].T),(yyvsp[(3) - (3)].T)); ;}
     break;
 
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 170 "tp.y"
+#line 173 "tp.y"
     { (yyval.T)=makeTree(DIV,2,(yyvsp[(1) - (3)].T),(yyvsp[(3) - (3)].T)); ;}
     break;
 
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 171 "tp.y"
+#line 174 "tp.y"
     { (yyval.T)=makeTree((yyvsp[(2) - (3)].C),2,(yyvsp[(1) - (3)].T),(yyvsp[(3) - (3)].T)); ;}
     break;
 
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 172 "tp.y"
+#line 175 "tp.y"
     { (yyval.T)=makeTree(UMIN,1,(yyvsp[(2) - (2)].T)); ;}
     break;
 
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 173 "tp.y"
+#line 176 "tp.y"
     { (yyval.T)=makeTree(UPLUS,1,(yyvsp[(2) - (2)].T)); ;}
     break;
 
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 176 "tp.y"
+#line 179 "tp.y"
     { (yyval.C)=yyval.C; ;}
     break;
 

@@ -30,22 +30,24 @@
   * Ajouter les indications similaires pour les autres nom-terminaux qui ont
   * aussi une notion de valeur associee.
   */
-/*%type <S> NOM_VAR
-%type <S> paramStrPut*/
+/*
+%type <S> NOM_VAR
+%type <S> paramStrPu
+*/
 %type <T> expression
 %type <T> exprWithOperator
 %type <C> relop
 
 %{
-#include "tp.h"     /* les definition des types et les etiquettes des noeuds */
+#include "arbre.h"     /* les definition des types et les etiquettes des noeuds */
 
 extern int yylex();	/* fournie par Flex */
-extern void yyerror();  /* definie dans tp.c */
+extern void yyerror();  /* definie dans arbre.c */
 %}
 
 %%
 
-/*  class Nom (param, ...) [extends nom (args, ...)] [bloc]  is  { decl,  ... } */
+/* class Nom (param, ...) [extends nom (args, ...)] [bloc]  is  { decl,  ... } */
 /* I/ */
 declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '}'
 ;
@@ -72,7 +74,8 @@ inherits :
 | EXTENDS TYPE '(' argumentsList ')'
 ;
 
-/* TODO : Pour Salma et Vincent : A modifier si besoin et à supprimer
+/* TODO : Pour Salma et Vincent : A modifier si besoin et à supprimer */
+/*
 argumentsList :
 | arg ',' argumentsList
 | arg
