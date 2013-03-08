@@ -218,7 +218,7 @@ int evalVar(TreeP tree, VarDeclP decls) {
   fprintf(stderr, "Error: Undeclared variable: %s\n", name);
   exit(UNEXPECTED);
 }
-
+/* ATTENTION : ce programme servira pour faire le parcours d'arbre, ne pas toucher pour le moment ! */
 /* Evaluation par parcours recursif de l'arbre representant une expression. 
  * Les valeurs des identificateurs situes aux feuilles de l'arbre sont a
  * rechercher dans la liste 'decls'

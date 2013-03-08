@@ -10,7 +10,6 @@
 typedef int bool;
 
 /* la structure d'un arbre (noeud ou feuille) */
-/* Pour Thomas : Sert pour le code de "base"*/
 typedef struct _Tree {
   short op;         /* etiquette de l'operateur courant */
   short nbChildren; /* nombre de sous-arbres */
@@ -20,17 +19,6 @@ typedef struct _Tree {
     struct _Tree **children; /* tableau des sous-arbres */
   } u;
 } Tree, *TreeP;
-
-/* Structure qui permet de mémoriser la liste de toutes les classes défini
- * dans le fichier
- */
-typedef struct _Class
-{ char *name;
-  struct _Class *next;
-} Class, *ClassP;
-
-
-
 
 /* la structure ci-dessous permet de memoriser des listes variable/valeur
  * (entiere). On va construire des listes de la forme { (x 5), (y, 27) } au fur
@@ -69,7 +57,7 @@ typedef struct _Decl
  * les autres correspondent aux variantes utilisees dans les actions
  * associees aux productions de la grammaire. 
 */
-typedef union /*Pour Thomas : c'est une UNION !!! */
+typedef union
 { char C;
   char *S;   
   int I;    
