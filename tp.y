@@ -49,7 +49,7 @@ extern void yyerror();  /* definie dans arbre.c */
 
 /* class Nom (param, ...) [extends nom (args, ...)] [bloc]  is  { decl,  ... } */
 /* I/ */
-declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '}'
+declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '}'		 { addClass(ADD, ); } /*Comment récupérer le nom de ID ?!? */
 ;
 
 paramsList :
@@ -61,7 +61,7 @@ paramsMultiples : paramName
 | paramName ',' paramsMultiples
 ; 
 
-paramName : var ':' type
+paramName : var ':' type			{ addConstructe
 ;
 
 var : ID

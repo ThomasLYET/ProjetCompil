@@ -20,7 +20,6 @@ typedef struct _Tree {
 	} u;
 } Tree, *TreeP;
 
-
 typedef struct _Methode {
 	VarDeclP varEntree; 
 	VarDeclP varSorti; /* ATTENTION : il n'y a qu'une seul variable de sorti !!! */
@@ -80,6 +79,7 @@ typedef struct _Fichier {
 #define SYNTAX_ERROR    3
 #define CONTEXT_ERROR	4
 #define EVAL_ERROR	5
+#define CLASS_NOT_FOUND 6
 #define UNEXPECTED	10
 
 
@@ -96,6 +96,11 @@ typedef union /*Pour Thomas : c'est une UNION !!! */
   TreeP T;
 } YYSTYPE;
 
+int eval(TreeP tree, VarDeclP decls);
+
+/* construction et accesseur de liste pour les classes */
+ClassP addClass( char* nom);
+ClassP findClass( char* nom );
 
 /* construction et accesseur pour les arbres */
 TreeP makeLeafStr(short op, char *str);
