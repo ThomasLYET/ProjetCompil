@@ -241,3 +241,28 @@ ClassP findClass( char* nom ) {
 	exit(CLASS_NOT_FOUND);
 }
 
+/**
+ * Pas besoin d'avoir la classe en variable, en effet, c'est lClass
+ * directement qui est concerné.
+ */
+void addConstructeur(char* nomVar, char* class) {
+	ClassP theClass = findClass(class);
+	
+	VarDeclP var = NEW(1,VarDecl);
+	var->name = nomVar;
+	var->val.c = theClass;
+	var->next = lClass->constructeur;
+	lClass->constructeur = var;
+}
+
+
+typedef struct _Decl
+{	char *name;
+	union { 
+		Class c;
+		int i;
+		char *str;
+	} val;
+	struct _Decl *next;
+} VarDecl, *VarDeclP;
+

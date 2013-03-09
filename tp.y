@@ -49,7 +49,7 @@ extern void yyerror();  /* definie dans arbre.c */
 
 /* class Nom (param, ...) [extends nom (args, ...)] [bloc]  is  { decl,  ... } */
 /* I/ */
-declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '}'		 { addClass(ADD, ); } /*Comment récupérer le nom de ID ?!? */
+declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '}'		 { addClass(ADD, $2); } /*Comment récupérer le nom de ID ?!? */
 ;
 
 paramsList :
@@ -61,13 +61,13 @@ paramsMultiples : paramName
 | paramName ',' paramsMultiples
 ; 
 
-paramName : var ':' type			{ addConstructe
+paramName : var ':' type			{ addConstructeur($1,$3); }
 ;
 
-var : ID
+var : ID	{ $$ = yyval.S; }
 ;
 
-type : ID
+type : ID	{ $$ = yyval.S; }
 ;
 
 inherits :
@@ -196,27 +196,10 @@ ifThenElse : IF expression THEN instructions ELSE instructions
 ;
 
 
-
-
-/*
-expr :
-| expr ADD expr			{$$=makeTree(ADD,2,$1,$3);}
-| expr SUB expr			{$$=makeTree(SUB,2,$1,$3);}
-| expr MUL expr			{$$=makeTree(MUL,2,$1,$3);}
-| expr DIV expr			{$$=makeTree(DIV,2,$1,$3);}
-| CST					{$$=makeLeafInt(CST, yylval.I);}
-| GET'('')'				{$$=makeLeafInt(GET, getValue());}
-| PUT'(' paramStrPut ',' expr ')'	{$$=makeLeafStr(PUT, putValue($3, $5) );}
-| NOM_VAR				{$$=makeLeafStr(CST, yylval.S);}
-| '-' expr %prec UNARY		{$$=makeTree(UMIN,1,$2);}
-| IF expr THEN expr ELSE expr	{$$=makeTree(IF,3,$2,$4,$6);}
-| expr RELOP expr			{$$=makeTree($2 ,2,$1,$3);}
-;
-*/
-
 /*decl : ID AFF expr ';'
 ;
 */
+
 /* construire et renvoyer un arbre representant l'expression, en fonction des
  * arbres (deja construits) de ses sous-expressions.
  *
