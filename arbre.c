@@ -217,10 +217,11 @@ int eval(TreeP tree, VarDeclP decls) {
 
 /** 
  * Créer une classe avec seulement le nom, les autres éléments devront
- * être ajouté manuellment.
+ * être ajouté manuellment après.
  */
 ClassP addClass( char* nom ) {
 	ClassP result = NEW(1,Class);
+	result->name =nom;
 	result->next =lClass;
 	lClass = result;
 	return result;
