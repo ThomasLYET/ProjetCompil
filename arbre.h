@@ -101,6 +101,7 @@ int eval(TreeP tree, VarDeclP decls);
 /* construction et accesseur de liste pour les classes */
 ClassP addClass( char* nom);
 ClassP findClass( char* nom );
+void addChamp(int isStatic,char* nom);                                 /*******************/
 void addConstructeur(char* nomVar, char* class);
 
 /* construction et accesseur pour les arbres */

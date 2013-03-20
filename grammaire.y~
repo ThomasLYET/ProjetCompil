@@ -34,7 +34,6 @@
 /*
 %type <S> NOM_VAR
 %type <S> paramStrPu
-%type <I> isStatic
 */
 /* %type<T> expression // TODO : A REMETTRE après avoir bien défini expression !!! \\ */
 /* %type<T> exprWithOperator // IDEM \\ */
@@ -112,7 +111,7 @@ declList :
 
 /* [static] var nom : type [:= expression]; */
 /* II/ */
-declChamp : isStatic VAR var ':' type exprInitVar ';'   { addChamp($1,$3,type)}
+declChamp : isStatic VAR var ':' type exprInitVar ';'   { addChamp($3,type)}
 ;
 
 isStatic :
