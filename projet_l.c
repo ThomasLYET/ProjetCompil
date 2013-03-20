@@ -1,6 +1,6 @@
-#line 2 "tp_l.c"
+#line 2 "projet_l.c"
 
-#line 4 "tp_l.c"
+#line 4 "projet_l.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -549,7 +549,7 @@ void lexError(char c) {
   setError(LEXICAL_ERROR);
 }
 
-#line 553 "tp_l.c"
+#line 553 "projet_l.c"
 
 #define INITIAL 0
 
@@ -738,7 +738,7 @@ YY_DECL
     
 #line 64 "projet.l"
 
-#line 742 "tp_l.c"
+#line 742 "projet_l.c"
 
 	if ( !(yy_init) )
 		{
@@ -968,7 +968,7 @@ YY_RULE_SETUP
 #line 100 "projet.l"
 ECHO;
 	YY_BREAK
-#line 972 "tp_l.c"
+#line 972 "projet_l.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 

@@ -68,7 +68,7 @@
 /* Copy the first part of user declarations.  */
 
 /* Line 189 of yacc.c  */
-#line 41 "tp.y"
+#line 41 "grammaire.y"
 
 #include "arbre.h"     /* les definition des types et les etiquettes des noeuds */
 
@@ -77,7 +77,7 @@ extern void yyerror();  /* definie dans arbre.c */
 
 
 /* Line 189 of yacc.c  */
-#line 81 "tp_y.c"
+#line 81 "grammaire_y.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -148,7 +148,7 @@ typedef int YYSTYPE;
 
 
 /* Line 264 of yacc.c  */
-#line 152 "tp_y.c"
+#line 152 "grammaire_y.c"
 
 #ifdef short
 # undef short
@@ -1470,10 +1470,38 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-      
+        case 2:
 
 /* Line 1455 of yacc.c  */
-#line 1477 "tp_y.c"
+#line 52 "grammaire.y"
+    { addClass(ADD, (yyvsp[(2) - (11)])); ;}
+    break;
+
+  case 7:
+
+/* Line 1455 of yacc.c  */
+#line 64 "grammaire.y"
+    { addConstructeur((yyvsp[(1) - (3)]),(yyvsp[(3) - (3)])); ;}
+    break;
+
+  case 8:
+
+/* Line 1455 of yacc.c  */
+#line 67 "grammaire.y"
+    { (yyval) = yyval.S; ;}
+    break;
+
+  case 9:
+
+/* Line 1455 of yacc.c  */
+#line 70 "grammaire.y"
+    { (yyval) = yyval.S; ;}
+    break;
+
+
+
+/* Line 1455 of yacc.c  */
+#line 1505 "grammaire_y.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
