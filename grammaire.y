@@ -37,6 +37,7 @@
 %type <D> paramsMultiples
 %type <D> paramName
 %type <S> paramStrPu
+%type <M> inherits
 */
 /* %type<T> expression // TODO : A REMETTRE après avoir bien défini expression !!! \\ */
 /* %type<T> exprWithOperator // IDEM \\ */
@@ -52,7 +53,7 @@ extern void yyerror();  /* definie dans arbre.c */
 
 /* class Nom (param, ...) [extends nom (args, ...)] [bloc]  is  { decl,  ... } */
 /* I/ */
-declarationClasse : CLASS name '(' paramsList ')' inherits blocs IS '{' declList '}'		 { addClass($2, $4, $5, $6); }
+declarationClasse : CLASS name '(' paramsList ')' inherits blocs IS '{' declList '}'		 { addClass($2, $4, $5); }
 ;
 
 paramsList :															{ $$ = NULL; }
@@ -73,29 +74,30 @@ var : ID																{ $$ = yyval.S; }
 name : ID																{ $$ = yyval.S; }
 ;
 
-inherits :
-| EXTENDS name '(' argumentsList ')'  									{ addMere($2); }
+inherits :																{ $$ = NULL; }
+| EXTENDS name '(' argumentsList ')'  									{ $$ = addMere($2); }
 ;
 
-argumentsList : 
+argumentsList : 														/*Faut-ils utiliser des arbres ?? */
 | argumentsListAux
 ;
-argumentsListAux : expression ',' argumentsListAux						{ addMereVarCons(
+
+argumentsListAux : expression ',' argumentsListAux						
 | expression
 ;
 
-blocs :
-| '{' blocInstructions '}'
+blocs :																	{ $$ = NULL; }
+| '{' blocInstructions '}'												{ $$ = $2; }
 ;
 
-blocInstructions :
-| listInstructions
-| listDeclarationVariables IS listInstructions
+blocInstructions :														{ $$ = NULL; }
+| listInstructions														/*TODO*/
+| listDeclarationVariables IS listInstructions							/*TODO*/
 ;
 
-declList :
-| declChamp declList
-| declMethod declList
+declList :																/*TODO*/
+| declChamp declList													/*TODO*/
+| declMethod declList													/*TODO*/
 ;
 
 
