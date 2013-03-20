@@ -1,5 +1,6 @@
 Digit [0-9]
 Letter  [a-zA-Z]
+Maj [A-Z]
 LD ({Letter}|{Digit})
 Delim [ \n\t\r]
 Accolade [{}]
