@@ -9,7 +9,7 @@
 %token AFF
 %token ADD SUB MUL DIV
 %token IF THEN ELSE
-%token ID TYPE VAR CST
+%token ID VAR CST
 %token RELOP
 %token UNARY
 
@@ -27,12 +27,15 @@
 
 
  /* On declare que la valeur associe a NOM_VAR utilise la variante 'S' du
-  * type YYSTYPE. Il s'agira donc d'une chaine de caracteres...
+	  * type YYSTYPE. Il s'agira donc d'une chaine de caracteres...
   * Ajouter les indications similaires pour les autres nom-terminaux qui ont
   * aussi une notion de valeur associee.
   */
 /*
 %type <S> NOM_VAR
+%type <D> paramsList
+%type <D> paramsMultiples
+%type <D> paramName
 %type <S> paramStrPu
 %type <I> isStatic
 */
@@ -50,49 +53,36 @@ extern void yyerror();  /* definie dans arbre.c */
 
 /* class Nom (param, ...) [extends nom (args, ...)] [bloc]  is  { decl,  ... } */
 /* I/ */
-declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '}'		 { addClass(ADD, $2); } /*Comment récupérer le nom de ID ?!? */
+declarationClasse : CLASS name '(' paramsList ')' inherits blocs IS '{' declList '}'		 { addClass($2, $4, $5, $6); }
 ;
 
-paramsList :
-| paramsMultiples 
+paramsList :															{ $$ = NULL; }
+| paramsMultiples 														{ $$ = $1; }
 ;
 
 
-paramsMultiples : paramName
-| paramName ',' paramsMultiples
+paramsMultiples : paramName												{ $$ = $1; }
+| paramName ',' paramsMultiples											{ $$ = concatVarDecl( $1, $3); }
 ; 
 
-paramName : var ':' type			{ addConstructeur($1,$3); }
+paramName : var ':' name												{ $$ = newVarDecl( $1, $3);}
 ;
 
-var : ID	{ $$ = yyval.S; }
+var : ID																{ $$ = yyval.S; }
 ;
 
-type : ID	{ $$ = yyval.S; }
+name : ID																{ $$ = yyval.S; }
 ;
 
 inherits :
-| EXTENDS TYPE '(' argumentsList ')'
-;
-
-/* TODO : Pour Salma et Vincent : A modifier si besoin et à supprimer */
-/*
-argumentsList :
-| arg ',' argumentsList
-| arg
-;
-
-arg : expression
-| expression ',' argumentsList
-;
-*/
-
-argumentsListAux : expression ',' argumentsListAux
-| expression
+| EXTENDS name '(' argumentsList ')'  									{ addMere($2); }
 ;
 
 argumentsList : 
 | argumentsListAux
+;
+argumentsListAux : expression ',' argumentsListAux						{ addMereVarCons(
+| expression
 ;
 
 blocs :
