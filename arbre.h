@@ -49,10 +49,11 @@ typedef struct _Class
 typedef struct _Decl
 {	char *name;
 	union { /* Normalement c'est une "Class" SAUF dans le cas des classes prédéfini "Integer" et "String" */
-		Class c;
+		ClassP c;
 		int i;
 		char *str;
 	} val;
+	TreeP experInit;
 	struct _Decl *next;
 } VarDecl, *VarDeclP;
 
@@ -116,6 +117,7 @@ SuperClassP newSuperClassP(char* nom /*, VarDeclP variable // Voir problème dan
 /* construction et accesseur de liste pour les classes */
 ClassP addClass( char* nom, VarDeclP varConst, SuperClassP mere, TreeP construct ); /*TODO*/
 ClassP findClass( char* nom );
+void addChamp(int isStatic,char* nom ,char* classe,TreeP exprInit);                                 /*******************/
 void addConstructeur(char* nomVar, char* class);
 
 /* construction et accesseur pour les arbres */

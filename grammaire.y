@@ -37,6 +37,8 @@
 %type <D> paramsMultiples
 %type <D> paramName
 %type <S> paramStrPu
+%type <I> isStatic
+%type <T> exprInitVar
 %type <M> inherits
 */
 /* %type<T> expression // TODO : A REMETTRE après avoir bien défini expression !!! \\ */
@@ -78,15 +80,12 @@ inherits :																{ $$ = NULL; }
 | EXTENDS name '(' argumentsList ')'  									{ $$ = addMere($2); }
 ;
 
-<<<<<<< HEAD:tp.y
-argumentsListAux : expression ',' argumentsListAux
-=======
 argumentsList : 														/*Faut-ils utiliser des arbres ?? */
 | argumentsListAux
 ;
 
 argumentsListAux : expression ',' argumentsListAux						
->>>>>>> 9ba134f57147697d459a6b1e933b32afd0d422e4:grammaire.y
+
 | expression
 ;
 
@@ -107,15 +106,15 @@ declList :																/*TODO*/
 
 /* [static] var nom : type [:= expression]; */
 /* II/ */
-declChamp : isStatic VAR var ':' type exprInitVar ';'
+declChamp : isStatic VAR var ':' type exprInitVar ';'   { addChamp($1,$3,$5,$6)}      /*|||||||||||*/
 ;
 
-isStatic :
-| STATIC 	{  }
+isStatic : {$$ = 0}
+| STATIC   {$$ = 1}
 ;
 
-exprInitVar :
-| AFF expression
+exprInitVar :  {$$ = NULL}
+| AFF expression   {$$ = $2}
 ;
 
 
@@ -215,3 +214,4 @@ paramStrPut : STR { $$=yyval.S; }
  
 /*NOM_VAR : ID { $$ = yylval.S; }
 ;*/
+
