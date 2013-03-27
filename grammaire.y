@@ -9,7 +9,7 @@
 %token AFF
 %token ADD SUB MUL DIV
 %token IF THEN ELSE
-%token ID TYPE VAR CST
+%token ID VAR CST
 %token RELOP
 %token UNARY
 
@@ -27,13 +27,17 @@
 
 
  /* On declare que la valeur associe a NOM_VAR utilise la variante 'S' du
-  * type YYSTYPE. Il s'agira donc d'une chaine de caracteres...
+	  * type YYSTYPE. Il s'agira donc d'une chaine de caracteres...
   * Ajouter les indications similaires pour les autres nom-terminaux qui ont
   * aussi une notion de valeur associee.
   */
 /*
 %type <S> NOM_VAR
+%type <D> paramsList
+%type <D> paramsMultiples
+%type <D> paramName
 %type <S> paramStrPu
+%type <M> inherits
 */
 /* %type<T> expression // TODO : A REMETTRE après avoir bien défini expression !!! \\ */
 /* %type<T> exprWithOperator // IDEM \\ */
@@ -49,51 +53,55 @@ extern void yyerror();  /* definie dans arbre.c */
 
 /* class Nom (param, ...) [extends nom (args, ...)] [bloc]  is  { decl,  ... } */
 /* I/ */
-declarationClasse : CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '}'		 { addClass(ADD, $2); } /*Comment récupérer le nom de ID ?!? */
+declarationClasse : CLASS name '(' paramsList ')' inherits blocs IS '{' declList '}'		 { addClass($2, $4, $5); }
 ;
 
-paramsList :
-| paramsMultiples 
+paramsList :															{ $$ = NULL; }
+| paramsMultiples 														{ $$ = $1; }
 ;
 
 
-paramsMultiples : paramName
-| paramName ',' paramsMultiples
+paramsMultiples : paramName												{ $$ = $1; }
+| paramName ',' paramsMultiples											{ $$ = concatVarDecl( $1, $3); }
 ; 
 
-paramName : var ':' type	{ addConstructeur($1,$3); }
+paramName : var ':' name												{ $$ = newVarDecl( $1, $3);}
 ;
 
-var : ID	{ $$ = yyval.S; }
+var : ID																{ $$ = yyval.S; }
 ;
 
-type : ID	{ $$ = yyval.S; }
+name : ID																{ $$ = yyval.S; }
 ;
 
-inherits :
-| EXTENDS TYPE '(' argumentsList ')'
+inherits :																{ $$ = NULL; }
+| EXTENDS name '(' argumentsList ')'  									{ $$ = addMere($2); }
 ;
 
+<<<<<<< HEAD:tp.y
 argumentsListAux : expression ',' argumentsListAux
-| expression
-;
-
-argumentsList : 
+=======
+argumentsList : 														/*Faut-ils utiliser des arbres ?? */
 | argumentsListAux
 ;
 
-blocs :
-| '{' blocInstructions '}'
+argumentsListAux : expression ',' argumentsListAux						
+>>>>>>> 9ba134f57147697d459a6b1e933b32afd0d422e4:grammaire.y
+| expression
 ;
 
-blocInstructions :
-| listInstructions
-| listDeclarationVariables IS listInstructions
+blocs :																	{ $$ = NULL; }
+| '{' blocInstructions '}'												{ $$ = $2; }
 ;
 
-declList :
-| declChamp declList
-| declMethod declList
+blocInstructions :														{ $$ = NULL; }
+| listInstructions														/*TODO*/
+| listDeclarationVariables IS listInstructions							/*TODO*/
+;
+
+declList :																/*TODO*/
+| declChamp declList													/*TODO*/
+| declMethod declList													/*TODO*/
 ;
 
 

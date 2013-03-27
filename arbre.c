@@ -217,10 +217,11 @@ int eval(TreeP tree, VarDeclP decls) {
 
 /** 
  * Créer une classe avec seulement le nom, les autres éléments devront
- * être ajouté manuellment.
+ * être ajouté manuellment après.
  */
 ClassP addClass( char* nom ) {
 	ClassP result = NEW(1,Class);
+	result->name =nom;
 	result->next =lClass;
 	lClass = result;
 	return result;
@@ -265,4 +266,18 @@ typedef struct _Decl
 	} val;
 	struct _Decl *next;
 } VarDecl, *VarDeclP;
+
+VarDeclP concatVarDeclP ( VarDeclP v1, VarDeclP v2) {
+	v1->next = v2;
+	return v1;
+}
+
+VarDeclP newVarDeclP(char* nom, char* classe) {
+	VarDeclP result = NEW(1,VarDecl);
+	result->name = nom;
+	result->val.c = classe;
+	return result;
+}
+
+
 

@@ -37,6 +37,7 @@ typedef struct _Class
 	MethodeP methode;
 	MethodeP methodeStatic; /* ATTENTION : ne peut pas utiliser des attributs NON-static ! */
 	TreeP constructeur;
+	struct _Class *mere;
     struct _Class *next;
 } Class, *ClassP;
 
@@ -59,6 +60,12 @@ typedef struct _Fichier {
 	ClassP classe;
 	TreeP main;
 }
+
+
+typedef struct _SuperClass
+{   char* name;
+	VarDeclP constructeur;
+} SuperClass, *SuperClassP;
 
 /* Etiquettes additionnelles pour les arbres de syntaxe abstraite. Les tokens
  * tels que ADD, SUB, etc. servent directement d'etiquette.
@@ -89,17 +96,25 @@ typedef struct _Fichier {
  * associees aux productions de la grammaire. 
 */
 typedef union /*Pour Thomas : c'est une UNION !!! */
-{ char C;
-  char *S;   
-  int I;    
-  VarDeclP D;
-  TreeP T;
+{	char C;
+	char *S;   
+	int I;    
+	VarDeclP D;
+	TreeP T;
+	SuperClassP M;
 } YYSTYPE;
 
 int eval(TreeP tree, VarDeclP decls);
 
+/* VarDeclP */
+VarDeclP concatVarDeclP ( VarDeclP v1, VarDeclP v2);
+VarDeclP newVarDeclP(char* nom, char* classe); /*TODO*/
+
+/* SuperClassP */
+SuperClassP newSuperClassP(char* nom /*, VarDeclP variable // Voir problème dans grammaire.y \\ */ );
+
 /* construction et accesseur de liste pour les classes */
-ClassP addClass( char* nom);
+ClassP addClass( char* nom, VarDeclP varConst, SuperClassP mere, TreeP construct ); /*TODO*/
 ClassP findClass( char* nom );
 void addConstructeur(char* nomVar, char* class);
 
