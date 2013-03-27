@@ -61,7 +61,7 @@ paramsMultiples : paramName
 | paramName ',' paramsMultiples
 ; 
 
-paramName : var ':' type			{ addConstructeur($1,$3); }
+paramName : var ':' type	{ addConstructeur($1,$3); }
 ;
 
 var : ID	{ $$ = yyval.S; }
@@ -73,18 +73,6 @@ type : ID	{ $$ = yyval.S; }
 inherits :
 | EXTENDS TYPE '(' argumentsList ')'
 ;
-
-/* TODO : Pour Salma et Vincent : A modifier si besoin et à supprimer */
-/*
-argumentsList :
-| arg ',' argumentsList
-| arg
-;
-
-arg : expression
-| expression ',' argumentsList
-;
-*/
 
 argumentsListAux : expression ',' argumentsListAux
 | expression
@@ -115,7 +103,7 @@ declChamp : isStatic VAR var ':' type exprInitVar ';'
 ;
 
 isStatic :
-| STATIC
+| STATIC 	{  }
 ;
 
 exprInitVar :
