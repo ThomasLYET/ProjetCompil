@@ -11,7 +11,8 @@
 %token IF THEN ELSE
 %token ID VAR CST
 %token RELOP
-%token UNARY
+%token UMIN UPLUS
+
 
 /* indications de precedence (en ordre croissant) et d'associativite. Les
  * operateurs sur une meme ligne (separes par un espace) ont la meme priorite.
@@ -30,8 +31,9 @@
 	  * type YYSTYPE. Il s'agira donc d'une chaine de caracteres...
   * Ajouter les indications similaires pour les autres nom-terminaux qui ont
   * aussi une notion de valeur associee.
-  */
-/*
+  *
+*/
+
 %type <S> NOM_VAR
 %type <D> paramsList
 %type <D> paramsMultiples
@@ -40,7 +42,7 @@
 %type <I> isStatic
 %type <T> exprInitVar
 %type <M> inherits
-*/
+
 /* %type<T> expression // TODO : A REMETTRE après avoir bien défini expression !!! \\ */
 /* %type<T> exprWithOperator // IDEM \\ */
 
@@ -77,7 +79,7 @@ name : ID																{ $$ = yyval.S; }
 ;
 
 inherits :																{ $$ = NULL; }
-| EXTENDS name '(' argumentsList ')'  									{ $$ = addMere($2); }
+| EXTENDS name '(' argumentsList ')'  									{ $$ = addMere($2); }/*à s'assurer*/
 ;
 
 argumentsList : 														/*Faut-ils utiliser des arbres ?? */
@@ -135,7 +137,7 @@ isReturn : 		{  }
 /* IV/ */
 /* Sans ";", qui est défini ailleurs */
 /* expression ne rajoute JAMAIS de { }  */
-expression : selection
+expression : selection 
 | CST
 | '(' expression ')'
 | '(' AS type ':' expression ')'
@@ -159,17 +161,17 @@ listAttributs :
 ;
 
 /* Ce qui en commentaire à remettre après */
-exprWithOperator : var				/* { $$=makeLeaf(ADD, 3); /* Attention valeur BIDON */ /* } */
-| expression ADD expression  		/* { $$=makeTree(ADD,2,$1,$3); } */
-| expression SUB expression			/* { $$=makeTree(SUB,2,$1,$3); } */
-| expression MUL expression  		/* { $$=makeTree(MUL,2,$1,$3); } */
-| expression DIV expression  		/* { $$=makeTree(DIV,2,$1,$3); } */
-| expression RELOP expression  		/* { $$=makeTree($2,2,$1,$3); } */
-| SUB expression %prec UNARY  		/* { $$=makeTree(UMIN,1,$2); } */
-| ADD expression %prec UNARY		/* { $$=makeTree(UPLUS,1,$2); } */
+exprWithOperator : var				 { $$=makeLeaf(ID, $1); }
+| expression ADD expression  	     { $$=makeTree(ADD,2,$1,$3); } 
+| expression SUB expression			 { $$=makeTree(SUB,2,$1,$3); } 
+| expression MUL expression  		 { $$=makeTree(MUL,2,$1,$3); } 
+| expression DIV expression  		 { $$=makeTree(DIV,2,$1,$3); } 
+| expression RELOP expression  		 { $$=makeTree(RELOP,2,$1,$3); } 
+| SUB expression %prec UMIN  		 { $$=makeTree(UMIN,1,$2); } 
+| ADD expression %prec UPLUS		 { $$=makeTree(UPLUS,1,$2); } 
 ;
 
-instructions : expression ';'
+instructions : expression ';' 
 | '{' blocInstructions '}'
 | RETURNS ';'
 | affectation
