@@ -159,7 +159,7 @@ listAttributs :
 
 exprWithOperator : var
 | expression ADD expression  				{ $$=makeTree(ADD,2,$1,$3); }
-| expression SUB expression				{ $$=makeTree(SUB,2,$1,$3); }
+| expression SUB expression			     	{ $$=makeTree(SUB,2,$1,$3); }
 | expression MUL expression  				{ $$=makeTree(MUL,2,$1,$3); }
 | expression DIV expression  				{ $$=makeTree(DIV,2,$1,$3); }
 | expression relop expression  				{ $$=makeTree($2,2,$1,$3); }
