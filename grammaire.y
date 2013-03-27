@@ -38,6 +38,7 @@
 %type <D> paramName
 %type <S> paramStrPu
 %type <I> isStatic
+%type <T> exprInitVar
 */
 /* %type<T> expression // TODO : A REMETTRE après avoir bien défini expression !!! \\ */
 /* %type<T> exprWithOperator // IDEM \\ */
@@ -102,15 +103,15 @@ declList :
 
 /* [static] var nom : type [:= expression]; */
 /* II/ */
-declChamp : isStatic VAR var ':' type exprInitVar ';'   { addChamp($1,$3,type)}
+declChamp : isStatic VAR var ':' type exprInitVar ';'   { addChamp($1,$3,$5,$6)}      /*|||||||||||*/
 ;
 
-isStatic :
-| STATIC
+isStatic : {$$ = 0}
+| STATIC   {$$ = 1}
 ;
 
-exprInitVar :
-| AFF expression {AFF}
+exprInitVar :  {$$ = NULL}
+| AFF expression   {$$ = $2}
 ;
 
 
@@ -125,7 +126,7 @@ isStaticOrOverride :
 ;
 
 isReturn : 
-| RETURNS type
+| RETURNS name
 ;
 
 /* IV/ */

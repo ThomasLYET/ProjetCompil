@@ -256,6 +256,16 @@ void addConstructeur(char* nomVar, char* class) {
 	lClass->constructeur = var;
 }
 
+void addChamp(int isStatic,char* nom ,char* class , TreeP exprInit){               /* TODO static */
+	VarDeclP var = NEW(1,VarDecl);
+	ClassP theClass = findClass(class); /*TODO if the class is NULL*/
+	var->name = nom;
+	var->val.c = theClass;
+	var->next = lClass->attribut;
+	lClass->attribut = var;
+	var->exprInit = exprInit;
+}
+
 
 typedef struct _Decl
 {	char *name;
