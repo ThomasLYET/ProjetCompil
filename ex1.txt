@@ -1,0 +1,224 @@
+/* Exemple de programme dans le langage source.
+ * Attention: pour l'instant seuls les aspects lexicaux et
+ * syntaxiques ont ete verifies automatiquement.
+ */
+class Point(xc: Integer, yc: Integer, n: String)
+      { x := xc; y := yc; name := n; 
+        iname := Point.newId(); /* Point est obligatoire */
+      }
+is 
+{
+  static var number : Integer := 1 ;
+
+  static def newId() returns Integer is {
+     result := number; number := number + 1;
+  }
+
+  static def alloues() returns Integer is { result := number - 1; }
+
+  var x: Integer;
+  var y: Integer;
+  var name: String;
+  var iname : Integer := "Point-" & number.toString();
+
+  def setName(s: String) is { name := s; }
+
+  def move(dx: Integer, dy: Integer) returns Point is {
+      x := x + dx; y := y + dy; result = this;
+  }
+
+  def getx() returns Integer is { result := x;  /* avec this implicite */  }
+ 
+  def gety() returns Integer is { result := this.y; /* avec this explicite */ }
+
+  def print() is {
+      "Inside Point::print".println();
+      /* Exemples avec l'operateur & de concatenation de chaines */
+      ( name & "[" & iname.toString() & "]" ).print();
+      ( "= (" & x.toString() & ", " & y.toString() & ")" ).println();
+  }
+
+  def verboseMove (dx: Integer, dy: Integer) is {
+      this.move(dx, dy); /* le this est obligatoire */
+      this.print();
+  }
+
+  def clone() returns Point is { result := new Point(x, y, this.name); }
+
+  def egal(p: Point) returns Integer is {
+   /* ils sont egaux s'ils ont memes coordonnees */
+       var b1 : Integer := p.x - x;
+       var b2 : Integer := p.y - y;
+    is if b1 then result := 0; else { result := b2 = 0; }
+  }
+
+  def egal2(p: Point) returns Integer is {
+   /* ils sont egaux s'ils ont memes coordonnees */
+       var b1 : Integer := p.x - x;
+    is if b1 then { result := 0; return; } else { }
+       result := b2 = 0;
+  }
+}
+
+
+class Couleur(cinit: Integer) 
+   /* 3 couleurs : couleur = 0, 1 ou autre chose !
+    * Valeur initiale a 0 grace a l'initialisation de l'attribut mais
+    * eventuellement ecrasee par la valeur passee dans le constructeur.
+    */
+  { if cinit = 1 then coul := 1; else if cinit = 2 then coul := 2; else { } }
+is {
+  static var default: Integer := 0; /* initialisee au lancement du programme */
+  var coul: Integer := default; /* eventuellement ecrase dans le constructeur */
+
+  static def blanc() returns Couleur is { result := new Couleur(0); }
+
+  static def noir() returns Couleur is { result := new Couleur(1); }
+
+  static def gris() returns Couleur is { result := new Couleur(2); }
+
+  def name() returns String is {
+      var aux : String;
+      is
+      "Inside Couleur::couleur".println();
+      if coul = 0 then { var aux2 : String:= "Blanc"; is result:= aux2;  }
+      else { var dummy : String; is 
+             if coul = 1 then aux := "Noir"; else aux := "Gris";
+	     result := aux;
+           }
+  }
+
+  def estGris() returns Integer is {
+     "Inside Couleur::estGris".println();
+     result := coul = 2;
+  }
+
+}
+
+
+class PointColore(xc: Integer, yc:Integer, c: Couleur)
+      extends Point(xc, yc, "Anonymous") { coul := c; } is
+{  
+  var coul: Couleur;
+
+  def couleur() returns Couleur is { result := coul; }
+
+  def colore() returns Integer is { result := coul.estGris() <> 0; }
+
+  def setCouleur(c: Couleur) is {
+       coul := c;
+  }
+
+  override def clone() returns Point /* pas PointColore ! */ is {
+      result := new PointColore(x, y, coul);
+  }
+
+  def estGris() returns Integer is {
+      "Inside PointColore::estGris".println();
+      result := coul.estGris();
+  }
+
+  override def print() is {
+      "Inside PointColore::print".println();
+      super.print();
+      this.couleur().name().println();
+  }
+}
+
+
+class PointNoir(xc: Integer, yc:Integer)
+      extends PointColore(xc, yc, Couleur.noir())
+      /* pas de corps de constructeur pour cette classe */
+is {
+  override def estGris() returns Integer is { result := 0; }
+  override def couleur() returns Couleur is { result := Couleur.noir(); }
+}
+
+
+class DefaultPoint() /* Parentheses obligatoires */
+      extends PointColore(0, 0, Couleur.blanc())
+      /* pas d'instruction d'initialisation pour cette classe */
+is {
+  override def estGris() returns Integer is { result := 0; }
+  override def couleur() returns Couleur is { result := Couleur.blanc(); }
+}
+
+class Test() is {
+ 
+ static def test(p: Point, p2: PointColore, p3: PointNoir) is {
+      var c: String; var c2: String; var c3: String;
+      is
+      p.print();
+      p2.print();
+      "Appel 1: ".println();
+      if p2.colore() <> 0 then c := "colore";  else c := "gris";
+      "Appel 2: ".println();
+      if p3.colore() <> 0 then c2 := "colore"; else c2 := "gris";
+      "Appel 3: ".println();
+      if p3.colore() <> 0 then c3 := "colore"; else c3 := "gris";
+      "Resultats de test: ".println();
+      c.print(); " ".print();
+      c2.print(); " ".print();
+      c3.print();
+      "".println();
+  }
+
+  static def test2(p: PointColore) is { 
+      p.couleur().name().print(); 
+  }
+}
+
+class A() is {
+  var v : Integer := 1;
+  def f() is { "A::f()\"n".print(); }
+}
+
+class A2() extends A() is {
+  var v : String := "hello"; /* masque le champ v de la classe A */
+
+  override def f() is { "A2::f()\"n".print(); }
+
+  def g() is {
+      v := "world";
+      /* this etant caste en A, le chmap v en question est celui de A */
+      (as A: this).v := 1;
+      /* les deux appels doivent fournir la meme chose */
+      this.f();
+      (as A : this).f();
+  }
+}
+
+{ /* Bloc qui correspond au programme principal */ 
+  var p1: Point := new Point(1, 5, "p1");
+  var p2: Point := new Point(2, 3, "p2");
+  var o : PointColore := new PointColore(0, 0, Couleur.blanc());
+  var pn : PointNoir := new PointNoir(+1, -1);
+  var dp : DefaultPoint := new DefaultPoint();
+is
+  p2.move(p1.getx(), p1.gety());
+  o.setName("origine");
+  p2.move(p1.getx()-2*5-3, p1.gety());
+  o.print();
+  p2.print();
+  o.clone().print();
+  o.clone().move(54, 36).print();
+  /* Ne compile pas car clone() renvoie statiquement un Point */
+  /* o := o.clone(); */
+  p1 := p1.clone().move(+2, -3); 
+  p1.print();
+  o.clone().print();
+  "test(Point, PointColore, PointNoir)".println();
+  Test.test(p1, o, pn);
+  "test(PointNoir, PointNoir, PointNoir)".println();
+  Test.test(pn, pn, pn);
+  p1 := pn;
+  Test.test2(o);
+  Test.test2(pn);
+  o := pn;
+
+  "test(PointNoir, PointNoir, PointNoir)".println();
+  Test.test(p1, o, pn);
+  Test.test2(o);
+  Test.test2(pn);
+  "\nDone".println();
+}

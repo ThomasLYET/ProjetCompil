@@ -280,4 +280,19 @@ VarDeclP newVarDeclP(char* nom, char* classe) {
 }
 
 
+void createMethodFrom( ClassP myClass, VarDeclP output, VarDeclP inputs, TreeP instrs )
+{
+	//lClass,
+
+	Methode tmp = NEW (1, Methode);
+	/* On sette les champs de la méthode */
+	tmp->varSortie = output;
+	
+	tmp->varEntree=inputs[i]
+
+	/* On ajoute la méthode à la classe */
+	myClass->
+
+}
+
 

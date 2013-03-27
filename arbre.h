@@ -22,7 +22,7 @@ typedef struct _Tree {
 
 typedef struct _Methode {
 	VarDeclP varEntree; 
-	VarDeclP varSorti; /* ATTENTION : il n'y a qu'une seul variable de sorti !!! */
+	VarDeclP varSortie; /* ATTENTION : il n'y a qu'une seul variable de sortiEEEE !!! */
 	TreeP code;
 } Methode, *MethodeP;
 
@@ -126,6 +126,9 @@ TreeP getChild(TreeP tree, int rank);
 
 /* evaluateur de l'expression principale */
 int eval(TreeP tree, VarDeclP decls);
+
+/* Création des méthodes */
+void createMethodFrom( VarDeclP output, VarDeclP inputs, TreeP instrs );
 
 /* ecriture formatee */
 void pprintVar(VarDeclP decl, TreeP tree);
