@@ -50,27 +50,28 @@
      AS = 268,
      NEW = 269,
      AFF = 270,
-     IF = 271,
-     THEN = 272,
-     ELSE = 273,
-     ID = 274,
-     TYPE = 275,
-     VAR = 276,
-     CST = 277,
-     RELOP = 278,
-     UNARY = 279,
-     AND = 280,
-     SUB = 281,
-     ADD = 282,
-     DIV = 283,
-     MUL = 284
+     ADD = 271,
+     SUB = 272,
+     MUL = 273,
+     DIV = 274,
+     IF = 275,
+     THEN = 276,
+     ELSE = 277,
+     ID = 278,
+     TYPE = 279,
+     VAR = 280,
+     CST = 281,
+     RELOP = 282,
+     UNARY = 283,
+     AND = 284
    };
 #endif
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-
+typedef int YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 #endif

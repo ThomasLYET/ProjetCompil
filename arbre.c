@@ -16,6 +16,9 @@ extern int yylineno;
   struct _Decl *next;
 } VarDecl, *VarDeclP;*/
 
+/*La liste de toutes les classes*/
+ClassP lClass;
+
 VarDecl *declaration = NULL;
 
 void ajoutVar(char *name, TreeP tree) {	
@@ -27,8 +30,6 @@ void ajoutVar(char *name, TreeP tree) {
 	}
 	declaration = temp;
 }
-
-int eval(TreeP tree, VarDeclP decls);
 
 /* Niveau de 'verbosite'.
  * Par defaut, n'imprime que le resultat et les messages d'erreur
@@ -47,7 +48,6 @@ int errorCode = NO_ERROR;
 /* Descripteur de fichier pour la lecture des donnees par get */
 FILE *fd = NIL(FILE);
 
-
 /* Appel:
  *   tp [-option]* programme.txt donnees.dat
  * Le fichier de donnees est obligatoire si le programme execute la
@@ -56,63 +56,63 @@ FILE *fd = NIL(FILE);
  * Options: -[eE] -[vV] -[hH?]
  */
 int main(int argc, char **argv) {
-  int fi;
-  int i, res;
+	int fi;
+	int i, res;
 
-  for(i = 1; i < argc; i++) {
-    if (argv[i][0] == '-') {
-      switch (argv[i][1]) {
-      case 'v': case 'V':
-	verbose = TRUE; continue;
-      case 'e': case 'E':
-	noEval = TRUE; continue;
-      case '?': case 'h': case 'H':
-	fprintf(stderr, "Command: tp -e -v program.txt data.dat\n");
-	exit(USAGE_ERROR);
-      default:
-	fprintf(stderr, "Error: Unknown option: %c\n", argv[i][1]);
-	exit(USAGE_ERROR);
-      }
-    } else break;
-  }
+	for(i = 1; i < argc; i++) {
+		if (argv[i][0] == '-') {
+			switch (argv[i][1]) {
+			case 'v': case 'V':
+				verbose = TRUE; continue;
+			case 'e': case 'E':
+				noEval = TRUE; continue;
+			case '?': case 'h': case 'H':
+				fprintf(stderr, "Command: tp -e -v program.txt data.dat\n");
+				exit(USAGE_ERROR);
+			default:
+				fprintf(stderr, "Error: Unknown option: %c\n", argv[i][1]);
+				exit(USAGE_ERROR);
+			}
+		} else break;
+	}
 
-  if (i == argc) {
-    fprintf(stderr, "Error: Missing program file\n");
-    exit(USAGE_ERROR);
-  }
+	if (i == argc) {
+		fprintf(stderr, "Error: Missing program file\n");
+		exit(USAGE_ERROR);
+	}
 
-  if ((fi = open(argv[i++], O_RDONLY)) == -1) {
-    fprintf(stderr, "Error: Cannot open %s\n", argv[i-1]);
-    exit(USAGE_ERROR);
-  }
+	if ((fi = open(argv[i++], O_RDONLY)) == -1) {
+		fprintf(stderr, "Error: Cannot open %s\n", argv[i-1]);
+		exit(USAGE_ERROR);
+	}
 
-  /* redirige l'entree standard sur le fichier... */
-  close(0); dup(fi); close(fi);
+	/* redirige l'entree standard sur le fichier... */
+	close(0); dup(fi); close(fi);
 
-  if (i < argc) { /* fichier dans lequel lire les valeurs pour get() */
-    if ((fd = fopen(argv[i], "r")) == NULL) {
-      fprintf(stderr, "Error: Cannot open %s\n", argv[i]);
-      exit(USAGE_ERROR);
-    }
-  }
+	if (i < argc) { /* fichier dans lequel lire les valeurs pour get() */
+		if ((fd = fopen(argv[i], "r")) == NULL) {
+			fprintf(stderr, "Error: Cannot open %s\n", argv[i]);
+			exit(USAGE_ERROR);
+		}
+	}
 
-  /* Lance l'analyse syntaxique de tout le source, en appelant yylex au fur
-   * et a mesure. Execute les actions semantiques en parallele avec les
-   * reductions.
-   * yyparse renvoie 0 si le source est syntaxiquement correct, une valeur
-   * differente de 0 en cas d'erreur syntaxique (eventuellement causee par des
-   * erreurs lexicales).
-   * Comme l'interpretation globale est automatiquement lancee par les actions
-   * associees aux reductions, une fois que yyparse a termine il n'y
-   * a plus rien a faire (sauf fermer les fichiers)
-   * Si le code du programme contient une erreur, on bloque l'evaluation.
-   * S'il n y a que des erreurs contextuelles on essaye de ne pas s'arreter
-   * a la premiere mais de continuer l'analyse pour en trouver d'autres, quand
-   * c'est possible.
-   */
-  res = yyparse();
-  if (fd != NIL(FILE)) fclose(fd);
-  return res ? SYNTAX_ERROR : errorCode;
+	/* Lance l'analyse syntaxique de tout le source, en appelant yylex au fur
+	 * et a mesure. Execute les actions semantiques en parallele avec les
+	 * reductions.
+	 * yyparse renvoie 0 si le source est syntaxiquement correct, une valeur
+	 * differente de 0 en cas d'erreur syntaxique (eventuellement causee par des
+	 * erreurs lexicales).
+	 * Comme l'interpretation globale est automatiquement lancee par les actions
+	 * associees aux reductions, une fois que yyparse a termine il n'y
+	 * a plus rien a faire (sauf fermer les fichiers)
+	 * Si le code du programme contient une erreur, on bloque l'evaluation.
+	 * S'il n y a que des erreurs contextuelles on essaye de ne pas s'arreter
+	 * a la premiere mais de continuer l'analyse pour en trouver d'autres, quand
+	 * c'est possible.
+	 */
+	res = yyparse();
+	if (fd != NIL(FILE)) fclose(fd);
+	return res ? SYNTAX_ERROR : errorCode;
 }
 
 
@@ -120,32 +120,6 @@ void setError(int code) {
   errorCode = code;
   if (code != NO_ERROR) { noEval = TRUE; }
 }
-
-/* Lecture dynamique d'une valeur, indiquee par get() dans une expression.
- * Exemple: x := 3 + get(); begin x end
- */
-int getValue() {
-  int res;
-  if (fd == NIL(FILE)) {
-    fprintf(stderr, "Error: Missing data file\n");
-    exit(USAGE_ERROR);
-  }
-  if (fscanf(fd, "%d", &res) == 1) {
-    return res;
-  } else {
-    fprintf(stderr, "Error: Missing or wrong data in file\n");
-    exit(USAGE_ERROR);
-  }
-}
-
-
-
-/* implemente la fonction put(str, val) du langage */
-int putValue(char *str, int val) {
-  printf("%s%d\n", str, val);
-  return val;
-}
-
 
 /* yyerror:  fonction importee par Bison et a fournir explicitement. Elle
  * est appelee quand Bison detecte une erreur syntaxique.
@@ -155,52 +129,48 @@ void yyerror(char *ignore) {
   printf("erreur de syntaxe: Ligne %d\n", yylineno);
 }
 
-
 /* Tronc commun pour la construction d'arbre */
 TreeP makeNode(int nbChildren, short op) {
-  TreeP tree = NEW(1, Tree);
-  tree->op = op;
-  tree->nbChildren = nbChildren;
-  tree->u.children = nbChildren > 0 ? NEW(nbChildren, TreeP) : NIL(TreeP);
-  return(tree);
+	TreeP tree = NEW(1, Tree);
+	tree->op = op;
+	tree->nbChildren = nbChildren;
+	tree->u.children = nbChildren > 0 ? NEW(nbChildren, TreeP) : NIL(TreeP);
+	return(tree);
 }
 
 
 /* Construction d'un arbre a nbChildren branches, passees en parametres */
 TreeP makeTree(short op, int nbChildren, ...) {
-  va_list args;
-  int i;
-  TreeP tree = makeNode(nbChildren, op); 
-  va_start(args, nbChildren);
-  for (i = 0; i < nbChildren; i++) { 
-    tree->u.children[i] = va_arg(args, TreeP);
-  }
-  va_end(args);
-  return(tree);
+	va_list args;
+	int i;
+	TreeP tree = makeNode(nbChildren, op); 
+	va_start(args, nbChildren);
+	for (i = 0; i < nbChildren; i++) { 
+		tree->u.children[i] = va_arg(args, TreeP);
+	}
+	va_end(args);
+	return(tree);
 }
-
 
 /* Retourne le rankieme fils d'un arbre (de 0 a n-1) */
 TreeP getChild(TreeP tree, int rank) {
-  return tree->u.children[rank];
+	return tree->u.children[rank];
 }
-
 
 /* Constructeur de feuille dont la valeur est une chaine de caracteres
  * (un identificateur de variable ou parametre, la chaine d'un PUT).
  */
 TreeP makeLeafStr(short op, char *str) {
-  TreeP tree = makeNode(0, op);
-  tree->u.str = str;
-  return(tree);
+	TreeP tree = makeNode(0, op);
+	tree->u.str = str;
+	return(tree);
 }
-
 
 /* Constructeur de feuille dont la valeur est un entier */
 TreeP makeLeafInt(short op, int val) {
-  TreeP tree = makeNode(0, op); 
-  tree->u.val = val;
-  return(tree);
+	TreeP tree = makeNode(0, op); 
+	tree->u.val = val;
+	return(tree);
 }
 
 
@@ -210,15 +180,15 @@ TreeP makeLeafInt(short op, int val) {
  * arbitraire. 
  */
 int evalVar(TreeP tree, VarDeclP decls) {
-  char *name = tree->u.str;
-  while (decls != NIL(VarDecl)) {
-    if (! strcmp(decls->name, name)) return(decls->val);
-    decls = decls->next;
-  }
-  fprintf(stderr, "Error: Undeclared variable: %s\n", name);
-  exit(UNEXPECTED);
+	char *name = tree->u.str;
+	while (decls != NIL(VarDecl)) {
+		if (! strcmp(decls->name, name)) return(decls->val);
+		decls = decls->next;
+	}
+	fprintf(stderr, "Error: Undeclared variable: %s\n", name);
+	exit(UNEXPECTED);
 }
-
+/* ATTENTION : ce programme servira pour faire le parcours d'arbre, ne pas toucher pour le moment ! */
 /* Evaluation par parcours recursif de l'arbre representant une expression. 
  * Les valeurs des identificateurs situes aux feuilles de l'arbre sont a
  * rechercher dans la liste 'decls'
@@ -226,22 +196,98 @@ int evalVar(TreeP tree, VarDeclP decls) {
  * selon la semantique de l'operateur (cas du IF, and, or, etc.)
  */
 int eval(TreeP tree, VarDeclP decls) {
-  switch (tree->op) {
-  case ID:
-    return evalVar(tree, decls);
-  case CST:
-    return(tree->u.val);
-  case EQ:
-  case NE:
-  case GT:
-  case GE:
-  case LT:
-  case LE:
-  case ADD:
-  case SUB:
-  default: 
-    fprintf(stderr, "Error: Eval unexpected operator label: %d\n", tree->op);
-    exit(UNEXPECTED);
-  }
+	switch (tree->op) {
+	case ID:
+		return evalVar(tree, decls);
+	case CST:
+		return(tree->u.val);
+	case EQ:
+	case NE:
+	case GT:
+	case GE:
+	case LT:
+	case LE:
+	case ADD:
+	case SUB:
+	default: 
+		fprintf(stderr, "Error: Eval unexpected operator label: %d\n", tree->op);
+		exit(UNEXPECTED);
+	}
 }
+
+/** 
+ * Créer une classe avec seulement le nom, les autres éléments devront
+ * être ajouté manuellment après.
+ */
+ClassP addClass( char* nom ) {
+	ClassP result = NEW(1,Class);
+	result->name =nom;
+	result->next =lClass;
+	lClass = result;
+	return result;
+}
+
+/**
+ * Renvoie la Class ayant le nom demandé
+ */
+ClassP findClass( char* nom ) {
+	ClassP temp = lClass;
+	while (temp != NULL) {
+		if (strcmp(nom,temp->name) == 0 ) {
+			return temp;
+		}
+		temp = temp->next;
+	}
+	fprintf(stderr, "Error: Class name doesn't exist : %s\n", nom);
+	exit(CLASS_NOT_FOUND);
+}
+
+/**
+ * Pas besoin d'avoir la classe en variable, en effet, c'est lClass
+ * directement qui est concerné.
+ */
+void addConstructeur(char* nomVar, char* class) {
+	ClassP theClass = findClass(class);
+	
+	VarDeclP var = NEW(1,VarDecl);
+	var->name = nomVar;
+	var->val.c = theClass;
+	var->next = lClass->constructeur;
+	lClass->constructeur = var;
+}
+
+void addChamp(int isStatic,char* nom ,char* class , TreeP exprInit){               /* TODO static */
+	VarDeclP var = NEW(1,VarDecl);
+	ClassP theClass = findClass(class); /*TODO if the class is NULL*/
+	var->name = nom;
+	var->val.c = theClass;
+	var->next = lClass->attribut;
+	lClass->attribut = var;
+	var->exprInit = exprInit;
+}
+
+
+typedef struct _Decl
+{	char *name;
+	union { 
+		Class c;
+		int i;
+		char *str;
+	} val;
+	struct _Decl *next;
+} VarDecl, *VarDeclP;
+
+VarDeclP concatVarDeclP ( VarDeclP v1, VarDeclP v2) {
+	v1->next = v2;
+	return v1;
+}
+
+VarDeclP newVarDeclP(char* nom, char* classe) {
+	VarDeclP result = NEW(1,VarDecl);
+	result->name = nom;
+	result->val.c = classe;
+	return result;
+}
+
+
 
