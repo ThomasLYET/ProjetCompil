@@ -16,8 +16,8 @@ F:	...
 	RETURN
 
 Pour faire appel à la fonction F:
-PUSHN 1	        -- Emplacement du resultat de F(...) et n'est présent que si la fonction a un type de retour
-PUSHI val	-- Apparaît N fois et permet d'empiler les val (arg0...argN) 0<=N
-PUSHA F		-- Emplilement de l'adresse de la fonction F
-CALL		-- Appel de la-dite fonction
-POPN N		-- Libération des N paramètres
+	PUSHN 1	        -- Emplacement du resultat de F(...) et n'est présent que si la fonction a un type de retour
+	PUSHI val	-- Apparaît N fois et permet d'empiler les val (arg0...argN) 0<=N
+	PUSHA F		-- Emplilement de l'adresse de la fonction F
+	CALL		-- Appel de la-dite fonction
+	POPN N		-- Libération des N paramètres
