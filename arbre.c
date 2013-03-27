@@ -277,3 +277,17 @@ typedef struct _Decl
 	struct _Decl *next;
 } VarDecl, *VarDeclP;
 
+VarDeclP concatVarDeclP ( VarDeclP v1, VarDeclP v2) {
+	v1->next = v2;
+	return v1;
+}
+
+VarDeclP newVarDeclP(char* nom, char* classe) {
+	VarDeclP result = NEW(1,VarDecl);
+	result->name = nom;
+	result->val.c = classe;
+	return result;
+}
+
+
+

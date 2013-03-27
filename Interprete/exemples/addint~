@@ -46,5 +46,5 @@ start:	START
 	LOAD 0
 	WRITEI
 	PUSHS "\n"
-	WRITES	
+	WRITES
 	STOP
