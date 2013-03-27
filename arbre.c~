@@ -299,7 +299,6 @@ void createMethodFrom( VarDeclP output, VarDeclP inputs, TreeP instrs )
 	while( inputs != NULL )
 	{
 		tmp->varEntree = inputs;
-		tmp->next = NEW (1, VarDeclP);
 		tmp = tmp->next;
 		inputs=inputs->next;
 	}

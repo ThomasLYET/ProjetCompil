@@ -24,7 +24,6 @@ typedef struct _Methode {
 	VarDeclP varEntree; 
 	VarDeclP varSortie; /* ATTENTION : il n'y a qu'une seul variable de sortiEEEE !!! */
 	TreeP code;
-	TreeP *next;
 } Methode, *MethodeP;
 
 /* Structure qui permet de mémoriser la liste de toutes les classes défini

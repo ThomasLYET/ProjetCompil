@@ -122,7 +122,7 @@ exprInitVar :  {$$ = NULL}
 
 /* [override | static] def nom (params, ...) [returns type] is bloc */
 /* III/ */
-declMethod : isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' blocInstructions '}'		{ createMethodFrom($,  ,$(10) );  } // $10 ??
+declMethod : isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' blocInstructions '}'		{ createMethodFrom( $7, $5 ,$(10) );  } // $10 ??
 ;
 
 isStaticOrOverride :
@@ -130,7 +130,7 @@ isStaticOrOverride :
 | OVERRIDE
 ;
 
-isReturn : 		{  }
+isReturn : 		{ $$ = "VOID_RETURN" }
 | RETURNS type		{ $$ = $2 }
 ;
 
