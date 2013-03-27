@@ -1,0 +1,30 @@
+Le cas des operations, nous pouvons utiliser deux methodes.
+Soit la methode ligne à ligne consistant à traduire littéralement le bout de code.
+Soit la methode par fonction qui consiste à crée une fonction dédiée à l'operation que nous appelerons.
+
+Nous utiliserons la première, car elle facilite la lecture et l'implémentation et évite les empilements de fonction:
+
+PUSHI val1
+PUSHI val2
+ADD/SUB/MUL/DIV
+
+Dès lors sera empilée la valeur finale de l'operation, que nous utiliserons de la manière que l'on désir.
+
+
+
+Si nous avions voulus utiliser la methode par fonction, nous aurions écris:
+
+La fonction apparaît comme un label:
+OP:	PUSHL -1
+	PUSHL -2
+	ADD/SUB/MUL/DIV
+	STOREL -3
+	RETURN
+
+Pour faire appel à la fonction F:
+	PUSHN 1		-- Emplacement du resultat de OP(val1,val2)
+	PUSHI val1
+	PUSHI val2
+	PUSHA OP	-- Emplilement de l'adresse de la fonction F
+	CALL		-- Appel de la-dite fonction
+	POPN N		-- Libération des N paramètres
