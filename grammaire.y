@@ -9,7 +9,7 @@
 %token AFF
 %token ADD SUB MUL DIV
 %token IF THEN ELSE
-%token ID VAR CST
+%token ID VAR CST MET
 %token RELOP
 %token UMIN UPLUS
 
@@ -41,6 +41,8 @@
 %type <S> paramStrPu
 %type <I> isStatic
 %type <T> exprInitVar
+%type <T> instenciation
+%type <T> selection
 %type <M> inherits
 
 /* %type<T> expression // TODO : A REMETTRE après avoir bien défini expression !!! \\ */
@@ -82,11 +84,11 @@ inherits :																{ $$ = NULL; }
 | EXTENDS name '(' argumentsList ')'  									{ $$ = addMere($2); }/*à s'assurer*/
 ;
 
-argumentsList : 														/*Faut-ils utiliser des arbres ?? */
-| argumentsListAux
+argumentsList : 														{ $$ = NULL; }
+| argumentsListAux														{ $$ = $1; }
 ;
 
-argumentsListAux : expression ',' argumentsListAux						
+argumentsListAux : expression ',' argumentsListAux						{ $$ = make
 
 | expression
 ;
@@ -108,7 +110,7 @@ declList :																/*TODO*/
 
 /* [static] var nom : type [:= expression]; */
 /* II/ */
-declChamp : isStatic VAR var ':' type exprInitVar ';'   { addChamp($1,$3,$5,$6)}      /*|||||||||||*/
+declChamp : isStatic VAR var ':' type exprInitVar ';'   { addChamp($1,$3,$5,$6)} 
 ;
 
 isStatic : {$$ = 0}
@@ -146,22 +148,25 @@ expression : selection
 | exprWithOperator
 ;
 
-selection : expression '.' var
+selection : expression '.' var											{ $$ = makeLeafVar($1,$3); }
 ;
 
-instenciation : NEW type '(' argumentsList ')'
+instenciation : NEW type '(' argumentsList ')'							
 ;
 
-envoiMsg : expression '.' ID '(' listAttributs ')'
+envoiMsg : expression '.' ID '(' listAttributs ')'						{ $$ = makeLeafMet($1,$3,$4); /*TODO*/ }
 ;
 
 listAttributs :
+| listAttributAux
+;
+
+listAttributsAux :
 | expression
 | expression',' listAttributs
 ;
 
-/* Ce qui en commentaire à remettre après */
-exprWithOperator : var				 { $$=makeLeaf(ID, $1); }
+exprWithOperator : var				 { $$=makeLeafStr(ID, $1); }
 | expression ADD expression  	     { $$=makeTree(ADD,2,$1,$3); } 
 | expression SUB expression			 { $$=makeTree(SUB,2,$1,$3); } 
 | expression MUL expression  		 { $$=makeTree(MUL,2,$1,$3); } 
@@ -191,29 +196,3 @@ affectation : selection AFF expression ';'
 
 ifThenElse : IF expression THEN instructions ELSE instructions
 ;
-
-
-/*decl : ID AFF expr ';'
-;
-*/
-
-/* construire et renvoyer un arbre representant l'expression, en fonction des
- * arbres (deja construits) de ses sous-expressions.
- *
- * Voir les fonctions mises a disposition dans tp.c et en ajouter si besoin.
- */
-
-/*relop : RELOP	{ $$=yyval.C; }
-;
-
-paramStrPut : STR { $$=yyval.S; }
-;
-*/
-
-/* Passage de valeur entre analyseur lexical et analyseur syntaxique via la
- * variable yylval (de type YYSTYPE)
- */
- 
-/*NOM_VAR : ID { $$ = yylval.S; }
-;*/
-

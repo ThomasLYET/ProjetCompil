@@ -16,13 +16,15 @@ typedef struct _Tree {
 	union {
 		char *str;      /* valeur de la feuille si op = ID ou STR */
 		int val;        /* valeur de la feuille si op = CST */
+		VarDeclP var;	/* nécessaire pour a.b */
+		ClassP classe;	/* nécessaire pour a.b() */
 		struct _Tree **children; /* tableau des sous-arbres */
 	} u;
 } Tree, *TreeP;
 
 typedef struct _Methode {
 	VarDeclP varEntree; 
-	VarDeclP varSortie; /* ATTENTION : il n'y a qu'une seul variable de sortiEEEE !!! */
+	VarDeclP varSortie; /* ATTENTION : il n'y a qu'une seul variable de sortie !!! */
 	TreeP code;
 	TreeP *next;
 } Methode, *MethodeP;
@@ -46,7 +48,6 @@ typedef struct _Class
  * (entiere). On va construire des listes de la forme { (x 5), (y, 27) } au fur
  * et a mesure qu'on interprete les declarations dans le programme.
  */
- /* TODO : Trouver commer stocker la valeur de la variable ! */
 typedef struct _Decl
 {	char *name;
 	union { /* Normalement c'est une "Class" SAUF dans le cas des classes prédéfini "Integer" et "String" */
@@ -63,10 +64,9 @@ typedef struct _Fichier {
 	TreeP main;
 }
 
-
 typedef struct _SuperClass
 {   char* name;
-	VarDeclP constructeur;
+	VarDeclP constructeur; /* A changer vraisemblablement en arbre */
 } SuperClass, *SuperClassP;
 
 /* Etiquettes additionnelles pour les arbres de syntaxe abstraite. Les tokens
@@ -126,6 +126,7 @@ TreeP makeLeafStr(short op, char *str);
 TreeP makeLeafInt(short op, int val);
 TreeP makeTree(short op, int nbChildren, ...);
 TreeP getChild(TreeP tree, int rank);
+TreeP findTree(char* classe, char* var);
 
 /* evaluateur de l'expression principale */
 int eval(TreeP tree, VarDeclP decls);
