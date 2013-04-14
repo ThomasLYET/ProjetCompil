@@ -173,7 +173,7 @@ TreeP makeLeafInt(short op, int val) {
 	return(tree);
 }
 
-/* findTree ne prend en entré soit le nom d'une classe, dans ce cas 
+/* makeLeafVar ne prend en entré soit le nom d'une classe, dans ce cas 
  * l'attribut recherché est forcément static.
  * soit une variable dans ce cas l'attribut est static ou non.
  */
@@ -228,7 +228,7 @@ TreeP makeLeafVar(TreeP classe, char* var) {
 		exit(CLASS_NOT_FOUND);
 	}
 	
-	fprintf(stderr, " This error is not expected (in fonction findTree)" );
+	fprintf(stderr, " This error is not expected (in fonction makeLeafVar)" );
 	exit(CLASS_NOT_FOUND);
 }
 

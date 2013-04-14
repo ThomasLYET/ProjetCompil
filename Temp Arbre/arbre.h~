@@ -1,0 +1,43 @@
+
+/* la structure d'un arbre (noeud ou feuille) */
+typedef struct _Tree {
+	short op;         /* etiquette de l'operateur courant */
+	short nbChildren; /* nombre de sous-arbres */
+	union {
+		char *str;      /* valeur de la feuille si op = ID ou STR */
+		int val;        /* valeur de la feuille si op = CST */
+		VarDeclP var;	/* nécessaire pour a.b */
+		ClassP classe;	/* nécessaire pour a.b() */
+		struct _Tree **children; /* tableau des sous-arbres */
+	} u;
+} Tree, *TreeP;
+
+
+typedef struct _Fichier {
+	ClassP classe;
+	TreeP main;
+}
+
+
+
+int eval(TreeP tree, VarDeclP decls);
+
+/* VarDeclP */
+VarDeclP concatVarDeclP ( VarDeclP v1, VarDeclP v2);
+VarDeclP newVarDeclP(char* nom, char* classe); /*TODO*/
+
+
+/* construction et accesseur pour les arbres */
+TreeP makeLeafStr(short op, char *str);
+TreeP makeLeafInt(short op, int val);
+TreeP makeTree(short op, int nbChildren, ...);
+TreeP getChild(TreeP tree, int rank);
+TreeP findTree(char* classe, char* var);
+
+/* evaluateur de l'expression principale */
+int eval(TreeP tree, VarDeclP decls);
+
+/* Création des méthodes */
+void createMethodFrom( VarDeclP output, VarDeclP inputs, TreeP instrs );
+
+

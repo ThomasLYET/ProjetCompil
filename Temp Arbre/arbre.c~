@@ -1,0 +1,62 @@
+
+
+
+/* findTree ne prend en entré soit le nom d'une classe, dans ce cas 
+ * l'attribut recherché est forcément static.
+ * soit une variable dans ce cas l'attribut est static ou non.
+ */
+
+TreeP makeLeafVarAUX(int op, VarDeclP var) {
+	TreeP tree = makeNode(0, VAR);
+	tree->u.var = var;
+	return(tree);
+}
+
+/** Renvoie 1 (TRUE) ou 0 (FALSE) si la class contient l'attribut
+ * (pour le moment pas de méthode ou de private/public) 
+ */
+int isVarDecl (ClassP classe, char* var) {
+	VarDeclP temp = classe->attribut;
+	while (temp != NULL) {
+		if (strcmp(var, temp->name) == 0 ) {
+			return TRUE;
+		}
+	}
+	temp = classe->attributStatic;
+	while (temp != NULL) {
+		if (strcmp(var, temp->name) == 0 ) {
+			return TRUE;
+		}
+	}
+	
+	return 0;
+}
+
+/* retrouve la valeur d'une variable stockee dans 'tree' si elle apparait bien
+ * bien dans la liste des couples (nom, valeur) de 'decls'. Sinon quitte
+ * irremediablement le programme car on ne va pas lui donner une valeur
+ * arbitraire. 
+ */
+int evalVar(TreeP tree, VarDeclP decls) {
+	char *name = tree->u.str;
+	while (decls != NIL(VarDecl)) {
+		if (! strcmp(decls->name, name)) return(decls->val);
+		decls = decls->next;
+	}
+	fprintf(stderr, "Error: Undeclared variable: %s\n", name);
+	exit(UNEXPECTED);
+}
+
+
+
+void addChamp(int isStatic,char* nom ,char* class , TreeP exprInit){               /* TODO static */
+	VarDeclP var = NEW(1,VarDecl);
+	ClassP theClass = findClass(class);
+	var->name = nom;
+	var->val.c = theClass;
+	var->next = lClass->attribut;
+	lClass->attribut = var;
+	var->exprInit = exprInit;
+}
+
+
