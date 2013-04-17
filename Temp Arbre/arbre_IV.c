@@ -119,3 +119,4 @@ TreeP makeLeafVarAUX(int op, VarDeclP var) {
 	return(tree);
 }
 
+TreeP makeLeafMet(TreeP classe, char* meth, 

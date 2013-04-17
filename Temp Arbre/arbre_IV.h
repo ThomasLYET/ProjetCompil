@@ -19,6 +19,7 @@ typedef struct _Tree {
 /* construction et accesseur pour les arbres */
 TreeP makeLeafVar(TreeP classe, char* var);
 TreeP makeLeafVarAUX(int op, VarDeclP var);
+TreeP makeLeafMet(TreeP classe, char* var);
 TreeP makeLeafStr(short op, char *str);
 TreeP makeLeafInt(short op, int val);
 TreeP makeTree(short op, int nbChildren, ...);
