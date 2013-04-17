@@ -32,7 +32,7 @@ VarDeclP newVarDeclP(char* nom, char* classe); /*TODO*/
 
 int isVarDecl (ClassP classe, char* var)
 
-void addChamp(int isStatic,char* nom ,char* class , TreeP exprInit;
+void addChamp(int isStatic,char* nom ,char* class , TreeP exprInit);
 
 /* Création des méthodes */
 void createMethodFrom( VarDeclP output, VarDeclP inputs, TreeP instrs );

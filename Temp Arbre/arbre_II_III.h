@@ -19,6 +19,7 @@ typedef struct _Decl
 } VarDecl, *VarDeclP;
 
 typedef struct _Methode {
+	char* nom;
 	VarDeclP varEntree; 
 	VarDeclP varSortie; /* ATTENTION : il n'y a qu'une seul variable de sortie !!! */
 	TreeP code;

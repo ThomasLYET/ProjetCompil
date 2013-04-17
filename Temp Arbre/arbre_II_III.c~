@@ -31,24 +31,19 @@ VarDeclP newVarDeclP(char* nom, char* classe) {
 	return result;
 }
 
-void createMethodFrom( VarDeclP output, VarDeclP inputs, TreeP instrs )
+void createMethodFrom(char* nom, int isStatic,VarDeclP output, VarDeclP inputs, TreeP instrs )
 {
-	Methode tmp = NEW (1, Methode);
+	
+	MethodeP tmp = NEW (1, Methode);
 	/* On sette les champs de la méthode */
+	tmp->nom = nom;
 	tmp->varSortie = output;
-
-	while( inputs != NULL )
-	{
-		tmp->varEntree = inputs;
-		tmp->next = NEW (1, VarDeclP);
-		tmp = tmp->next;
-		inputs=inputs->next;
-	}
+        tmp->code = instrs;
+	tmp->varEntree = inputs;
 
 	/* On ajoute la méthode à la classe */
-	myClass->
-
-	lClass->methode
+	tmp->next = lClass->methode
+	lClass->methode = tmp; 
 }
 
 /** Renvoie 1 (TRUE) ou 0 (FALSE) si la class contient l'attribut
@@ -72,7 +67,7 @@ bool isVarDecl (ClassP classe, char* var) {
 	return 0;
 }
 
-void addChamp(int isStatic,char* nom ,char* class , TreeP exprInit {     
+void addChamp(int isStatic,char* nom ,char* class , TreeP exprInit) {     
 /* TODO static */
 	VarDeclP var = NEW(1,VarDecl);
 	ClassP theClass = findClass(class);
@@ -81,6 +76,8 @@ void addChamp(int isStatic,char* nom ,char* class , TreeP exprInit {
 	var->next = lClass->attribut;
 	lClass->attribut = var;
 	var->exprInit = exprInit;
+}
+
 }
 
 
