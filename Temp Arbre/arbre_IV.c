@@ -64,16 +64,18 @@ TreeP makeLeafVar(TreeP classe, char* var) {
 		char* nomClasse = classe->u.str;
 		ClassP laClass = findClass(classe);
 		/* Si la classe n'existe pas, l'erreur a déjà été révélé par la
-		 * fonction "findclass"
-		 */
+		 * fonction "findclass" */
 		/* Si c'est effectivment le nom d'une classe, alors il faut
-		 * chercher une static !!!
+		 * chercher une variable static !!!
 		 */
 		bool continuer = TRUE;
 		VarDeclP temp = laClass->attributStatic;
 		while (temp != NULL && continuer) {
 			if (strcmp(var, temp->name) == 0 ) {
 				continuer = FALSE;
+			}
+			else {
+				temp = temp->next;
 			}
 		}
 		if ( continuer = FALSE ) {

@@ -53,3 +53,11 @@ void addConstructeur(char* nomVar, char* class) {
 	var->next = lClass->constructeur;
 	lClass->constructeur = var;
 }
+
+/**
+ * Ajoute la classe mère
+ */
+void addMere(char* nom) {
+	lClass.mere = findClass(nom);
+}
+

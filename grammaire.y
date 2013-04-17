@@ -81,22 +81,33 @@ name : ID																{ $$ = yyval.S; }
 ;
 
 inherits :																{ $$ = NULL; }
-| EXTENDS name '(' argumentsList ')'  									{ $$ = addMere($2); }/*à s'assurer*/
+| EXTENDS name '(' argumentsList ')'  									{ $$ = addMere($2 /*,$4*/ ); } /*Ajout des arguments d'initialisation à faire*/
 ;
 
 argumentsList : 														{ $$ = NULL; }
 | argumentsListAux														{ $$ = $1; }
 ;
 
-argumentsListAux : expression ',' argumentsListAux						{ $$ = make
-| expression
+argumentsListAux : expression ',' argumentsListAux						/*TODO*/
+| expression															{
 ;
+
+/************** DIFFERENCE ???!???
+listAttributs :
+| listAttributAux
+;
+
+listAttributsAux : expression
+| expression',' listAttributs
+;
+*************/
+
 
 blocs :																	{ $$ = NULL; }
 | '{' blocInstructions '}'												{ $$ = $2; }
 ;
 
-blocInstructions :														{ $$ = NULL; }
+blocInstructions :														/*TODO*/
 | listInstructions														/*TODO*/
 | listDeclarationVariables IS listInstructions							/*TODO*/
 ;
@@ -109,15 +120,15 @@ declList :																/*TODO*/
 
 /* [static] var nom : type [:= expression]; */
 /* II/ */
-declChamp : isStatic VAR var ':' type exprInitVar ';'   { addChamp($1,$3,$5,$6)} 
+declChamp : isStatic VAR var ':' type exprInitVar ';'   				{ addChamp($1,$3,$5,$6)} 
 ;
 
-isStatic : {$$ = 0}
-| STATIC   {$$ = 1}
+isStatic :																{$$ = 0}
+| STATIC   																{$$ = 1}
 ;
 
-exprInitVar :  {$$ = NULL}
-| AFF expression   {$$ = $2}
+exprInitVar :  															{$$ = NULL}
+| AFF expression   														{$$ = $2}
 ;
 
 
@@ -131,8 +142,8 @@ isStaticOrOverride :
 | OVERRIDE
 ;
 
-isReturn : 		{ $$ = "VOID_RETURN" }
-| RETURNS type		{ $$ = $2 }
+isReturn : 																{ $$ = "VOID_RETURN" }
+| RETURNS type															{ $$ = $2 }
 ;
 
 /* IV/ */
@@ -156,23 +167,22 @@ instenciation : NEW type '(' argumentsList ')'
 envoiMsg : expression '.' ID '(' listAttributs ')'						{ $$ = makeLeafMet($1,$3,$4); /*TODO*/ }
 ;
 
-listAttributs :
+listAttributs :															/* difference avec argumentList ?!? */
 | listAttributAux
 ;
 
-listAttributsAux :
-| expression
+listAttributsAux : expression
 | expression',' listAttributs
 ;
 
-exprWithOperator : var				 { $$=makeLeafStr(ID, $1); }
-| expression ADD expression  	     { $$=makeTree(ADD,2,$1,$3); } 
-| expression SUB expression			 { $$=makeTree(SUB,2,$1,$3); } 
-| expression MUL expression  		 { $$=makeTree(MUL,2,$1,$3); } 
-| expression DIV expression  		 { $$=makeTree(DIV,2,$1,$3); } 
-| expression RELOP expression  		 { $$=makeTree(RELOP,2,$1,$3); } 
-| SUB expression %prec UMIN  		 { $$=makeTree(UMIN,1,$2); } 
-| ADD expression %prec UPLUS		 { $$=makeTree(UPLUS,1,$2); } 
+exprWithOperator : var													{ $$=makeLeafStr(ID, $1); }
+| expression ADD expression  	 									    { $$=makeTree(ADD,2,$1,$3); } 
+| expression SUB expression												{ $$=makeTree(SUB,2,$1,$3); } 
+| expression MUL expression  											{ $$=makeTree(MUL,2,$1,$3); } 
+| expression DIV expression  											{ $$=makeTree(DIV,2,$1,$3); } 
+| expression RELOP expression  											{ $$=makeTree(RELOP,2,$1,$3); } 
+| SUB expression %prec UMIN  											{ $$=makeTree(UMIN,1,$2); } 
+| ADD expression %prec UPLUS											{ $$=makeTree(UPLUS,1,$2); } 
 ;
 
 instructions : expression ';' 

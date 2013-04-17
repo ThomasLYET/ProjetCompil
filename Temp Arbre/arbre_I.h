@@ -31,5 +31,6 @@ ClassP addClass( char* nom, VarDeclP varConst, SuperClassP mere, TreeP construct
 ClassP findClass( char* nom );
 void addChamp(int isStatic,char* nom ,char* classe,TreeP exprInit);
 void addConstructeur(char* nomVar, char* class);
+void addMere(char* nom);
 
 #endif

@@ -14,24 +14,23 @@ typedef struct _Decl
 		int i;
 		char *str;
 	} val;
-	TreeP experInit;
+	TreeP exprInit;
 	struct _Decl *next;
 } VarDecl, *VarDeclP;
 
 typedef struct _Methode {
-	VarDeclP varEntree; 
-	VarDeclP varSortie; /* ATTENTION : il n'y a qu'une seul variable de sortie !!! */
-	TreeP code;
-	TreeP *next;
+	VarDeclP varEntree; /*N'est pas initialisé !!*/
+	VarDeclP varSortie; /* ATTENTION : il n'y a qu'une seul variable de sortie !!! N'est pas initialisé et n'a pas à priori de nom !!!! */
+	ListArbreP first;
+	//ListArbreP last;
+	struct _Methode *next;
 } Methode, *MethodeP;
 
 /* VarDeclP */
 void ajoutVar(char *name, TreeP tree);
 VarDeclP concatVarDeclP ( VarDeclP v1, VarDeclP v2);
 VarDeclP newVarDeclP(char* nom, char* classe); /*TODO*/
-
 int isVarDecl (ClassP classe, char* var)
-
 void addChamp(int isStatic,char* nom ,char* class , TreeP exprInit);
 
 /* Création des méthodes */
