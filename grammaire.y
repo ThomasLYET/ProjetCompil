@@ -59,7 +59,7 @@ extern void yyerror();  /* definie dans arbre.c */
 
 /* class Nom (param, ...) [extends nom (args, ...)] [bloc]  is  { decl,  ... } */
 /* I/ */
-declarationClasse : CLASS name '(' paramsList ')' inherits blocs IS '{' declList '}'		 { addClass($2, $4, $5); }
+declarationClasse : CLASS name '(' paramsList ')' inherits blocs IS '{' declList '}'		 { addClass($2, $4, $6); }
 ;
 
 paramsList :															{ $$ = NULL; }
@@ -134,12 +134,12 @@ exprInitVar :  															{$$ = NULL}
 
 /* [override | static] def nom (params, ...) [returns type] is bloc */
 /* III/ */
-declMethod : isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' blocInstructions '}'		{ createMethodFrom( $7, $5 ,$(10) );  } // $10 ??
+declMethod : isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' blocInstructions '}'		{ createMethodFrom( $3 ,$5, $7 ,$(10) );  } // $10 ??
 ;
 
-isStaticOrOverride :
-| STATIC
-| OVERRIDE
+isStaticOrOverride :            {$$ = 0}
+| STATIC		        {$$ = 1}
+| OVERRIDE			{$$ = 2}
 ;
 
 isReturn : 																{ $$ = "VOID_RETURN" }
