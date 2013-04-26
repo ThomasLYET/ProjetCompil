@@ -16,12 +16,11 @@ typedef struct _Tree {
 	} u;
 } Tree, *TreeP;
 
-/*Liste doublement chainée à but FIFO, peut être supprimé doublement chainée sur le long terme*/
-typedef struct _ListArbre {
-	struct _listArbre prev;
-	struct _listArbre next;
+typedef struct _Instructions {
 	TreeP arbre;
-} ListArbre, ListArbreP;
+	struct _Instructions *next;
+} Instructions, *InstructionsP;
+
 
 /* construction et accesseur pour les arbres */
 TreeP makeLeafVar(TreeP classe, char* var);
@@ -34,5 +33,7 @@ TreeP makeLeafInt(short op, int val);
 TreeP makeTree(short op, int nbChildren, ...);
 TreeP getChild(TreeP tree, int rank);
 TreeP findTree(char* classe, char* var);
+
+InstructionsP concatInstruction(InstructionsP premier, InstructionsP suivants);
 
 #endif

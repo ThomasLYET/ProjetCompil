@@ -44,6 +44,7 @@
 %type <T> instenciation
 %type <T> selection
 %type <M> inherits
+%type <T> expression
 
 /* %type<T> expression // TODO : A REMETTRE après avoir bien défini expression !!! \\ */
 /* %type<T> exprWithOperator // IDEM \\ */
@@ -89,7 +90,7 @@ argumentsList : 														{ $$ = NULL; }
 ;
 
 argumentsListAux : expression ',' argumentsListAux						/*TODO*/
-| expression															{
+| expression															/*TODO*/
 ;
 
 /************** DIFFERENCE ???!???
@@ -107,12 +108,13 @@ blocs :																	{ $$ = NULL; }
 | '{' blocInstructions '}'												{ $$ = $2; }
 ;
 
-blocInstructions :														/*TODO*/
-| listInstructions														/*TODO*/
+blocInstructions :														{ $$ = NULL; }
+| listInstructions														{ $$ = $1; }
 | listDeclarationVariables IS listInstructions							/*TODO*/
 ;
 
-declList :																/*TODO*/
+declList : declChamp 													/*TODO*/
+| declMethod															/*TODO*/
 | declChamp declList													/*TODO*/
 | declMethod declList													/*TODO*/
 ;
@@ -137,31 +139,30 @@ exprInitVar :  															{$$ = NULL}
 declMethod : isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' blocInstructions '}'		{ createMethodFrom( $3 ,$5, $7 ,$(10) );  } // $10 ??
 ;
 
-isStaticOrOverride :            {$$ = 0}
-| STATIC		        {$$ = 1}
-| OVERRIDE			{$$ = 2}
+isStaticOrOverride : isStatic  											{ $$ = $1; }
+| OVERRIDE																{ $$ = 2; }
 ;
 
-isReturn : 																{ $$ = "VOID_RETURN" }
-| RETURNS type															{ $$ = $2 }
+isReturn : 																{ $$ = "VOID_RETURN"; }
+| RETURNS type															{ $$ = $2; }
 ;
 
 /* IV/ */
 /* Sans ";", qui est défini ailleurs */
 /* expression ne rajoute JAMAIS de { }  */
-expression : selection 
-| CST
-| '(' expression ')'
-| '(' AS type ':' expression ')'
-| instenciation
-| envoiMsg
-| exprWithOperator
+expression : selection 													{ $$ = $1; }
+| CST																	/*TODO*/
+| '(' expression ')'													/*TODO*/
+| '(' AS type ':' expression ')'										/*TODO*/	
+| instenciation															/*TODO*/
+| envoiMsg																/*TODO*/
+| exprWithOperator														{ $$ = $1;}
 ;
 
 selection : expression '.' var											{ $$ = makeLeafVar($1,$3); }
 ;
 
-instenciation : NEW type '(' argumentsList ')'							
+instenciation : NEW type '(' argumentsList ')'							/*TODO*/					
 ;
 
 envoiMsg : expression '.' ID '(' listAttributs ')'						{ $$ = makeLeafMet($1,$3,$4); /*TODO*/ }
@@ -171,8 +172,8 @@ listAttributs :															/* difference avec argumentList ?!? */
 | listAttributAux
 ;
 
-listAttributsAux : expression
-| expression',' listAttributs
+listAttributsAux : expression											/*TODO*/
+| expression',' listAttributs											/*TODO*/
 ;
 
 exprWithOperator : var													{ $$=makeLeafStr(ID, $1); }
@@ -185,23 +186,23 @@ exprWithOperator : var													{ $$=makeLeafStr(ID, $1); }
 | ADD expression %prec UPLUS											{ $$=makeTree(UPLUS,1,$2); } 
 ;
 
-instructions : expression ';' 
-| '{' blocInstructions '}'
-| RETURNS ';'
-| affectation
-| ifThenElse
+instructions : expression ';' 											{ $$ = $1; }
+| '{' blocInstructions '}'												{ $$ = $2; }
+| RETURNS ';'															/*TODO*/
+| affectation															/*TODO*/
+| ifThenElse															/*TODO*/
 ;
 
-listInstructions : instructions
-| instructions listInstructions
+listInstructions : instructions											{ $$ = $1; }
+| instructions listInstructions											{ $$ = concatInstruction($1, $2); }
 ;
 
-listDeclarationVariables : VAR var ':' type exprInitVar ';'
+listDeclarationVariables : VAR var ':' type exprInitVar ';'				/*TODO*/
 ;
 
-affectation : selection AFF expression ';'
-| ID AFF expression ';'
+affectation : selection AFF expression ';'								/*TODO*/
+| ID AFF expression ';'													/*TODO*/
 ;
 
-ifThenElse : IF expression THEN instructions ELSE instructions
+ifThenElse : IF expression THEN instructions ELSE instructions			/*TODO*/
 ;

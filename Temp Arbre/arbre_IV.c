@@ -122,3 +122,9 @@ TreeP makeLeafVarAUX(int op, VarDeclP var) {
 }
 
 TreeP makeLeafMet(TreeP classe, char* meth, 
+
+
+InstructionsP concatInstruction(InstructionsP premier, InstructionsP suivants) {
+	premier->next = suivants;
+	return premier;
+}

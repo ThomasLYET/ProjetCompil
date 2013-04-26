@@ -23,6 +23,8 @@ typedef struct _SuperClass
 	VarDeclP constructeur; /* TODO A changer vraisemblablement en arbre */
 } SuperClass, *SuperClassP;
 
+
+
 /* SuperClassP */
 SuperClassP newSuperClassP(char* nom /*, VarDeclP variable // Voir problème dans grammaire.y \\ */ );
 
