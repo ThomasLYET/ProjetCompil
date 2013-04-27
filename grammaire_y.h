@@ -66,8 +66,9 @@
      RELOP = 282,
      UMIN = 283,
      UPLUS = 284,
-     AND = 285,
-     UNARY = 286
+     TREE = 285,
+     AND = 286,
+     UNARY = 287
    };
 #endif
 

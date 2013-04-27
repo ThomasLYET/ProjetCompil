@@ -4,6 +4,7 @@ Terminals unused in grammar
    SUPER
    RESULT
    MET
+   TREE
    AND
    UNARY
 
@@ -154,76 +155,77 @@ MET (281)
 RELOP (282) 54
 UMIN (283)
 UPLUS (284)
-AND (285)
-UNARY (286)
+TREE (285)
+AND (286)
+UNARY (287)
 
 
 Non-terminaux, suivis des règles où ils apparaissent
 
-$accept (40)
+$accept (41)
     à gauche: 0
-declarationClasse (41)
+declarationClasse (42)
     à gauche: 1, à droite: 0
-paramsList (42)
+paramsList (43)
     à gauche: 2 3, à droite: 1 30
-paramsMultiples (43)
+paramsMultiples (44)
     à gauche: 4 5, à droite: 3 5
-paramName (44)
+paramName (45)
     à gauche: 6, à droite: 4 5
-var (45)
+var (46)
     à gauche: 7, à droite: 6 24 30 42 49 64
-name (46)
+name (47)
     à gauche: 8, à droite: 1 6 10
-inherits (47)
+inherits (48)
     à gauche: 9 10, à droite: 1
-argumentsList (48)
+argumentsList (49)
     à gauche: 11 12, à droite: 10 43
-argumentsListAux (49)
+argumentsListAux (50)
     à gauche: 13 14, à droite: 12 13
-blocs (50)
+blocs (51)
     à gauche: 15 16, à droite: 1
-blocInstructions (51)
+blocInstructions (52)
     à gauche: 17 18 19, à droite: 16 30 58
-declList (52)
+declList (53)
     à gauche: 20 21 22 23, à droite: 1 22 23
-declChamp (53)
+declChamp (54)
     à gauche: 24, à droite: 20 22
-isStatic (54)
+isStatic (55)
     à gauche: 25 26, à droite: 24 31
-type (55)
+type (56)
     à gauche: 27, à droite: 24 34 38 43 64
-exprInitVar (56)
+exprInitVar (57)
     à gauche: 28 29, à droite: 24 64
-declMethod (57)
+declMethod (58)
     à gauche: 30, à droite: 21 23
-isStaticOrOverride (58)
+isStaticOrOverride (59)
     à gauche: 31 32, à droite: 30
-isReturn (59)
+isReturn (60)
     à gauche: 33 34, à droite: 30
-expression (60)
+expression (61)
     à gauche: 35 36 37 38 39 40 41, à droite: 13 14 29 37 38 42 44
     47 48 50 51 52 53 54 55 56 57 65 66 67
-selection (61)
+selection (62)
     à gauche: 42, à droite: 35 65
-instenciation (62)
+instenciation (63)
     à gauche: 43, à droite: 39
-envoiMsg (63)
+envoiMsg (64)
     à gauche: 44, à droite: 40
-listAttributs (64)
+listAttributs (65)
     à gauche: 45 46, à droite: 44 48
-listAttributsAux (65)
+listAttributsAux (66)
     à gauche: 47 48, à droite: 46
-exprWithOperator (66)
+exprWithOperator (67)
     à gauche: 49 50 51 52 53 54 55 56, à droite: 41
-instructions (67)
+instructions (68)
     à gauche: 57 58 59 60 61, à droite: 62 63 67
-listInstructions (68)
+listInstructions (69)
     à gauche: 62 63, à droite: 18 19 63
-listDeclarationVariables (69)
+listDeclarationVariables (70)
     à gauche: 64, à droite: 19
-affectation (70)
+affectation (71)
     à gauche: 65 66, à droite: 60
-ifThenElse (71)
+ifThenElse (72)
     à gauche: 67, à droite: 61
 
 

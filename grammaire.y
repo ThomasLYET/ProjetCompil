@@ -12,7 +12,7 @@
 %token ID VAR CST MET
 %token RELOP
 %token UMIN UPLUS
-
+%token TREE
 
 /* indications de precedence (en ordre croissant) et d'associativite. Les
  * operateurs sur une meme ligne (separes par un espace) ont la meme priorite.
@@ -158,18 +158,18 @@ isReturn : 																{ $$ = "VOID_RETURN"; }
 /* Sans ";", qui est défini ailleurs */
 /* expression ne rajoute JAMAIS de { }  */
 expression : selection 													/* { $$ = $1; } */
-| CST																	/*TODO*/
-| '(' expression ')'													/*TODO*/
-| '(' AS type ':' expression ')'										/*TODO*/	
+| CST																	/* { $$ = makeLeafInt(CST, yyval.I); } */
+| '(' expression ')'													/* { $$ = $$=makeTree(TREE,1,$2);*/
 | instenciation															/*TODO*/
 | envoiMsg																/*TODO*/
 | exprWithOperator														/* { $$ = $1;} */
+/* | '(' AS type ':' expression ')'		//correspond au cast d'une expression, non aborde\\ */	
 ;
 
 selection : expression '.' var											/* TODO : { $$ = makeLeafVar($1,$3); } */
 ;
 
-instenciation : NEW type '(' argumentsList ')'							/*TODO*/					
+instenciation : NEW type '(' argumentsList ')'							/*TODO : { $$ = */					
 ;
 
 envoiMsg : expression '.' ID '(' listAttributs ')'						/* TODO : { $$ = makeLeafMet($1,$3 //,$4//); } */
