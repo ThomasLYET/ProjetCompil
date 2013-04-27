@@ -129,3 +129,14 @@ InstructionsP concatInstruction(InstructionsP premier, InstructionsP suivants) {
 	return premier;
 }
 
+InstructionsP blocToInstruction(BlocP b) {
+	InstructionsP result = NEW(1,Instructions);
+	result->u.bloc = b;
+	return result;
+}
+
+BlocP instructionToBloc(VarDeclP var0, InstructionsP inst0) {
+	BlocP result = NEW(1,Bloc);
+	result->var = var0;
+	result->inst = inst0;
+}

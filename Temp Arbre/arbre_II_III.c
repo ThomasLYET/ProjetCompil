@@ -31,6 +31,12 @@ VarDeclP newVarDeclP(char* nom, char* classe) {
 	return result;
 }
 
+VarDeclP varSansNom(TreeP valeur) {
+	VarDeclP result = NEW(1,VarDecl);
+	result->exprInit = valeur;
+	return result;
+}
+
 void createMethodFrom(char* nom,VarDeclP inputs, VarDeclP output, TreeP instrs )
 {
 	

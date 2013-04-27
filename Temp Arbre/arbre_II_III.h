@@ -30,7 +30,8 @@ typedef struct _Methode {
 void ajoutVar(char *name, TreeP tree);
 VarDeclP concatVarDeclP ( VarDeclP v1, VarDeclP v2);
 VarDeclP newVarDeclP(char* nom, char* classe); /*TODO*/
-int isVarDecl (ClassP classe, char* var)
+VarDeclP varSansNom(TreeP valeur);
+int isVarDecl (ClassP classe, char* var);
 void addChamp(int isStatic,char* nom ,char* class , TreeP exprInit);
 
 /* Création des méthodes */

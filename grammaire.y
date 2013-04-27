@@ -93,28 +93,17 @@ argumentsList : 														/*TODO : { $$ = NULL; }*/
 | argumentsListAux														/*TODO : { $$ = $1; }*/
 ;
 
-argumentsListAux : expression ',' argumentsListAux						/*TODO*/
-| expression															/*TODO*/
+argumentsListAux : expression ',' argumentsListAux						/*TODO : { $$ = concatVarDeclP(varSansNom($1), $3); }*/
+| expression															/*TODO : { $$ = varSansNom($1);} */
 ;
-
-/************** DIFFERENCE ???!???
-listAttributs :
-| listAttributAux
-;
-
-listAttributsAux : expression
-| expression',' listAttributs
-;
-*************/
-
 
 blocs :																	/*TODO : { $$ = NULL; } */
-| '{' blocInstructions '}'												/*TODO : { $$ = $2; } */
+| '{' blocInstructions '}'												/*TODO : { $$ = blocToInstruction($2); } */
 ;
 
 blocInstructions :														/*TODO : { $$ = NULL; } */
-| listInstructions														/*TODO : { $$ = $1; } */
-| listDeclarationVariables IS listInstructions							/*TODO : { $$ = $3; } */
+| listInstructions														/*TODO : { $$ = instructionToBloc(NULL, $1); } */
+| listDeclarationVariables IS listInstructions							/*TODO : { $$ = instructionToBloc($1, $3); } */
 ;
 
 declList : declChamp 													/*void*/
@@ -126,7 +115,7 @@ declList : declChamp 													/*void*/
 
 /* [static] var nom : type [:= expression]; */
 /* II/ */
-declChamp : isStatic VAR var ':' type exprInitVar ';'   				{ addChamp($1,$3,$5,NULL/*$6*/)} /*void*/
+declChamp : isStatic VAR var ':' type exprInitVar ';'   				{ addChamp($1,$3,$5,$6)} /*void*/
 ;
 
 isStatic :																{$$ = 0}
@@ -143,7 +132,7 @@ exprInitVar :  															/*TODO : {$$ = NULL} */
 
 /* [override | static] def nom (params, ...) [returns type] is bloc */
 /* III/ */
-declMethod : isStaticOrOverride DEF var '(' paramsList ')' isReturn IS '{' blocInstructions '}'		{ createMethodFrom( $3 ,$5, $7 , NULL /*$10*/ );  }
+declMethod : isStaticOrOverride DEF var '(' paramsList ')' isReturn IS '{' blocInstructions '}'		{ createMethodFrom( $3 ,$5, $7 , $10 );  }
 ;
 
 isStaticOrOverride : isStatic  											{ $$ = $1; }
@@ -159,8 +148,8 @@ isReturn : 																{ $$ = "VOID_RETURN"; }
 /* expression ne rajoute JAMAIS de { }  */
 expression : selection 													/* { $$ = $1; } */
 | CST																	/* { $$ = makeLeafInt(CST, yyval.I); } */
-| '(' expression ')'													/* { $$ = $$=makeTree(TREE,1,$2);*/
-| instenciation															/*TODO*/
+| '(' expression ')'													/* { $$ = makeTree(TREE,1,$2);*/
+| instenciation															/* { $$ = makeLeafVar*/
 | envoiMsg																/*TODO*/
 | exprWithOperator														/* { $$ = $1;} */
 /* | '(' AS type ':' expression ')'		//correspond au cast d'une expression, non aborde\\ */	
@@ -169,32 +158,24 @@ expression : selection 													/* { $$ = $1; } */
 selection : expression '.' var											/* TODO : { $$ = makeLeafVar($1,$3); } */
 ;
 
-instenciation : NEW type '(' argumentsList ')'							/*TODO : { $$ = */					
+instenciation : NEW type '(' argumentsList ')'							/*TODO : { $$ = varSansNom($2, $4); }*/					
 ;
 
-envoiMsg : expression '.' ID '(' listAttributs ')'						/* TODO : { $$ = makeLeafMet($1,$3 //,$4//); } */
+envoiMsg : expression '.' ID '(' argumentsList ')'						/* TODO : { $$ = makeLeafMet($1,$3 //,$4//); } */
 ;
 
-listAttributs :															/* difference avec argumentList ?!? */
-| listAttributsAux
-;
-
-listAttributsAux : expression											/*TODO*/
-| expression',' listAttributs											/*TODO*/
-;
-
-exprWithOperator : var													/*TODO : { $$=makeLeafStr(ID, $1); } */
-| expression ADD expression  	 									    /*TODO : { $$=makeTree(ADD,2,$1,$3); }  */
-| expression SUB expression												/*TODO : { $$=makeTree(SUB,2,$1,$3); }  */
-| expression MUL expression  											/*TODO : { $$=makeTree(MUL,2,$1,$3); }  */
-| expression DIV expression  											/*TODO : { $$=makeTree(DIV,2,$1,$3); }  */
-| expression RELOP expression  											/*TODO : { $$=makeTree(RELOP,2,$1,$3); }  */
-| SUB expression %prec UMIN  											/*TODO : { $$=makeTree(UMIN,1,$2); }  */
-| ADD expression %prec UPLUS											/*TODO : { $$=makeTree(UPLUS,1,$2); }  */
+exprWithOperator : var													{ $$=makeLeafStr(ID, $1); }
+| expression ADD expression  	 									    { $$=makeTree(ADD,2,$1,$3); } 
+| expression SUB expression												{ $$=makeTree(SUB,2,$1,$3); } 
+| expression MUL expression  											{ $$=makeTree(MUL,2,$1,$3); } 
+| expression DIV expression  											{ $$=makeTree(DIV,2,$1,$3); } 
+| expression RELOP expression  											{ $$=makeTree(RELOP,2,$1,$3); } 
+| SUB expression %prec UMIN  											{ $$=makeTree(UMIN,1,$2); } 
+| ADD expression %prec UPLUS											{ $$=makeTree(UPLUS,1,$2); } 
 ;
 
 instructions : expression ';' 											/*TODO { $$ = $1; } */
-| '{' blocInstructions '}'												/*TODO { $$ = $2; } */
+| '{' blocInstructions '}'												/*TODO { $$ = blocToInstruction($2); } */
 | RETURNS ';'															/*TODO*/
 | affectation															/*TODO*/
 | ifThenElse															/*TODO*/

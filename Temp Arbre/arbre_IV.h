@@ -18,7 +18,7 @@ typedef struct _Tree {
 
 typedef struct _Bloc {
 	VarDeclP var;
-	InstructionsP;
+	InstructionsP inst;
 } Bloc, *BlocP;
 
 typedef struct _Instructions {
@@ -43,5 +43,6 @@ TreeP getChild(TreeP tree, int rank);
 TreeP findTree(char* classe, char* var);
 
 InstructionsP concatInstruction(InstructionsP premier, InstructionsP suivants);
-
+InstructionsP blocToInstruction(BlocP b);
+BlocP instructionToBloc(VarDeclP var0, InstructionsP inst0);
 #endif
