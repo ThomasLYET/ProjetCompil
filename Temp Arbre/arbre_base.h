@@ -57,7 +57,7 @@ typedef union /*Pour Thomas : c'est une UNION !!! */
 /* evaluateur de l'expression principale */
 int eval(TreeP tree, VarDeclP decls);
 
-int evalVar(TreeP tree, VarDeclP decls);;
+int evalVar(TreeP tree, VarDeclP decls);
 
 /* ecriture formatee */
 void pprintVar(VarDeclP decl, TreeP tree);

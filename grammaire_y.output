@@ -3,14 +3,20 @@ Terminals unused in grammar
    THIS
    SUPER
    RESULT
+   MET
    AND
+   UNARY
+
+
+État 53 conflits: 6 décalage/réduction
+État 54 conflits: 6 décalage/réduction
 
 
 Grammaire
 
     0 $accept: declarationClasse $end
 
-    1 declarationClasse: CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '}'
+    1 declarationClasse: CLASS name '(' paramsList ')' inherits blocs IS '{' declList '}'
 
     2 paramsList: /* vide */
     3           | paramsMultiples
@@ -18,20 +24,20 @@ Grammaire
     4 paramsMultiples: paramName
     5                | paramName ',' paramsMultiples
 
-    6 paramName: var ':' type
+    6 paramName: var ':' name
 
     7 var: ID
 
-    8 type: ID
+    8 name: ID
 
     9 inherits: /* vide */
-   10         | EXTENDS TYPE '(' argumentsList ')'
+   10         | EXTENDS name '(' argumentsList ')'
 
-   11 argumentsListAux: expression ',' argumentsListAux
-   12                 | expression
+   11 argumentsList: /* vide */
+   12              | argumentsListAux
 
-   13 argumentsList: /* vide */
-   14              | argumentsListAux
+   13 argumentsListAux: expression ',' argumentsListAux
+   14                 | expression
 
    15 blocs: /* vide */
    16      | '{' blocInstructions '}'
@@ -40,175 +46,185 @@ Grammaire
    18                 | listInstructions
    19                 | listDeclarationVariables IS listInstructions
 
-   20 declList: /* vide */
-   21         | declChamp declList
-   22         | declMethod declList
+   20 declList: declChamp
+   21         | declMethod
+   22         | declChamp declList
+   23         | declMethod declList
 
-   23 declChamp: isStatic VAR var ':' type exprInitVar ';'
+   24 declChamp: isStatic VAR var ':' type exprInitVar ';'
 
-   24 isStatic: /* vide */
-   25         | STATIC
+   25 isStatic: /* vide */
+   26         | STATIC
 
-   26 exprInitVar: /* vide */
-   27            | AFF expression
+   27 type: ID
 
-   28 declMethod: isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' blocInstructions '}'
+   28 exprInitVar: /* vide */
+   29            | AFF expression
 
-   29 isStaticOrOverride: /* vide */
-   30                   | STATIC
-   31                   | OVERRIDE
+   30 declMethod: isStaticOrOverride DEF var '(' paramsList ')' isReturn IS '{' blocInstructions '}'
 
-   32 isReturn: /* vide */
-   33         | RETURNS type
+   31 isStaticOrOverride: isStatic
+   32                   | OVERRIDE
 
-   34 expression: selection
-   35           | CST
-   36           | '(' expression ')'
-   37           | '(' AS type ':' expression ')'
-   38           | instenciation
-   39           | envoiMsg
-   40           | exprWithOperator
+   33 isReturn: /* vide */
+   34         | RETURNS type
 
-   41 selection: expression '.' var
+   35 expression: selection
+   36           | CST
+   37           | '(' expression ')'
+   38           | '(' AS type ':' expression ')'
+   39           | instenciation
+   40           | envoiMsg
+   41           | exprWithOperator
 
-   42 instenciation: NEW type '(' argumentsList ')'
+   42 selection: expression '.' var
 
-   43 envoiMsg: expression '.' ID '(' listAttributs ')'
+   43 instenciation: NEW type '(' argumentsList ')'
 
-   44 listAttributs: /* vide */
-   45              | expression
-   46              | expression ',' listAttributs
+   44 envoiMsg: expression '.' ID '(' listAttributs ')'
 
-   47 exprWithOperator: var
-   48                 | expression ADD expression
-   49                 | expression SUB expression
-   50                 | expression MUL expression
-   51                 | expression DIV expression
-   52                 | expression RELOP expression
-   53                 | SUB expression
-   54                 | ADD expression
+   45 listAttributs: /* vide */
+   46              | listAttributsAux
 
-   55 instructions: expression ';'
-   56             | '{' blocInstructions '}'
-   57             | RETURNS ';'
-   58             | affectation
-   59             | ifThenElse
+   47 listAttributsAux: expression
+   48                 | expression ',' listAttributs
 
-   60 listInstructions: instructions
-   61                 | instructions listInstructions
+   49 exprWithOperator: var
+   50                 | expression ADD expression
+   51                 | expression SUB expression
+   52                 | expression MUL expression
+   53                 | expression DIV expression
+   54                 | expression RELOP expression
+   55                 | SUB expression
+   56                 | ADD expression
 
-   62 listDeclarationVariables: VAR var ':' type exprInitVar ';'
+   57 instructions: expression ';'
+   58             | '{' blocInstructions '}'
+   59             | RETURNS ';'
+   60             | affectation
+   61             | ifThenElse
 
-   63 affectation: selection AFF expression ';'
-   64            | ID AFF expression ';'
+   62 listInstructions: instructions
+   63                 | instructions listInstructions
 
-   65 ifThenElse: IF expression THEN instructions ELSE instructions
+   64 listDeclarationVariables: VAR var ':' type exprInitVar ';'
+
+   65 affectation: selection AFF expression ';'
+   66            | ID AFF expression ';'
+
+   67 ifThenElse: IF expression THEN instructions ELSE instructions
 
 
 Terminaux, suivis des règles où ils apparaissent
 
 $end (0) 0
-'(' (40) 1 10 28 36 37 42 43
-')' (41) 1 10 28 36 37 42 43
-',' (44) 5 11 46
-'.' (46) 41 43
-':' (58) 6 23 37 62
-';' (59) 23 55 57 62 63 64
-'{' (123) 1 16 28 56
-'}' (125) 1 16 28 56
+'(' (40) 1 10 30 37 38 43 44
+')' (41) 1 10 30 37 38 43 44
+',' (44) 5 13 48
+'.' (46) 42 44
+':' (58) 6 24 38 64
+';' (59) 24 57 59 64 65 66
+'{' (123) 1 16 30 58
+'}' (125) 1 16 30 58
 error (256)
 CLASS (258) 1
-IS (259) 1 19 28
+IS (259) 1 19 30
 EXTENDS (260) 10
-STATIC (261) 25 30
-OVERRIDE (262) 31
-RETURNS (263) 33 57
-DEF (264) 28
+STATIC (261) 26
+OVERRIDE (262) 32
+RETURNS (263) 34 59
+DEF (264) 30
 THIS (265)
 SUPER (266)
 RESULT (267)
-AS (268) 37
-NEW (269) 42
-AFF (270) 27 63 64
-ADD (271) 48 54
-SUB (272) 49 53
-MUL (273) 50
-DIV (274) 51
-IF (275) 65
-THEN (276) 65
-ELSE (277) 65
-ID (278) 1 7 8 28 43 64
-TYPE (279) 10
-VAR (280) 23 62
-CST (281) 35
-RELOP (282) 52
-UNARY (283)
-AND (284)
+AS (268) 38
+NEW (269) 43
+AFF (270) 29 65 66
+ADD (271) 50 56
+SUB (272) 51 55
+MUL (273) 52
+DIV (274) 53
+IF (275) 67
+THEN (276) 67
+ELSE (277) 67
+ID (278) 7 8 27 44 66
+VAR (279) 24 64
+CST (280) 36
+MET (281)
+RELOP (282) 54
+UMIN (283)
+UPLUS (284)
+AND (285)
+UNARY (286)
 
 
 Non-terminaux, suivis des règles où ils apparaissent
 
-$accept (38)
+$accept (40)
     à gauche: 0
-declarationClasse (39)
+declarationClasse (41)
     à gauche: 1, à droite: 0
-paramsList (40)
-    à gauche: 2 3, à droite: 1 28
-paramsMultiples (41)
+paramsList (42)
+    à gauche: 2 3, à droite: 1 30
+paramsMultiples (43)
     à gauche: 4 5, à droite: 3 5
-paramName (42)
+paramName (44)
     à gauche: 6, à droite: 4 5
-var (43)
-    à gauche: 7, à droite: 6 23 41 47 62
-type (44)
-    à gauche: 8, à droite: 6 23 33 37 42 62
-inherits (45)
+var (45)
+    à gauche: 7, à droite: 6 24 30 42 49 64
+name (46)
+    à gauche: 8, à droite: 1 6 10
+inherits (47)
     à gauche: 9 10, à droite: 1
-argumentsListAux (46)
-    à gauche: 11 12, à droite: 11 14
-argumentsList (47)
-    à gauche: 13 14, à droite: 10 42
-blocs (48)
+argumentsList (48)
+    à gauche: 11 12, à droite: 10 43
+argumentsListAux (49)
+    à gauche: 13 14, à droite: 12 13
+blocs (50)
     à gauche: 15 16, à droite: 1
-blocInstructions (49)
-    à gauche: 17 18 19, à droite: 16 28 56
-declList (50)
-    à gauche: 20 21 22, à droite: 1 21 22
-declChamp (51)
-    à gauche: 23, à droite: 21
-isStatic (52)
-    à gauche: 24 25, à droite: 23
-exprInitVar (53)
-    à gauche: 26 27, à droite: 23 62
-declMethod (54)
-    à gauche: 28, à droite: 22
-isStaticOrOverride (55)
-    à gauche: 29 30 31, à droite: 28
-isReturn (56)
-    à gauche: 32 33, à droite: 28
-expression (57)
-    à gauche: 34 35 36 37 38 39 40, à droite: 11 12 27 36 37 41 43
-    45 46 48 49 50 51 52 53 54 55 63 64 65
-selection (58)
-    à gauche: 41, à droite: 34 63
-instenciation (59)
-    à gauche: 42, à droite: 38
-envoiMsg (60)
+blocInstructions (51)
+    à gauche: 17 18 19, à droite: 16 30 58
+declList (52)
+    à gauche: 20 21 22 23, à droite: 1 22 23
+declChamp (53)
+    à gauche: 24, à droite: 20 22
+isStatic (54)
+    à gauche: 25 26, à droite: 24 31
+type (55)
+    à gauche: 27, à droite: 24 34 38 43 64
+exprInitVar (56)
+    à gauche: 28 29, à droite: 24 64
+declMethod (57)
+    à gauche: 30, à droite: 21 23
+isStaticOrOverride (58)
+    à gauche: 31 32, à droite: 30
+isReturn (59)
+    à gauche: 33 34, à droite: 30
+expression (60)
+    à gauche: 35 36 37 38 39 40 41, à droite: 13 14 29 37 38 42 44
+    47 48 50 51 52 53 54 55 56 57 65 66 67
+selection (61)
+    à gauche: 42, à droite: 35 65
+instenciation (62)
     à gauche: 43, à droite: 39
-listAttributs (61)
-    à gauche: 44 45 46, à droite: 43 46
-exprWithOperator (62)
-    à gauche: 47 48 49 50 51 52 53 54, à droite: 40
-instructions (63)
-    à gauche: 55 56 57 58 59, à droite: 60 61 65
-listInstructions (64)
-    à gauche: 60 61, à droite: 18 19 61
-listDeclarationVariables (65)
-    à gauche: 62, à droite: 19
-affectation (66)
-    à gauche: 63 64, à droite: 58
-ifThenElse (67)
-    à gauche: 65, à droite: 59
+envoiMsg (63)
+    à gauche: 44, à droite: 40
+listAttributs (64)
+    à gauche: 45 46, à droite: 44 48
+listAttributsAux (65)
+    à gauche: 47 48, à droite: 46
+exprWithOperator (66)
+    à gauche: 49 50 51 52 53 54 55 56, à droite: 41
+instructions (67)
+    à gauche: 57 58 59 60 61, à droite: 62 63 67
+listInstructions (68)
+    à gauche: 62 63, à droite: 18 19 63
+listDeclarationVariables (69)
+    à gauche: 64, à droite: 19
+affectation (70)
+    à gauche: 65 66, à droite: 60
+ifThenElse (71)
+    à gauche: 67, à droite: 61
 
 
 état 0
@@ -222,125 +238,136 @@ ifThenElse (67)
 
 état 1
 
-    1 declarationClasse: CLASS . ID '(' paramsList ')' inherits blocs IS '{' declList '}'
+    1 declarationClasse: CLASS . name '(' paramsList ')' inherits blocs IS '{' declList '}'
 
     ID  décalage et aller à l'état 3
+
+    name  aller à l'état 4
 
 
 état 2
 
     0 $accept: declarationClasse . $end
 
-    $end  décalage et aller à l'état 4
+    $end  décalage et aller à l'état 5
 
 
 état 3
 
-    1 declarationClasse: CLASS ID . '(' paramsList ')' inherits blocs IS '{' declList '}'
+    8 name: ID .
 
-    '('  décalage et aller à l'état 5
+    $défaut  réduction par utilisation de la règle 8 (name)
 
 
 état 4
+
+    1 declarationClasse: CLASS name . '(' paramsList ')' inherits blocs IS '{' declList '}'
+
+    '('  décalage et aller à l'état 6
+
+
+état 5
 
     0 $accept: declarationClasse $end .
 
     $défaut  accepter
 
 
-état 5
+état 6
 
-    1 declarationClasse: CLASS ID '(' . paramsList ')' inherits blocs IS '{' declList '}'
+    1 declarationClasse: CLASS name '(' . paramsList ')' inherits blocs IS '{' declList '}'
 
-    ID  décalage et aller à l'état 6
+    ID  décalage et aller à l'état 7
 
     $défaut  réduction par utilisation de la règle 2 (paramsList)
 
-    paramsList       aller à l'état 7
-    paramsMultiples  aller à l'état 8
-    paramName        aller à l'état 9
-    var              aller à l'état 10
+    paramsList       aller à l'état 8
+    paramsMultiples  aller à l'état 9
+    paramName        aller à l'état 10
+    var              aller à l'état 11
 
 
-état 6
+état 7
 
     7 var: ID .
 
     $défaut  réduction par utilisation de la règle 7 (var)
 
 
-état 7
-
-    1 declarationClasse: CLASS ID '(' paramsList . ')' inherits blocs IS '{' declList '}'
-
-    ')'  décalage et aller à l'état 11
-
-
 état 8
+
+    1 declarationClasse: CLASS name '(' paramsList . ')' inherits blocs IS '{' declList '}'
+
+    ')'  décalage et aller à l'état 12
+
+
+état 9
 
     3 paramsList: paramsMultiples .
 
     $défaut  réduction par utilisation de la règle 3 (paramsList)
 
 
-état 9
+état 10
 
     4 paramsMultiples: paramName .
     5                | paramName . ',' paramsMultiples
 
-    ','  décalage et aller à l'état 12
+    ','  décalage et aller à l'état 13
 
     $défaut  réduction par utilisation de la règle 4 (paramsMultiples)
 
 
-état 10
-
-    6 paramName: var . ':' type
-
-    ':'  décalage et aller à l'état 13
-
-
 état 11
 
-    1 declarationClasse: CLASS ID '(' paramsList ')' . inherits blocs IS '{' declList '}'
+    6 paramName: var . ':' name
 
-    EXTENDS  décalage et aller à l'état 14
-
-    $défaut  réduction par utilisation de la règle 9 (inherits)
-
-    inherits  aller à l'état 15
+    ':'  décalage et aller à l'état 14
 
 
 état 12
 
-    5 paramsMultiples: paramName ',' . paramsMultiples
+    1 declarationClasse: CLASS name '(' paramsList ')' . inherits blocs IS '{' declList '}'
 
-    ID  décalage et aller à l'état 6
+    EXTENDS  décalage et aller à l'état 15
 
-    paramsMultiples  aller à l'état 16
-    paramName        aller à l'état 9
-    var              aller à l'état 10
+    $défaut  réduction par utilisation de la règle 9 (inherits)
+
+    inherits  aller à l'état 16
 
 
 état 13
 
-    6 paramName: var ':' . type
+    5 paramsMultiples: paramName ',' . paramsMultiples
 
-    ID  décalage et aller à l'état 17
+    ID  décalage et aller à l'état 7
 
-    type  aller à l'état 18
+    paramsMultiples  aller à l'état 17
+    paramName        aller à l'état 10
+    var              aller à l'état 11
 
 
 état 14
 
-   10 inherits: EXTENDS . TYPE '(' argumentsList ')'
+    6 paramName: var ':' . name
 
-    TYPE  décalage et aller à l'état 19
+    ID  décalage et aller à l'état 3
+
+    name  aller à l'état 18
 
 
 état 15
 
-    1 declarationClasse: CLASS ID '(' paramsList ')' inherits . blocs IS '{' declList '}'
+   10 inherits: EXTENDS . name '(' argumentsList ')'
+
+    ID  décalage et aller à l'état 3
+
+    name  aller à l'état 19
+
+
+état 16
+
+    1 declarationClasse: CLASS name '(' paramsList ')' inherits . blocs IS '{' declList '}'
 
     '{'  décalage et aller à l'état 20
 
@@ -349,30 +376,23 @@ ifThenElse (67)
     blocs  aller à l'état 21
 
 
-état 16
+état 17
 
     5 paramsMultiples: paramName ',' paramsMultiples .
 
     $défaut  réduction par utilisation de la règle 5 (paramsMultiples)
 
 
-état 17
-
-    8 type: ID .
-
-    $défaut  réduction par utilisation de la règle 8 (type)
-
-
 état 18
 
-    6 paramName: var ':' type .
+    6 paramName: var ':' name .
 
     $défaut  réduction par utilisation de la règle 6 (paramName)
 
 
 état 19
 
-   10 inherits: EXTENDS TYPE . '(' argumentsList ')'
+   10 inherits: EXTENDS name . '(' argumentsList ')'
 
     '('  décalage et aller à l'état 22
 
@@ -410,27 +430,27 @@ ifThenElse (67)
 
 état 21
 
-    1 declarationClasse: CLASS ID '(' paramsList ')' inherits blocs . IS '{' declList '}'
+    1 declarationClasse: CLASS name '(' paramsList ')' inherits blocs . IS '{' declList '}'
 
     IS  décalage et aller à l'état 45
 
 
 état 22
 
-   10 inherits: EXTENDS TYPE '(' . argumentsList ')'
+   10 inherits: EXTENDS name '(' . argumentsList ')'
 
     NEW  décalage et aller à l'état 24
     ADD  décalage et aller à l'état 25
     SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
+    ID   décalage et aller à l'état 7
     CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
-    $défaut  réduction par utilisation de la règle 13 (argumentsList)
+    $défaut  réduction par utilisation de la règle 11 (argumentsList)
 
     var               aller à l'état 33
-    argumentsListAux  aller à l'état 46
-    argumentsList     aller à l'état 47
+    argumentsList     aller à l'état 46
+    argumentsListAux  aller à l'état 47
     expression        aller à l'état 48
     selection         aller à l'état 49
     instenciation     aller à l'état 37
@@ -440,47 +460,28 @@ ifThenElse (67)
 
 état 23
 
-   57 instructions: RETURNS . ';'
+   59 instructions: RETURNS . ';'
 
     ';'  décalage et aller à l'état 50
 
 
 état 24
 
-   42 instenciation: NEW . type '(' argumentsList ')'
+   43 instenciation: NEW . type '(' argumentsList ')'
 
-    ID  décalage et aller à l'état 17
+    ID  décalage et aller à l'état 51
 
-    type  aller à l'état 51
+    type  aller à l'état 52
 
 
 état 25
 
-   54 exprWithOperator: ADD . expression
+   56 exprWithOperator: ADD . expression
 
     NEW  décalage et aller à l'état 24
     ADD  décalage et aller à l'état 25
     SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 30
-    '('  décalage et aller à l'état 31
-
-    var               aller à l'état 33
-    expression        aller à l'état 52
-    selection         aller à l'état 49
-    instenciation     aller à l'état 37
-    envoiMsg          aller à l'état 38
-    exprWithOperator  aller à l'état 39
-
-
-état 26
-
-   53 exprWithOperator: SUB . expression
-
-    NEW  décalage et aller à l'état 24
-    ADD  décalage et aller à l'état 25
-    SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
+    ID   décalage et aller à l'état 7
     CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
@@ -492,14 +493,14 @@ ifThenElse (67)
     exprWithOperator  aller à l'état 39
 
 
-état 27
+état 26
 
-   65 ifThenElse: IF . expression THEN instructions ELSE instructions
+   55 exprWithOperator: SUB . expression
 
     NEW  décalage et aller à l'état 24
     ADD  décalage et aller à l'état 25
     SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
+    ID   décalage et aller à l'état 7
     CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
@@ -511,47 +512,66 @@ ifThenElse (67)
     exprWithOperator  aller à l'état 39
 
 
+état 27
+
+   67 ifThenElse: IF . expression THEN instructions ELSE instructions
+
+    NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
+    ID   décalage et aller à l'état 7
+    CST  décalage et aller à l'état 30
+    '('  décalage et aller à l'état 31
+
+    var               aller à l'état 33
+    expression        aller à l'état 55
+    selection         aller à l'état 49
+    instenciation     aller à l'état 37
+    envoiMsg          aller à l'état 38
+    exprWithOperator  aller à l'état 39
+
+
 état 28
 
     7 var: ID .
-   64 affectation: ID . AFF expression ';'
+   66 affectation: ID . AFF expression ';'
 
-    AFF  décalage et aller à l'état 55
+    AFF  décalage et aller à l'état 56
 
     $défaut  réduction par utilisation de la règle 7 (var)
 
 
 état 29
 
-   62 listDeclarationVariables: VAR . var ':' type exprInitVar ';'
+   64 listDeclarationVariables: VAR . var ':' type exprInitVar ';'
 
-    ID  décalage et aller à l'état 6
+    ID  décalage et aller à l'état 7
 
-    var  aller à l'état 56
+    var  aller à l'état 57
 
 
 état 30
 
-   35 expression: CST .
+   36 expression: CST .
 
-    $défaut  réduction par utilisation de la règle 35 (expression)
+    $défaut  réduction par utilisation de la règle 36 (expression)
 
 
 état 31
 
-   36 expression: '(' . expression ')'
-   37           | '(' . AS type ':' expression ')'
+   37 expression: '(' . expression ')'
+   38           | '(' . AS type ':' expression ')'
 
-    AS   décalage et aller à l'état 57
+    AS   décalage et aller à l'état 58
     NEW  décalage et aller à l'état 24
     ADD  décalage et aller à l'état 25
     SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
+    ID   décalage et aller à l'état 7
     CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     var               aller à l'état 33
-    expression        aller à l'état 58
+    expression        aller à l'état 59
     selection         aller à l'état 49
     instenciation     aller à l'état 37
     envoiMsg          aller à l'état 38
@@ -560,7 +580,7 @@ ifThenElse (67)
 
 état 32
 
-   56 instructions: '{' . blocInstructions '}'
+   58 instructions: '{' . blocInstructions '}'
 
     RETURNS  décalage et aller à l'état 23
     NEW      décalage et aller à l'état 24
@@ -576,7 +596,7 @@ ifThenElse (67)
     $défaut  réduction par utilisation de la règle 17 (blocInstructions)
 
     var                       aller à l'état 33
-    blocInstructions          aller à l'état 59
+    blocInstructions          aller à l'état 60
     expression                aller à l'état 35
     selection                 aller à l'état 36
     instenciation             aller à l'état 37
@@ -591,73 +611,73 @@ ifThenElse (67)
 
 état 33
 
-   47 exprWithOperator: var .
+   49 exprWithOperator: var .
 
-    $défaut  réduction par utilisation de la règle 47 (exprWithOperator)
+    $défaut  réduction par utilisation de la règle 49 (exprWithOperator)
 
 
 état 34
 
    16 blocs: '{' blocInstructions . '}'
 
-    '}'  décalage et aller à l'état 60
+    '}'  décalage et aller à l'état 61
 
 
 état 35
 
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
-   55 instructions: expression . ';'
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
+   57 instructions: expression . ';'
 
-    ADD    décalage et aller à l'état 61
-    SUB    décalage et aller à l'état 62
-    MUL    décalage et aller à l'état 63
-    DIV    décalage et aller à l'état 64
-    RELOP  décalage et aller à l'état 65
-    '.'    décalage et aller à l'état 66
-    ';'    décalage et aller à l'état 67
+    ADD    décalage et aller à l'état 62
+    SUB    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 64
+    DIV    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 66
+    '.'    décalage et aller à l'état 67
+    ';'    décalage et aller à l'état 68
 
 
 état 36
 
-   34 expression: selection .
-   63 affectation: selection . AFF expression ';'
+   35 expression: selection .
+   65 affectation: selection . AFF expression ';'
 
-    AFF  décalage et aller à l'état 68
+    AFF  décalage et aller à l'état 69
 
-    $défaut  réduction par utilisation de la règle 34 (expression)
+    $défaut  réduction par utilisation de la règle 35 (expression)
 
 
 état 37
 
-   38 expression: instenciation .
-
-    $défaut  réduction par utilisation de la règle 38 (expression)
-
-
-état 38
-
-   39 expression: envoiMsg .
+   39 expression: instenciation .
 
     $défaut  réduction par utilisation de la règle 39 (expression)
 
 
-état 39
+état 38
 
-   40 expression: exprWithOperator .
+   40 expression: envoiMsg .
 
     $défaut  réduction par utilisation de la règle 40 (expression)
 
 
+état 39
+
+   41 expression: exprWithOperator .
+
+    $défaut  réduction par utilisation de la règle 41 (expression)
+
+
 état 40
 
-   60 listInstructions: instructions .
-   61                 | instructions . listInstructions
+   62 listInstructions: instructions .
+   63                 | instructions . listInstructions
 
     RETURNS  décalage et aller à l'état 23
     NEW      décalage et aller à l'état 24
@@ -669,7 +689,7 @@ ifThenElse (67)
     '('      décalage et aller à l'état 31
     '{'      décalage et aller à l'état 32
 
-    $défaut  réduction par utilisation de la règle 60 (listInstructions)
+    $défaut  réduction par utilisation de la règle 62 (listInstructions)
 
     var               aller à l'état 33
     expression        aller à l'état 35
@@ -678,7 +698,7 @@ ifThenElse (67)
     envoiMsg          aller à l'état 38
     exprWithOperator  aller à l'état 39
     instructions      aller à l'état 40
-    listInstructions  aller à l'état 69
+    listInstructions  aller à l'état 70
     affectation       aller à l'état 43
     ifThenElse        aller à l'état 44
 
@@ -694,232 +714,246 @@ ifThenElse (67)
 
    19 blocInstructions: listDeclarationVariables . IS listInstructions
 
-    IS  décalage et aller à l'état 70
+    IS  décalage et aller à l'état 71
 
 
 état 43
 
-   58 instructions: affectation .
+   60 instructions: affectation .
 
-    $défaut  réduction par utilisation de la règle 58 (instructions)
+    $défaut  réduction par utilisation de la règle 60 (instructions)
 
 
 état 44
 
-   59 instructions: ifThenElse .
+   61 instructions: ifThenElse .
 
-    $défaut  réduction par utilisation de la règle 59 (instructions)
+    $défaut  réduction par utilisation de la règle 61 (instructions)
 
 
 état 45
 
-    1 declarationClasse: CLASS ID '(' paramsList ')' inherits blocs IS . '{' declList '}'
+    1 declarationClasse: CLASS name '(' paramsList ')' inherits blocs IS . '{' declList '}'
 
-    '{'  décalage et aller à l'état 71
+    '{'  décalage et aller à l'état 72
 
 
 état 46
 
-   14 argumentsList: argumentsListAux .
+   10 inherits: EXTENDS name '(' argumentsList . ')'
 
-    $défaut  réduction par utilisation de la règle 14 (argumentsList)
+    ')'  décalage et aller à l'état 73
 
 
 état 47
 
-   10 inherits: EXTENDS TYPE '(' argumentsList . ')'
+   12 argumentsList: argumentsListAux .
 
-    ')'  décalage et aller à l'état 72
+    $défaut  réduction par utilisation de la règle 12 (argumentsList)
 
 
 état 48
 
-   11 argumentsListAux: expression . ',' argumentsListAux
-   12                 | expression .
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
+   13 argumentsListAux: expression . ',' argumentsListAux
+   14                 | expression .
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
 
-    ADD    décalage et aller à l'état 61
-    SUB    décalage et aller à l'état 62
-    MUL    décalage et aller à l'état 63
-    DIV    décalage et aller à l'état 64
-    RELOP  décalage et aller à l'état 65
-    '.'    décalage et aller à l'état 66
-    ','    décalage et aller à l'état 73
+    ADD    décalage et aller à l'état 62
+    SUB    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 64
+    DIV    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 66
+    '.'    décalage et aller à l'état 67
+    ','    décalage et aller à l'état 74
 
-    $défaut  réduction par utilisation de la règle 12 (argumentsListAux)
+    $défaut  réduction par utilisation de la règle 14 (argumentsListAux)
 
 
 état 49
 
-   34 expression: selection .
+   35 expression: selection .
 
-    $défaut  réduction par utilisation de la règle 34 (expression)
+    $défaut  réduction par utilisation de la règle 35 (expression)
 
 
 état 50
 
-   57 instructions: RETURNS ';' .
+   59 instructions: RETURNS ';' .
 
-    $défaut  réduction par utilisation de la règle 57 (instructions)
+    $défaut  réduction par utilisation de la règle 59 (instructions)
 
 
 état 51
 
-   42 instenciation: NEW type . '(' argumentsList ')'
+   27 type: ID .
 
-    '('  décalage et aller à l'état 74
+    $défaut  réduction par utilisation de la règle 27 (type)
 
 
 état 52
 
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
-   54                 | ADD expression .
+   43 instenciation: NEW type . '(' argumentsList ')'
 
-    $défaut  réduction par utilisation de la règle 54 (exprWithOperator)
+    '('  décalage et aller à l'état 75
 
 
 état 53
 
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
-   53                 | SUB expression .
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
+   56                 | ADD expression .
 
-    $défaut  réduction par utilisation de la règle 53 (exprWithOperator)
+    ADD    décalage et aller à l'état 62
+    SUB    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 64
+    DIV    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 66
+    '.'    décalage et aller à l'état 67
+
+    ADD       [réduction par utilisation de la règle 56 (exprWithOperator)]
+    SUB       [réduction par utilisation de la règle 56 (exprWithOperator)]
+    MUL       [réduction par utilisation de la règle 56 (exprWithOperator)]
+    DIV       [réduction par utilisation de la règle 56 (exprWithOperator)]
+    RELOP     [réduction par utilisation de la règle 56 (exprWithOperator)]
+    '.'       [réduction par utilisation de la règle 56 (exprWithOperator)]
+    $défaut  réduction par utilisation de la règle 56 (exprWithOperator)
 
 
 état 54
 
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
-   65 ifThenElse: IF expression . THEN instructions ELSE instructions
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
+   55                 | SUB expression .
 
-    ADD    décalage et aller à l'état 61
-    SUB    décalage et aller à l'état 62
-    MUL    décalage et aller à l'état 63
-    DIV    décalage et aller à l'état 64
-    THEN   décalage et aller à l'état 75
-    RELOP  décalage et aller à l'état 65
-    '.'    décalage et aller à l'état 66
+    ADD    décalage et aller à l'état 62
+    SUB    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 64
+    DIV    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 66
+    '.'    décalage et aller à l'état 67
+
+    ADD       [réduction par utilisation de la règle 55 (exprWithOperator)]
+    SUB       [réduction par utilisation de la règle 55 (exprWithOperator)]
+    MUL       [réduction par utilisation de la règle 55 (exprWithOperator)]
+    DIV       [réduction par utilisation de la règle 55 (exprWithOperator)]
+    RELOP     [réduction par utilisation de la règle 55 (exprWithOperator)]
+    '.'       [réduction par utilisation de la règle 55 (exprWithOperator)]
+    $défaut  réduction par utilisation de la règle 55 (exprWithOperator)
 
 
 état 55
 
-   64 affectation: ID AFF . expression ';'
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
+   67 ifThenElse: IF expression . THEN instructions ELSE instructions
+
+    ADD    décalage et aller à l'état 62
+    SUB    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 64
+    DIV    décalage et aller à l'état 65
+    THEN   décalage et aller à l'état 76
+    RELOP  décalage et aller à l'état 66
+    '.'    décalage et aller à l'état 67
+
+
+état 56
+
+   66 affectation: ID AFF . expression ';'
 
     NEW  décalage et aller à l'état 24
     ADD  décalage et aller à l'état 25
     SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
+    ID   décalage et aller à l'état 7
     CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     var               aller à l'état 33
-    expression        aller à l'état 76
+    expression        aller à l'état 77
     selection         aller à l'état 49
     instenciation     aller à l'état 37
     envoiMsg          aller à l'état 38
     exprWithOperator  aller à l'état 39
 
 
-état 56
-
-   62 listDeclarationVariables: VAR var . ':' type exprInitVar ';'
-
-    ':'  décalage et aller à l'état 77
-
-
 état 57
 
-   37 expression: '(' AS . type ':' expression ')'
+   64 listDeclarationVariables: VAR var . ':' type exprInitVar ';'
 
-    ID  décalage et aller à l'état 17
-
-    type  aller à l'état 78
+    ':'  décalage et aller à l'état 78
 
 
 état 58
 
-   36 expression: '(' expression . ')'
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
+   38 expression: '(' AS . type ':' expression ')'
 
-    ADD    décalage et aller à l'état 61
-    SUB    décalage et aller à l'état 62
-    MUL    décalage et aller à l'état 63
-    DIV    décalage et aller à l'état 64
-    RELOP  décalage et aller à l'état 65
-    '.'    décalage et aller à l'état 66
-    ')'    décalage et aller à l'état 79
+    ID  décalage et aller à l'état 51
+
+    type  aller à l'état 79
 
 
 état 59
 
-   56 instructions: '{' blocInstructions . '}'
+   37 expression: '(' expression . ')'
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
 
-    '}'  décalage et aller à l'état 80
+    ADD    décalage et aller à l'état 62
+    SUB    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 64
+    DIV    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 66
+    '.'    décalage et aller à l'état 67
+    ')'    décalage et aller à l'état 80
 
 
 état 60
+
+   58 instructions: '{' blocInstructions . '}'
+
+    '}'  décalage et aller à l'état 81
+
+
+état 61
 
    16 blocs: '{' blocInstructions '}' .
 
     $défaut  réduction par utilisation de la règle 16 (blocs)
 
 
-état 61
-
-   48 exprWithOperator: expression ADD . expression
-
-    NEW  décalage et aller à l'état 24
-    ADD  décalage et aller à l'état 25
-    SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 30
-    '('  décalage et aller à l'état 31
-
-    var               aller à l'état 33
-    expression        aller à l'état 81
-    selection         aller à l'état 49
-    instenciation     aller à l'état 37
-    envoiMsg          aller à l'état 38
-    exprWithOperator  aller à l'état 39
-
-
 état 62
 
-   49 exprWithOperator: expression SUB . expression
+   50 exprWithOperator: expression ADD . expression
 
     NEW  décalage et aller à l'état 24
     ADD  décalage et aller à l'état 25
     SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
+    ID   décalage et aller à l'état 7
     CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
@@ -933,12 +967,12 @@ ifThenElse (67)
 
 état 63
 
-   50 exprWithOperator: expression MUL . expression
+   51 exprWithOperator: expression SUB . expression
 
     NEW  décalage et aller à l'état 24
     ADD  décalage et aller à l'état 25
     SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
+    ID   décalage et aller à l'état 7
     CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
@@ -952,12 +986,12 @@ ifThenElse (67)
 
 état 64
 
-   51 exprWithOperator: expression DIV . expression
+   52 exprWithOperator: expression MUL . expression
 
     NEW  décalage et aller à l'état 24
     ADD  décalage et aller à l'état 25
     SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
+    ID   décalage et aller à l'état 7
     CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
@@ -971,12 +1005,12 @@ ifThenElse (67)
 
 état 65
 
-   52 exprWithOperator: expression RELOP . expression
+   53 exprWithOperator: expression DIV . expression
 
     NEW  décalage et aller à l'état 24
     ADD  décalage et aller à l'état 25
     SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
+    ID   décalage et aller à l'état 7
     CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
@@ -990,48 +1024,67 @@ ifThenElse (67)
 
 état 66
 
-   41 selection: expression '.' . var
-   43 envoiMsg: expression '.' . ID '(' listAttributs ')'
-
-    ID  décalage et aller à l'état 86
-
-    var  aller à l'état 87
-
-
-état 67
-
-   55 instructions: expression ';' .
-
-    $défaut  réduction par utilisation de la règle 55 (instructions)
-
-
-état 68
-
-   63 affectation: selection AFF . expression ';'
+   54 exprWithOperator: expression RELOP . expression
 
     NEW  décalage et aller à l'état 24
     ADD  décalage et aller à l'état 25
     SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
+    ID   décalage et aller à l'état 7
     CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     var               aller à l'état 33
-    expression        aller à l'état 88
+    expression        aller à l'état 86
     selection         aller à l'état 49
     instenciation     aller à l'état 37
     envoiMsg          aller à l'état 38
     exprWithOperator  aller à l'état 39
 
 
+état 67
+
+   42 selection: expression '.' . var
+   44 envoiMsg: expression '.' . ID '(' listAttributs ')'
+
+    ID  décalage et aller à l'état 87
+
+    var  aller à l'état 88
+
+
+état 68
+
+   57 instructions: expression ';' .
+
+    $défaut  réduction par utilisation de la règle 57 (instructions)
+
+
 état 69
 
-   61 listInstructions: instructions listInstructions .
+   65 affectation: selection AFF . expression ';'
 
-    $défaut  réduction par utilisation de la règle 61 (listInstructions)
+    NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
+    ID   décalage et aller à l'état 7
+    CST  décalage et aller à l'état 30
+    '('  décalage et aller à l'état 31
+
+    var               aller à l'état 33
+    expression        aller à l'état 89
+    selection         aller à l'état 49
+    instenciation     aller à l'état 37
+    envoiMsg          aller à l'état 38
+    exprWithOperator  aller à l'état 39
 
 
 état 70
+
+   63 listInstructions: instructions listInstructions .
+
+    $défaut  réduction par utilisation de la règle 63 (listInstructions)
+
+
+état 71
 
    19 blocInstructions: listDeclarationVariables IS . listInstructions
 
@@ -1052,72 +1105,47 @@ ifThenElse (67)
     envoiMsg          aller à l'état 38
     exprWithOperator  aller à l'état 39
     instructions      aller à l'état 40
-    listInstructions  aller à l'état 89
+    listInstructions  aller à l'état 90
     affectation       aller à l'état 43
     ifThenElse        aller à l'état 44
 
 
-état 71
-
-    1 declarationClasse: CLASS ID '(' paramsList ')' inherits blocs IS '{' . declList '}'
-
-    STATIC    décalage et aller à l'état 90
-    OVERRIDE  décalage et aller à l'état 91
-
-    DEF       réduction par utilisation de la règle 29 (isStaticOrOverride)
-    VAR       réduction par utilisation de la règle 24 (isStatic)
-    $défaut  réduction par utilisation de la règle 20 (declList)
-
-    declList            aller à l'état 92
-    declChamp           aller à l'état 93
-    isStatic            aller à l'état 94
-    declMethod          aller à l'état 95
-    isStaticOrOverride  aller à l'état 96
-
-
 état 72
 
-   10 inherits: EXTENDS TYPE '(' argumentsList ')' .
+    1 declarationClasse: CLASS name '(' paramsList ')' inherits blocs IS '{' . declList '}'
 
-    $défaut  réduction par utilisation de la règle 10 (inherits)
+    STATIC    décalage et aller à l'état 91
+    OVERRIDE  décalage et aller à l'état 92
+
+    $défaut  réduction par utilisation de la règle 25 (isStatic)
+
+    declList            aller à l'état 93
+    declChamp           aller à l'état 94
+    isStatic            aller à l'état 95
+    declMethod          aller à l'état 96
+    isStaticOrOverride  aller à l'état 97
 
 
 état 73
 
-   11 argumentsListAux: expression ',' . argumentsListAux
+   10 inherits: EXTENDS name '(' argumentsList ')' .
 
-    NEW  décalage et aller à l'état 24
-    ADD  décalage et aller à l'état 25
-    SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 30
-    '('  décalage et aller à l'état 31
-
-    var               aller à l'état 33
-    argumentsListAux  aller à l'état 97
-    expression        aller à l'état 48
-    selection         aller à l'état 49
-    instenciation     aller à l'état 37
-    envoiMsg          aller à l'état 38
-    exprWithOperator  aller à l'état 39
+    $défaut  réduction par utilisation de la règle 10 (inherits)
 
 
 état 74
 
-   42 instenciation: NEW type '(' . argumentsList ')'
+   13 argumentsListAux: expression ',' . argumentsListAux
 
     NEW  décalage et aller à l'état 24
     ADD  décalage et aller à l'état 25
     SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
+    ID   décalage et aller à l'état 7
     CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
-    $défaut  réduction par utilisation de la règle 13 (argumentsList)
-
     var               aller à l'état 33
-    argumentsListAux  aller à l'état 46
-    argumentsList     aller à l'état 98
+    argumentsListAux  aller à l'état 98
     expression        aller à l'état 48
     selection         aller à l'état 49
     instenciation     aller à l'état 37
@@ -1127,7 +1155,30 @@ ifThenElse (67)
 
 état 75
 
-   65 ifThenElse: IF expression THEN . instructions ELSE instructions
+   43 instenciation: NEW type '(' . argumentsList ')'
+
+    NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
+    ID   décalage et aller à l'état 7
+    CST  décalage et aller à l'état 30
+    '('  décalage et aller à l'état 31
+
+    $défaut  réduction par utilisation de la règle 11 (argumentsList)
+
+    var               aller à l'état 33
+    argumentsList     aller à l'état 99
+    argumentsListAux  aller à l'état 47
+    expression        aller à l'état 48
+    selection         aller à l'état 49
+    instenciation     aller à l'état 37
+    envoiMsg          aller à l'état 38
+    exprWithOperator  aller à l'état 39
+
+
+état 76
+
+   67 ifThenElse: IF expression THEN . instructions ELSE instructions
 
     RETURNS  décalage et aller à l'état 23
     NEW      décalage et aller à l'état 24
@@ -1145,402 +1196,406 @@ ifThenElse (67)
     instenciation     aller à l'état 37
     envoiMsg          aller à l'état 38
     exprWithOperator  aller à l'état 39
-    instructions      aller à l'état 99
+    instructions      aller à l'état 100
     affectation       aller à l'état 43
     ifThenElse        aller à l'état 44
 
 
-état 76
-
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
-   64 affectation: ID AFF expression . ';'
-
-    ADD    décalage et aller à l'état 61
-    SUB    décalage et aller à l'état 62
-    MUL    décalage et aller à l'état 63
-    DIV    décalage et aller à l'état 64
-    RELOP  décalage et aller à l'état 65
-    '.'    décalage et aller à l'état 66
-    ';'    décalage et aller à l'état 100
-
-
 état 77
 
-   62 listDeclarationVariables: VAR var ':' . type exprInitVar ';'
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
+   66 affectation: ID AFF expression . ';'
 
-    ID  décalage et aller à l'état 17
-
-    type  aller à l'état 101
+    ADD    décalage et aller à l'état 62
+    SUB    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 64
+    DIV    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 66
+    '.'    décalage et aller à l'état 67
+    ';'    décalage et aller à l'état 101
 
 
 état 78
 
-   37 expression: '(' AS type . ':' expression ')'
+   64 listDeclarationVariables: VAR var ':' . type exprInitVar ';'
 
-    ':'  décalage et aller à l'état 102
+    ID  décalage et aller à l'état 51
+
+    type  aller à l'état 102
 
 
 état 79
 
-   36 expression: '(' expression ')' .
+   38 expression: '(' AS type . ':' expression ')'
 
-    $défaut  réduction par utilisation de la règle 36 (expression)
+    ':'  décalage et aller à l'état 103
 
 
 état 80
 
-   56 instructions: '{' blocInstructions '}' .
+   37 expression: '(' expression ')' .
 
-    $défaut  réduction par utilisation de la règle 56 (instructions)
+    $défaut  réduction par utilisation de la règle 37 (expression)
 
 
 état 81
 
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   48                 | expression ADD expression .
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
+   58 instructions: '{' blocInstructions '}' .
 
-    MUL  décalage et aller à l'état 63
-    DIV  décalage et aller à l'état 64
-    '.'  décalage et aller à l'état 66
-
-    $défaut  réduction par utilisation de la règle 48 (exprWithOperator)
+    $défaut  réduction par utilisation de la règle 58 (instructions)
 
 
 état 82
 
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   49                 | expression SUB expression .
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   50                 | expression ADD expression .
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
 
-    MUL  décalage et aller à l'état 63
-    DIV  décalage et aller à l'état 64
-    '.'  décalage et aller à l'état 66
-
-    $défaut  réduction par utilisation de la règle 49 (exprWithOperator)
-
-
-état 83
-
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   50                 | expression MUL expression .
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
-
-    '.'  décalage et aller à l'état 66
+    MUL  décalage et aller à l'état 64
+    DIV  décalage et aller à l'état 65
+    '.'  décalage et aller à l'état 67
 
     $défaut  réduction par utilisation de la règle 50 (exprWithOperator)
 
 
-état 84
+état 83
 
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   51                 | expression DIV expression .
-   52                 | expression . RELOP expression
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   51                 | expression SUB expression .
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
 
-    '.'  décalage et aller à l'état 66
+    MUL  décalage et aller à l'état 64
+    DIV  décalage et aller à l'état 65
+    '.'  décalage et aller à l'état 67
 
     $défaut  réduction par utilisation de la règle 51 (exprWithOperator)
 
 
-état 85
+état 84
 
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
-   52                 | expression RELOP expression .
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   52                 | expression MUL expression .
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
 
-    ADD  décalage et aller à l'état 61
-    SUB  décalage et aller à l'état 62
-    MUL  décalage et aller à l'état 63
-    DIV  décalage et aller à l'état 64
-    '.'  décalage et aller à l'état 66
-
-    RELOP  erreur (non-associative)
+    '.'  décalage et aller à l'état 67
 
     $défaut  réduction par utilisation de la règle 52 (exprWithOperator)
 
 
+état 85
+
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   53                 | expression DIV expression .
+   54                 | expression . RELOP expression
+
+    '.'  décalage et aller à l'état 67
+
+    $défaut  réduction par utilisation de la règle 53 (exprWithOperator)
+
+
 état 86
 
-    7 var: ID .
-   43 envoiMsg: expression '.' ID . '(' listAttributs ')'
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
+   54                 | expression RELOP expression .
 
-    '('  décalage et aller à l'état 103
+    ADD  décalage et aller à l'état 62
+    SUB  décalage et aller à l'état 63
+    MUL  décalage et aller à l'état 64
+    DIV  décalage et aller à l'état 65
+    '.'  décalage et aller à l'état 67
 
-    $défaut  réduction par utilisation de la règle 7 (var)
+    RELOP  erreur (non-associative)
+
+    $défaut  réduction par utilisation de la règle 54 (exprWithOperator)
 
 
 état 87
 
-   41 selection: expression '.' var .
+    7 var: ID .
+   44 envoiMsg: expression '.' ID . '(' listAttributs ')'
 
-    $défaut  réduction par utilisation de la règle 41 (selection)
+    '('  décalage et aller à l'état 104
+
+    $défaut  réduction par utilisation de la règle 7 (var)
 
 
 état 88
 
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
-   63 affectation: selection AFF expression . ';'
+   42 selection: expression '.' var .
 
-    ADD    décalage et aller à l'état 61
-    SUB    décalage et aller à l'état 62
-    MUL    décalage et aller à l'état 63
-    DIV    décalage et aller à l'état 64
-    RELOP  décalage et aller à l'état 65
-    '.'    décalage et aller à l'état 66
-    ';'    décalage et aller à l'état 104
+    $défaut  réduction par utilisation de la règle 42 (selection)
 
 
 état 89
+
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
+   65 affectation: selection AFF expression . ';'
+
+    ADD    décalage et aller à l'état 62
+    SUB    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 64
+    DIV    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 66
+    '.'    décalage et aller à l'état 67
+    ';'    décalage et aller à l'état 105
+
+
+état 90
 
    19 blocInstructions: listDeclarationVariables IS listInstructions .
 
     $défaut  réduction par utilisation de la règle 19 (blocInstructions)
 
 
-état 90
-
-   25 isStatic: STATIC .
-   30 isStaticOrOverride: STATIC .
-
-    DEF       réduction par utilisation de la règle 30 (isStaticOrOverride)
-    $défaut  réduction par utilisation de la règle 25 (isStatic)
-
-
 état 91
 
-   31 isStaticOrOverride: OVERRIDE .
+   26 isStatic: STATIC .
 
-    $défaut  réduction par utilisation de la règle 31 (isStaticOrOverride)
+    $défaut  réduction par utilisation de la règle 26 (isStatic)
 
 
 état 92
 
-    1 declarationClasse: CLASS ID '(' paramsList ')' inherits blocs IS '{' declList . '}'
+   32 isStaticOrOverride: OVERRIDE .
 
-    '}'  décalage et aller à l'état 105
+    $défaut  réduction par utilisation de la règle 32 (isStaticOrOverride)
 
 
 état 93
 
-   21 declList: declChamp . declList
+    1 declarationClasse: CLASS name '(' paramsList ')' inherits blocs IS '{' declList . '}'
 
-    STATIC    décalage et aller à l'état 90
-    OVERRIDE  décalage et aller à l'état 91
-
-    DEF       réduction par utilisation de la règle 29 (isStaticOrOverride)
-    VAR       réduction par utilisation de la règle 24 (isStatic)
-    $défaut  réduction par utilisation de la règle 20 (declList)
-
-    declList            aller à l'état 106
-    declChamp           aller à l'état 93
-    isStatic            aller à l'état 94
-    declMethod          aller à l'état 95
-    isStaticOrOverride  aller à l'état 96
+    '}'  décalage et aller à l'état 106
 
 
 état 94
 
-   23 declChamp: isStatic . VAR var ':' type exprInitVar ';'
+   20 declList: declChamp .
+   22         | declChamp . declList
 
-    VAR  décalage et aller à l'état 107
+    STATIC    décalage et aller à l'état 91
+    OVERRIDE  décalage et aller à l'état 92
+
+    '}'       réduction par utilisation de la règle 20 (declList)
+    $défaut  réduction par utilisation de la règle 25 (isStatic)
+
+    declList            aller à l'état 107
+    declChamp           aller à l'état 94
+    isStatic            aller à l'état 95
+    declMethod          aller à l'état 96
+    isStaticOrOverride  aller à l'état 97
 
 
 état 95
 
-   22 declList: declMethod . declList
+   24 declChamp: isStatic . VAR var ':' type exprInitVar ';'
+   31 isStaticOrOverride: isStatic .
 
-    STATIC    décalage et aller à l'état 90
-    OVERRIDE  décalage et aller à l'état 91
+    VAR  décalage et aller à l'état 108
 
-    DEF       réduction par utilisation de la règle 29 (isStaticOrOverride)
-    VAR       réduction par utilisation de la règle 24 (isStatic)
-    $défaut  réduction par utilisation de la règle 20 (declList)
-
-    declList            aller à l'état 108
-    declChamp           aller à l'état 93
-    isStatic            aller à l'état 94
-    declMethod          aller à l'état 95
-    isStaticOrOverride  aller à l'état 96
+    $défaut  réduction par utilisation de la règle 31 (isStaticOrOverride)
 
 
 état 96
 
-   28 declMethod: isStaticOrOverride . DEF ID '(' paramsList ')' isReturn IS '{' blocInstructions '}'
+   21 declList: declMethod .
+   23         | declMethod . declList
 
-    DEF  décalage et aller à l'état 109
+    STATIC    décalage et aller à l'état 91
+    OVERRIDE  décalage et aller à l'état 92
+
+    '}'       réduction par utilisation de la règle 21 (declList)
+    $défaut  réduction par utilisation de la règle 25 (isStatic)
+
+    declList            aller à l'état 109
+    declChamp           aller à l'état 94
+    isStatic            aller à l'état 95
+    declMethod          aller à l'état 96
+    isStaticOrOverride  aller à l'état 97
 
 
 état 97
 
-   11 argumentsListAux: expression ',' argumentsListAux .
+   30 declMethod: isStaticOrOverride . DEF var '(' paramsList ')' isReturn IS '{' blocInstructions '}'
 
-    $défaut  réduction par utilisation de la règle 11 (argumentsListAux)
+    DEF  décalage et aller à l'état 110
 
 
 état 98
 
-   42 instenciation: NEW type '(' argumentsList . ')'
+   13 argumentsListAux: expression ',' argumentsListAux .
 
-    ')'  décalage et aller à l'état 110
+    $défaut  réduction par utilisation de la règle 13 (argumentsListAux)
 
 
 état 99
 
-   65 ifThenElse: IF expression THEN instructions . ELSE instructions
+   43 instenciation: NEW type '(' argumentsList . ')'
 
-    ELSE  décalage et aller à l'état 111
+    ')'  décalage et aller à l'état 111
 
 
 état 100
 
-   64 affectation: ID AFF expression ';' .
+   67 ifThenElse: IF expression THEN instructions . ELSE instructions
 
-    $défaut  réduction par utilisation de la règle 64 (affectation)
+    ELSE  décalage et aller à l'état 112
 
 
 état 101
 
-   62 listDeclarationVariables: VAR var ':' type . exprInitVar ';'
+   66 affectation: ID AFF expression ';' .
 
-    AFF  décalage et aller à l'état 112
-
-    $défaut  réduction par utilisation de la règle 26 (exprInitVar)
-
-    exprInitVar  aller à l'état 113
+    $défaut  réduction par utilisation de la règle 66 (affectation)
 
 
 état 102
 
-   37 expression: '(' AS type ':' . expression ')'
+   64 listDeclarationVariables: VAR var ':' type . exprInitVar ';'
 
-    NEW  décalage et aller à l'état 24
-    ADD  décalage et aller à l'état 25
-    SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 30
-    '('  décalage et aller à l'état 31
+    AFF  décalage et aller à l'état 113
 
-    var               aller à l'état 33
-    expression        aller à l'état 114
-    selection         aller à l'état 49
-    instenciation     aller à l'état 37
-    envoiMsg          aller à l'état 38
-    exprWithOperator  aller à l'état 39
+    $défaut  réduction par utilisation de la règle 28 (exprInitVar)
+
+    exprInitVar  aller à l'état 114
 
 
 état 103
 
-   43 envoiMsg: expression '.' ID '(' . listAttributs ')'
+   38 expression: '(' AS type ':' . expression ')'
 
     NEW  décalage et aller à l'état 24
     ADD  décalage et aller à l'état 25
     SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
+    ID   décalage et aller à l'état 7
     CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
-
-    $défaut  réduction par utilisation de la règle 44 (listAttributs)
 
     var               aller à l'état 33
     expression        aller à l'état 115
     selection         aller à l'état 49
     instenciation     aller à l'état 37
     envoiMsg          aller à l'état 38
-    listAttributs     aller à l'état 116
     exprWithOperator  aller à l'état 39
 
 
 état 104
 
-   63 affectation: selection AFF expression ';' .
+   44 envoiMsg: expression '.' ID '(' . listAttributs ')'
 
-    $défaut  réduction par utilisation de la règle 63 (affectation)
+    NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
+    ID   décalage et aller à l'état 7
+    CST  décalage et aller à l'état 30
+    '('  décalage et aller à l'état 31
+
+    $défaut  réduction par utilisation de la règle 45 (listAttributs)
+
+    var               aller à l'état 33
+    expression        aller à l'état 116
+    selection         aller à l'état 49
+    instenciation     aller à l'état 37
+    envoiMsg          aller à l'état 38
+    listAttributs     aller à l'état 117
+    listAttributsAux  aller à l'état 118
+    exprWithOperator  aller à l'état 39
 
 
 état 105
 
-    1 declarationClasse: CLASS ID '(' paramsList ')' inherits blocs IS '{' declList '}' .
+   65 affectation: selection AFF expression ';' .
 
-    $défaut  réduction par utilisation de la règle 1 (declarationClasse)
+    $défaut  réduction par utilisation de la règle 65 (affectation)
 
 
 état 106
 
-   21 declList: declChamp declList .
+    1 declarationClasse: CLASS name '(' paramsList ')' inherits blocs IS '{' declList '}' .
 
-    $défaut  réduction par utilisation de la règle 21 (declList)
+    $défaut  réduction par utilisation de la règle 1 (declarationClasse)
 
 
 état 107
 
-   23 declChamp: isStatic VAR . var ':' type exprInitVar ';'
-
-    ID  décalage et aller à l'état 6
-
-    var  aller à l'état 117
-
-
-état 108
-
-   22 declList: declMethod declList .
+   22 declList: declChamp declList .
 
     $défaut  réduction par utilisation de la règle 22 (declList)
 
 
+état 108
+
+   24 declChamp: isStatic VAR . var ':' type exprInitVar ';'
+
+    ID  décalage et aller à l'état 7
+
+    var  aller à l'état 119
+
+
 état 109
 
-   28 declMethod: isStaticOrOverride DEF . ID '(' paramsList ')' isReturn IS '{' blocInstructions '}'
+   23 declList: declMethod declList .
 
-    ID  décalage et aller à l'état 118
+    $défaut  réduction par utilisation de la règle 23 (declList)
 
 
 état 110
 
-   42 instenciation: NEW type '(' argumentsList ')' .
+   30 declMethod: isStaticOrOverride DEF . var '(' paramsList ')' isReturn IS '{' blocInstructions '}'
 
-    $défaut  réduction par utilisation de la règle 42 (instenciation)
+    ID  décalage et aller à l'état 7
+
+    var  aller à l'état 120
 
 
 état 111
 
-   65 ifThenElse: IF expression THEN instructions ELSE . instructions
+   43 instenciation: NEW type '(' argumentsList ')' .
+
+    $défaut  réduction par utilisation de la règle 43 (instenciation)
+
+
+état 112
+
+   67 ifThenElse: IF expression THEN instructions ELSE . instructions
 
     RETURNS  décalage et aller à l'état 23
     NEW      décalage et aller à l'état 24
@@ -1558,278 +1613,286 @@ ifThenElse (67)
     instenciation     aller à l'état 37
     envoiMsg          aller à l'état 38
     exprWithOperator  aller à l'état 39
-    instructions      aller à l'état 119
+    instructions      aller à l'état 121
     affectation       aller à l'état 43
     ifThenElse        aller à l'état 44
 
 
-état 112
+état 113
 
-   27 exprInitVar: AFF . expression
+   29 exprInitVar: AFF . expression
 
     NEW  décalage et aller à l'état 24
     ADD  décalage et aller à l'état 25
     SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
+    ID   décalage et aller à l'état 7
     CST  décalage et aller à l'état 30
     '('  décalage et aller à l'état 31
 
     var               aller à l'état 33
-    expression        aller à l'état 120
+    expression        aller à l'état 122
     selection         aller à l'état 49
     instenciation     aller à l'état 37
     envoiMsg          aller à l'état 38
     exprWithOperator  aller à l'état 39
-
-
-état 113
-
-   62 listDeclarationVariables: VAR var ':' type exprInitVar . ';'
-
-    ';'  décalage et aller à l'état 121
 
 
 état 114
 
-   37 expression: '(' AS type ':' expression . ')'
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
+   64 listDeclarationVariables: VAR var ':' type exprInitVar . ';'
 
-    ADD    décalage et aller à l'état 61
-    SUB    décalage et aller à l'état 62
-    MUL    décalage et aller à l'état 63
-    DIV    décalage et aller à l'état 64
-    RELOP  décalage et aller à l'état 65
-    '.'    décalage et aller à l'état 66
-    ')'    décalage et aller à l'état 122
+    ';'  décalage et aller à l'état 123
 
 
 état 115
 
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   45 listAttributs: expression .
-   46              | expression . ',' listAttributs
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
+   38 expression: '(' AS type ':' expression . ')'
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
 
-    ADD    décalage et aller à l'état 61
-    SUB    décalage et aller à l'état 62
-    MUL    décalage et aller à l'état 63
-    DIV    décalage et aller à l'état 64
-    RELOP  décalage et aller à l'état 65
-    '.'    décalage et aller à l'état 66
-    ','    décalage et aller à l'état 123
-
-    $défaut  réduction par utilisation de la règle 45 (listAttributs)
+    ADD    décalage et aller à l'état 62
+    SUB    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 64
+    DIV    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 66
+    '.'    décalage et aller à l'état 67
+    ')'    décalage et aller à l'état 124
 
 
 état 116
 
-   43 envoiMsg: expression '.' ID '(' listAttributs . ')'
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   47 listAttributsAux: expression .
+   48                 | expression . ',' listAttributs
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
 
-    ')'  décalage et aller à l'état 124
+    ADD    décalage et aller à l'état 62
+    SUB    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 64
+    DIV    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 66
+    '.'    décalage et aller à l'état 67
+    ','    décalage et aller à l'état 125
+
+    $défaut  réduction par utilisation de la règle 47 (listAttributsAux)
 
 
 état 117
 
-   23 declChamp: isStatic VAR var . ':' type exprInitVar ';'
+   44 envoiMsg: expression '.' ID '(' listAttributs . ')'
 
-    ':'  décalage et aller à l'état 125
+    ')'  décalage et aller à l'état 126
 
 
 état 118
 
-   28 declMethod: isStaticOrOverride DEF ID . '(' paramsList ')' isReturn IS '{' blocInstructions '}'
-
-    '('  décalage et aller à l'état 126
-
-
-état 119
-
-   65 ifThenElse: IF expression THEN instructions ELSE instructions .
-
-    $défaut  réduction par utilisation de la règle 65 (ifThenElse)
-
-
-état 120
-
-   27 exprInitVar: AFF expression .
-   41 selection: expression . '.' var
-   43 envoiMsg: expression . '.' ID '(' listAttributs ')'
-   48 exprWithOperator: expression . ADD expression
-   49                 | expression . SUB expression
-   50                 | expression . MUL expression
-   51                 | expression . DIV expression
-   52                 | expression . RELOP expression
-
-    ADD    décalage et aller à l'état 61
-    SUB    décalage et aller à l'état 62
-    MUL    décalage et aller à l'état 63
-    DIV    décalage et aller à l'état 64
-    RELOP  décalage et aller à l'état 65
-    '.'    décalage et aller à l'état 66
-
-    $défaut  réduction par utilisation de la règle 27 (exprInitVar)
-
-
-état 121
-
-   62 listDeclarationVariables: VAR var ':' type exprInitVar ';' .
-
-    $défaut  réduction par utilisation de la règle 62 (listDeclarationVariables)
-
-
-état 122
-
-   37 expression: '(' AS type ':' expression ')' .
-
-    $défaut  réduction par utilisation de la règle 37 (expression)
-
-
-état 123
-
-   46 listAttributs: expression ',' . listAttributs
-
-    NEW  décalage et aller à l'état 24
-    ADD  décalage et aller à l'état 25
-    SUB  décalage et aller à l'état 26
-    ID   décalage et aller à l'état 6
-    CST  décalage et aller à l'état 30
-    '('  décalage et aller à l'état 31
-
-    $défaut  réduction par utilisation de la règle 44 (listAttributs)
-
-    var               aller à l'état 33
-    expression        aller à l'état 115
-    selection         aller à l'état 49
-    instenciation     aller à l'état 37
-    envoiMsg          aller à l'état 38
-    listAttributs     aller à l'état 127
-    exprWithOperator  aller à l'état 39
-
-
-état 124
-
-   43 envoiMsg: expression '.' ID '(' listAttributs ')' .
-
-    $défaut  réduction par utilisation de la règle 43 (envoiMsg)
-
-
-état 125
-
-   23 declChamp: isStatic VAR var ':' . type exprInitVar ';'
-
-    ID  décalage et aller à l'état 17
-
-    type  aller à l'état 128
-
-
-état 126
-
-   28 declMethod: isStaticOrOverride DEF ID '(' . paramsList ')' isReturn IS '{' blocInstructions '}'
-
-    ID  décalage et aller à l'état 6
-
-    $défaut  réduction par utilisation de la règle 2 (paramsList)
-
-    paramsList       aller à l'état 129
-    paramsMultiples  aller à l'état 8
-    paramName        aller à l'état 9
-    var              aller à l'état 10
-
-
-état 127
-
-   46 listAttributs: expression ',' listAttributs .
+   46 listAttributs: listAttributsAux .
 
     $défaut  réduction par utilisation de la règle 46 (listAttributs)
 
 
+état 119
+
+   24 declChamp: isStatic VAR var . ':' type exprInitVar ';'
+
+    ':'  décalage et aller à l'état 127
+
+
+état 120
+
+   30 declMethod: isStaticOrOverride DEF var . '(' paramsList ')' isReturn IS '{' blocInstructions '}'
+
+    '('  décalage et aller à l'état 128
+
+
+état 121
+
+   67 ifThenElse: IF expression THEN instructions ELSE instructions .
+
+    $défaut  réduction par utilisation de la règle 67 (ifThenElse)
+
+
+état 122
+
+   29 exprInitVar: AFF expression .
+   42 selection: expression . '.' var
+   44 envoiMsg: expression . '.' ID '(' listAttributs ')'
+   50 exprWithOperator: expression . ADD expression
+   51                 | expression . SUB expression
+   52                 | expression . MUL expression
+   53                 | expression . DIV expression
+   54                 | expression . RELOP expression
+
+    ADD    décalage et aller à l'état 62
+    SUB    décalage et aller à l'état 63
+    MUL    décalage et aller à l'état 64
+    DIV    décalage et aller à l'état 65
+    RELOP  décalage et aller à l'état 66
+    '.'    décalage et aller à l'état 67
+
+    $défaut  réduction par utilisation de la règle 29 (exprInitVar)
+
+
+état 123
+
+   64 listDeclarationVariables: VAR var ':' type exprInitVar ';' .
+
+    $défaut  réduction par utilisation de la règle 64 (listDeclarationVariables)
+
+
+état 124
+
+   38 expression: '(' AS type ':' expression ')' .
+
+    $défaut  réduction par utilisation de la règle 38 (expression)
+
+
+état 125
+
+   48 listAttributsAux: expression ',' . listAttributs
+
+    NEW  décalage et aller à l'état 24
+    ADD  décalage et aller à l'état 25
+    SUB  décalage et aller à l'état 26
+    ID   décalage et aller à l'état 7
+    CST  décalage et aller à l'état 30
+    '('  décalage et aller à l'état 31
+
+    $défaut  réduction par utilisation de la règle 45 (listAttributs)
+
+    var               aller à l'état 33
+    expression        aller à l'état 116
+    selection         aller à l'état 49
+    instenciation     aller à l'état 37
+    envoiMsg          aller à l'état 38
+    listAttributs     aller à l'état 129
+    listAttributsAux  aller à l'état 118
+    exprWithOperator  aller à l'état 39
+
+
+état 126
+
+   44 envoiMsg: expression '.' ID '(' listAttributs ')' .
+
+    $défaut  réduction par utilisation de la règle 44 (envoiMsg)
+
+
+état 127
+
+   24 declChamp: isStatic VAR var ':' . type exprInitVar ';'
+
+    ID  décalage et aller à l'état 51
+
+    type  aller à l'état 130
+
+
 état 128
 
-   23 declChamp: isStatic VAR var ':' type . exprInitVar ';'
+   30 declMethod: isStaticOrOverride DEF var '(' . paramsList ')' isReturn IS '{' blocInstructions '}'
 
-    AFF  décalage et aller à l'état 112
+    ID  décalage et aller à l'état 7
 
-    $défaut  réduction par utilisation de la règle 26 (exprInitVar)
+    $défaut  réduction par utilisation de la règle 2 (paramsList)
 
-    exprInitVar  aller à l'état 130
+    paramsList       aller à l'état 131
+    paramsMultiples  aller à l'état 9
+    paramName        aller à l'état 10
+    var              aller à l'état 11
 
 
 état 129
 
-   28 declMethod: isStaticOrOverride DEF ID '(' paramsList . ')' isReturn IS '{' blocInstructions '}'
+   48 listAttributsAux: expression ',' listAttributs .
 
-    ')'  décalage et aller à l'état 131
+    $défaut  réduction par utilisation de la règle 48 (listAttributsAux)
 
 
 état 130
 
-   23 declChamp: isStatic VAR var ':' type exprInitVar . ';'
+   24 declChamp: isStatic VAR var ':' type . exprInitVar ';'
 
-    ';'  décalage et aller à l'état 132
+    AFF  décalage et aller à l'état 113
+
+    $défaut  réduction par utilisation de la règle 28 (exprInitVar)
+
+    exprInitVar  aller à l'état 132
 
 
 état 131
 
-   28 declMethod: isStaticOrOverride DEF ID '(' paramsList ')' . isReturn IS '{' blocInstructions '}'
+   30 declMethod: isStaticOrOverride DEF var '(' paramsList . ')' isReturn IS '{' blocInstructions '}'
 
-    RETURNS  décalage et aller à l'état 133
-
-    $défaut  réduction par utilisation de la règle 32 (isReturn)
-
-    isReturn  aller à l'état 134
+    ')'  décalage et aller à l'état 133
 
 
 état 132
 
-   23 declChamp: isStatic VAR var ':' type exprInitVar ';' .
+   24 declChamp: isStatic VAR var ':' type exprInitVar . ';'
 
-    $défaut  réduction par utilisation de la règle 23 (declChamp)
+    ';'  décalage et aller à l'état 134
 
 
 état 133
 
-   33 isReturn: RETURNS . type
+   30 declMethod: isStaticOrOverride DEF var '(' paramsList ')' . isReturn IS '{' blocInstructions '}'
 
-    ID  décalage et aller à l'état 17
+    RETURNS  décalage et aller à l'état 135
 
-    type  aller à l'état 135
+    $défaut  réduction par utilisation de la règle 33 (isReturn)
+
+    isReturn  aller à l'état 136
 
 
 état 134
 
-   28 declMethod: isStaticOrOverride DEF ID '(' paramsList ')' isReturn . IS '{' blocInstructions '}'
+   24 declChamp: isStatic VAR var ':' type exprInitVar ';' .
 
-    IS  décalage et aller à l'état 136
+    $défaut  réduction par utilisation de la règle 24 (declChamp)
 
 
 état 135
 
-   33 isReturn: RETURNS type .
+   34 isReturn: RETURNS . type
 
-    $défaut  réduction par utilisation de la règle 33 (isReturn)
+    ID  décalage et aller à l'état 51
+
+    type  aller à l'état 137
 
 
 état 136
 
-   28 declMethod: isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS . '{' blocInstructions '}'
+   30 declMethod: isStaticOrOverride DEF var '(' paramsList ')' isReturn . IS '{' blocInstructions '}'
 
-    '{'  décalage et aller à l'état 137
+    IS  décalage et aller à l'état 138
 
 
 état 137
 
-   28 declMethod: isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' . blocInstructions '}'
+   34 isReturn: RETURNS type .
+
+    $défaut  réduction par utilisation de la règle 34 (isReturn)
+
+
+état 138
+
+   30 declMethod: isStaticOrOverride DEF var '(' paramsList ')' isReturn IS . '{' blocInstructions '}'
+
+    '{'  décalage et aller à l'état 139
+
+
+état 139
+
+   30 declMethod: isStaticOrOverride DEF var '(' paramsList ')' isReturn IS '{' . blocInstructions '}'
 
     RETURNS  décalage et aller à l'état 23
     NEW      décalage et aller à l'état 24
@@ -1845,7 +1908,7 @@ ifThenElse (67)
     $défaut  réduction par utilisation de la règle 17 (blocInstructions)
 
     var                       aller à l'état 33
-    blocInstructions          aller à l'état 138
+    blocInstructions          aller à l'état 140
     expression                aller à l'état 35
     selection                 aller à l'état 36
     instenciation             aller à l'état 37
@@ -1858,15 +1921,15 @@ ifThenElse (67)
     ifThenElse                aller à l'état 44
 
 
-état 138
+état 140
 
-   28 declMethod: isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' blocInstructions . '}'
+   30 declMethod: isStaticOrOverride DEF var '(' paramsList ')' isReturn IS '{' blocInstructions . '}'
 
-    '}'  décalage et aller à l'état 139
+    '}'  décalage et aller à l'état 141
 
 
-état 139
+état 141
 
-   28 declMethod: isStaticOrOverride DEF ID '(' paramsList ')' isReturn IS '{' blocInstructions '}' .
+   30 declMethod: isStaticOrOverride DEF var '(' paramsList ')' isReturn IS '{' blocInstructions '}' .
 
-    $défaut  réduction par utilisation de la règle 28 (declMethod)
+    $défaut  réduction par utilisation de la règle 30 (declMethod)
