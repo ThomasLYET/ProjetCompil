@@ -19,19 +19,11 @@ typedef struct _Decl
 } VarDecl, *VarDeclP;
 
 typedef struct _Methode {
-<<<<<<< HEAD
-	VarDeclP varEntree; /*N'est pas initialisé !!*/
-	VarDeclP varSortie; /* ATTENTION : il n'y a qu'une seul variable de sortie !!! N'est pas initialisé et n'a pas à priori de nom !!!! */
-	ListArbreP first;
-	//ListArbreP last;
-	struct _Methode *next;
-=======
 	char* nom;
-	VarDeclP varEntree; 
+	VarDeclP varEntree; /* Possède des noms mais pas de code !*/
 	VarDeclP varSortie; /* ATTENTION : il n'y a qu'une seul variable de sortie !!! */
-	TreeP code;
-	TreeP *next;
->>>>>>> 58f1e04895f1d4d4103fb41a60f6099ac6f376b1
+	BlocP code;
+	struct _Methode *next;
 } Methode, *MethodeP;
 
 /* VarDeclP */

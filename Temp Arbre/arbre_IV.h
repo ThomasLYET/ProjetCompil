@@ -16,8 +16,16 @@ typedef struct _Tree {
 	} u;
 } Tree, *TreeP;
 
+typedef struct _Bloc {
+	VarDeclP var;
+	InstructionsP;
+} Bloc, *BlocP;
+
 typedef struct _Instructions {
-	TreeP arbre;
+	union {
+		TreeP arbre;
+		BlocP bloc;
+	} u;
 	struct _Instructions *next;
 } Instructions, *InstructionsP;
 

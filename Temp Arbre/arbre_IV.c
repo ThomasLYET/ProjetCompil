@@ -128,3 +128,4 @@ InstructionsP concatInstruction(InstructionsP premier, InstructionsP suivants) {
 	premier->next = suivants;
 	return premier;
 }
+
